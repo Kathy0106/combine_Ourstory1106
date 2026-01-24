@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V43</title>
+    <title>我的旅遊手帳 V44</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -40,6 +40,11 @@
             animation-timing-function: linear;
             animation-iteration-count: infinite;
         }
+        
+        /* Header Transition */
+        .header-bg {
+            transition: background-image 0.5s ease-in-out;
+        }
     </style>
 </head>
 <body class="h-screen w-screen overflow-hidden text-slate-700">
@@ -73,10 +78,10 @@
             <div class="space-y-6">
                 
                 <div @click="selectTrip('karuizawa')" class="bg-white rounded-[30px] p-0 soft-shadow overflow-hidden card-press cursor-pointer group relative">
-                    <div class="h-32 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=800&q=80');">
+                    <div class="h-32 bg-cover bg-center relative" :style="{ backgroundImage: `url(${trips.karuizawa.headerImg})` }">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-3 left-4 text-white">
-                            <h3 class="text-xl font-bold">🌸 輕井澤 Pre-wedding</h3>
+                            <h3 class="text-xl font-bold">{{ trips.karuizawa.name }}</h3>
                             <p class="text-xs opacity-90"><i class="fa-solid fa-location-dot mr-1"></i>東京、輕井澤</p>
                         </div>
                     </div>
@@ -92,11 +97,11 @@
                 </div>
 
                 <div @click="selectTrip('central')" class="bg-white rounded-[30px] p-0 soft-shadow overflow-hidden card-press cursor-pointer group relative">
-                    <div class="h-32 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=800&q=80');">
+                    <div class="h-32 bg-cover bg-center relative" :style="{ backgroundImage: `url(${trips.central.headerImg})` }">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-3 left-4 text-white">
-                            <h3 class="text-xl font-bold">🍁 日本中部紅葉之旅</h3>
-                            <p class="text-xs opacity-90"><i class="fa-solid fa-location-dot mr-1"></i>名古屋、高山、白川鄉</p>
+                            <h3 class="text-xl font-bold">{{ trips.central.name }}</h3>
+                            <p class="text-xs opacity-90"><i class="fa-solid fa-location-dot mr-1"></i>名古屋、高山</p>
                         </div>
                     </div>
                     <div class="p-4 flex justify-between items-center">
@@ -120,26 +125,37 @@
 
         <div v-if="currentView === 'detail'" class="flex-1 flex flex-col relative z-10 h-full">
             
-            <div class="px-4 py-3 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-50">
-                <button @click="currentView = 'home'" class="w-10 h-10 rounded-full bg-white soft-shadow flex items-center justify-center text-slate-400 hover:text-slate-800 transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <div class="font-bold text-lg truncate max-w-[200px]">{{ activeTrip.name }}</div>
-                <div class="w-10"></div> </div>
+            <div class="relative h-48 header-bg bg-cover bg-center" :style="{ backgroundImage: `url(${activeTrip.headerImg})` }">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60"></div>
+                
+                <div class="absolute top-0 w-full px-4 py-3 flex justify-between items-center z-50">
+                    <button @click="currentView = 'home'" class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button @click="showSettings = true" class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </div>
 
-            <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-24">
+                <div class="absolute bottom-4 left-6 text-white text-shadow">
+                    <h2 class="text-2xl font-bold tracking-wider mb-1">{{ activeTrip.name }}</h2>
+                    <p class="text-xs opacity-90 font-mono bg-black/20 px-2 py-1 rounded inline-block">{{ activeTrip.range }}</p>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-24 -mt-6 bg-transparent z-10">
                 
                 <div v-if="activeTab === 'itinerary'">
                     
                     <div class="flex space-x-3 overflow-x-auto no-scrollbar mb-6 py-2">
                         <div v-for="(day, index) in activeTrip.days" :key="index" 
                              @click="selectedDayIndex = index"
-                             class="flex-shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl transition-all duration-300 snap-center cursor-pointer border border-white/50"
+                             class="flex-shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl transition-all duration-300 snap-center cursor-pointer border border-white/50 soft-shadow"
                              :class="selectedDayIndex === index ? 'text-white shadow-lg scale-105' : 'bg-white text-gray-400'"
                              :style="{ backgroundColor: selectedDayIndex === index ? currentTheme.main : 'white' }">
                             <span class="text-xs font-bold uppercase">{{ day.weekday }}</span>
                             <span class="text-xl font-bold">{{ day.dateStr }}</span>
-                            <span class="text-[10px] opacity-80">D{{ index + 1 }}</span>
+                            <span class="text-[10px] opacity-80">Day {{ index + 1 }}</span>
                         </div>
                     </div>
 
@@ -189,13 +205,13 @@
                     
                     <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-l-4" :style="{ borderLeftColor: currentTheme.main }">
                         <div class="bg-gray-50 p-3 font-bold flex justify-between items-center" :style="{ color: currentTheme.main }">
-                            <span><i class="fa-solid fa-link mr-2"></i>網頁版詳細行程</span>
+                            <span><i class="fa-solid fa-file-lines mr-2"></i>詳細 Google Doc 行程</span>
                         </div>
                         <div class="p-4">
-                            <a :href="activeTrip.link" target="_blank" 
+                            <a :href="activeTrip.docLink" target="_blank" 
                                class="block w-full text-white font-bold py-3 rounded-xl shadow-md transition-transform active:scale-95 text-center"
                                :style="{ backgroundColor: currentTheme.main }">
-                                <i class="fa-brands fa-github mr-2"></i> 點擊前往 GitHub
+                                <i class="fa-brands fa-google-drive mr-2"></i> 點擊查看完整文檔
                             </a>
                         </div>
                     </div>
@@ -229,7 +245,6 @@
                                     <span>{{ activeTrip.flights.out.date }}</span>
                                 </div>
                             </div>
-                            <div class="border-t border-dashed border-gray-200 my-4"></div>
                             <div>
                                 <div class="flex justify-between text-xs text-gray-400 mb-1"><span>回程 (JP → HKG)</span></div>
                                 <div class="flex justify-between items-center mb-1">
@@ -242,18 +257,6 @@
                                     <span>{{ activeTrip.flights.in.date }}</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden" v-if="activeTrip.rental">
-                        <div class="bg-blue-50 p-3 text-blue-600 font-bold flex justify-between">
-                            <span><i class="fa-solid fa-car mr-2"></i>租車資訊</span>
-                        </div>
-                        <div class="p-5 text-sm space-y-2">
-                            <p><strong>公司:</strong> {{ activeTrip.rental.company }}</p>
-                            <p><strong>取車:</strong> {{ activeTrip.rental.pickup }}</p>
-                            <p><strong>還車:</strong> {{ activeTrip.rental.return }}</p>
-                            <p v-if="activeTrip.rental.note" class="text-red-500 font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ activeTrip.rental.note }}</p>
                         </div>
                     </div>
 
@@ -330,7 +333,7 @@
             </div>
         </div>
 
-        <button v-if="currentView === 'detail'" @click="openAddModal" class="absolute bottom-24 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl z-50 text-white transition-transform active:scale-90" :style="{ backgroundColor: currentTheme.main }">
+        <button v-if="currentView === 'detail' && activeTab === 'itinerary'" @click="openAddModal" class="absolute bottom-24 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl z-50 text-white transition-transform active:scale-90" :style="{ backgroundColor: currentTheme.main }">
             <i class="fa-solid fa-plus"></i>
         </button>
 
@@ -376,11 +379,11 @@
                     apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4',
 
                     themes: {
-                        pink: { main: '#FB7185', bg: '#FFF0F3' },   
-                        orange: { main: '#F97316', bg: '#FFF7ED' }  
+                        pink: { main: '#FB7185', bg: '#FFF0F3' },   // 櫻花粉
+                        orange: { main: '#F97316', bg: '#FFF7ED' }  // 紅葉橙
                     },
 
-                    // 這裡預載了你提供的舊 App 數據
+                    // 完整行程資料整合
                     trips: {
                         karuizawa: {
                             id: 'karuizawa',
@@ -389,19 +392,14 @@
                             range: 'Apr 18 - 25, 2026',
                             theme: 'pink',
                             effect: 'flower',
-                            link: 'https://kathy0106.github.io/OurStory11thtokyo/',
+                            headerImg: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=800&q=80',
+                            docLink: 'https://docs.google.com/document/d/1-4mgjTycE9bGWhuitIkigPSM4_0fBPlZX2RoVRCTlXw/edit?usp=drivesdk',
                             weatherCity: 'Karuizawa,JP',
                             
-                            // Rich Info Data
+                            // Info Tab 數據
                             flights: {
                                 out: { code: 'CX524', date: '4/18', dep: '01:00', arr: '06:40' },
                                 in: { code: 'CX501', date: '4/25', dep: '21:30', arr: '02:00' }
-                            },
-                            rental: {
-                                company: 'Toyota Rent a Car',
-                                pickup: '4/20 09:30 @ T-CAT (水天宮)',
-                                return: '4/22 17:00 @ T-CAT (水天宮)',
-                                note: '予約番号: 98147748300'
                             },
                             hotels: [
                                 { name: 'VIA INN PRIME 日本橋人形町', dates: '4/18 - 4/20' },
@@ -417,43 +415,56 @@
                             shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
                             expenses: [],
                             
+                            // 完整行程 Day 1 - Day 8
                             days: [
                                 { weekday: 'Sat', dateStr: '4/18', events: [
                                     { time: '06:40', title: '抵達成田 (NRT)', desc: '買飛去 T-CAT', category: 'flight', loc: 'Narita Airport' },
-                                    { time: '09:00', title: 'Check-in 酒店', desc: 'VIA INN PRIME', category: 'hotel', loc: 'Ningyocho' },
-                                    { time: '11:00', title: '利久牛舌', desc: '上野 Parco_ya', category: 'food', loc: 'Ueno' },
+                                    { time: '09:00', title: 'Check-in 酒店', desc: 'VIA INN PRIME 日本橋人形町', category: 'hotel', loc: 'Ningyocho' },
+                                    { time: '11:00', title: '利久牛舌 (午餐)', desc: '上野 Parco_ya 6F', category: 'food', loc: 'Rikyu Ueno' },
                                     { time: '13:00', title: '根津神社', desc: '杜鵑花祭', category: 'sightseeing', loc: 'Nezu Shrine' },
-                                    { time: '17:00', title: '米久本店', desc: '百年牛鍋', category: 'food', loc: 'Asakusa' }
+                                    { time: '17:00', title: '米久本店', desc: '百年牛鍋 (壽喜燒)', category: 'food', loc: 'Asakusa' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '4/19', events: [
                                     { time: '09:30', title: '龜戶天神社', desc: '紫藤花', category: 'sightseeing', loc: 'Kameido Tenjin' },
                                     { time: '12:30', title: '山笑ふ', desc: 'Shabu Shabu (已預約)', category: 'food', loc: 'Omotesando' },
-                                    { time: '19:00', title: '牛かつもと村', desc: '炸牛排', category: 'food', loc: 'Shibuya' }
+                                    { time: '14:30', title: 'Harakado', desc: '屋頂花園', category: 'sightseeing', loc: 'Harakado' },
+                                    { time: '19:00', title: '牛かつもと村', desc: '炸牛排 (澀谷)', category: 'food', loc: 'Shibuya' }
                                 ]},
                                 { weekday: 'Mon', dateStr: '4/20', events: [
-                                    { time: '09:30', title: '取車', desc: 'Toyota Rent a Car T-CAT', category: 'transport', loc: 'T-CAT' },
-                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵', category: 'food', loc: 'Karuizawa' },
-                                    { time: '14:30', title: 'Outlet Shopping', desc: '血拼時間', category: 'shopping', loc: 'Prince Shopping Plaza' }
+                                    { time: '09:00', title: 'Check-out', desc: '行去 T-CAT', category: 'other', loc: 'T-CAT' },
+                                    { time: '09:30', title: '取車', desc: 'Toyota Rent a Car (98147748300)', category: 'transport', loc: 'T-CAT' },
+                                    { time: '10:30', title: '三芳 PA', desc: '休息站', category: 'transport', loc: 'Miyoshi PA' },
+                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵 或 村民食堂', category: 'food', loc: 'Karuizawa' },
+                                    { time: '14:30', title: 'Outlet Shopping', desc: 'MapCode: 292 677 245*55', category: 'shopping', loc: 'Prince Shopping Plaza' },
+                                    { time: '18:00', title: 'Check-in', desc: 'Toyoko Inn 佐久平', category: 'hotel', loc: 'Saku' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '4/21', events: [
                                     { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝', category: 'highlight', loc: 'Karuizawa' },
-                                    { time: '19:00', title: '慶功晚餐', desc: 'Rogotei 燒肉', category: 'food', loc: 'Rogotei' }
+                                    { time: '19:00', title: '慶功晚餐', desc: '輕井澤燒肉', category: 'food', loc: 'Rogotei' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '4/22', events: [
-                                    { time: '10:00', title: '白絲瀑布', desc: '名勝打卡', category: 'sightseeing', loc: 'Shiraito Falls' },
-                                    { time: '17:00', title: '東京還車', desc: 'T-CAT', category: 'transport', loc: 'T-CAT' }
+                                    { time: '10:00', title: '白絲瀑布', desc: 'MapCode: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls' },
+                                    { time: '11:00', title: 'Rogotei 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei Karuizawa' },
+                                    { time: '14:00', title: '橫川 SA', desc: '釜飯便當', category: 'food', loc: 'Yokokawa SA' },
+                                    { time: '17:00', title: '東京還車', desc: 'T-CAT B1 停車場', category: 'transport', loc: 'T-CAT' },
+                                    { time: '18:00', title: 'Check-in', desc: '八重翠東京酒店', category: 'hotel', loc: 'Yaekit' },
+                                    { time: '20:45', title: '壽司郎', desc: '八重洲地下街', category: 'food', loc: 'Sushiro' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '4/23', events: [
-                                    { time: '07:30', title: 'Disney Sea', desc: '入園搶 Pass (Fantasy Springs)', category: 'ticket', loc: 'DisneySea' },
+                                    { time: '06:45', title: '出發', desc: 'JR 京葉線 -> 舞濱', category: 'transport', loc: 'Hatchobori' },
+                                    { time: '07:30', title: 'Disney Sea', desc: '搶 Frozen Pass', category: 'ticket', loc: 'Tokyo DisneySea' },
                                     { time: '21:00', title: '宵夜', desc: '麥當勞厚牛堡', category: 'food', loc: 'Hatchobori' }
                                 ]},
                                 { weekday: 'Fri', dateStr: '4/24', events: [
-                                    { time: '10:00', title: '大和壽司', desc: '豐洲市場', category: 'food', loc: 'Toyosu' },
-                                    { time: '13:30', title: 'TeamLab', desc: 'Planets', category: 'sightseeing', loc: 'TeamLab Planets' }
+                                    { time: '09:30', title: '前往豐洲', desc: '的士', category: 'transport', loc: 'Toyosu' },
+                                    { time: '10:00', title: '大和壽司', desc: '早餐', category: 'food', loc: 'Daiwa Sushi' },
+                                    { time: '13:30', title: 'TeamLab', desc: 'Planets', category: 'sightseeing', loc: 'TeamLab Planets' },
+                                    { time: '18:30', title: '銀座 篝', desc: '雞白湯拉麵', category: 'food', loc: 'Ginza Kagari' }
                                 ]},
                                 { weekday: 'Sat', dateStr: '4/25', events: [
                                     { time: '10:30', title: '東京一番街', desc: '最後衝刺', category: 'shopping', loc: 'Tokyo Station' },
-                                    { time: '14:45', title: '前往機場', desc: '巴士/Skyliner', category: 'transport', loc: 'Narita Airport' }
+                                    { time: '14:30', title: 'T-CAT', desc: '寄行李', category: 'transport', loc: 'T-CAT' },
+                                    { time: '14:45', title: '前往機場', desc: '巴士', category: 'transport', loc: 'Narita Airport' }
                                 ]}
                             ]
                         },
@@ -464,9 +475,11 @@
                             range: 'Oct 31 - Nov 08, 2026',
                             theme: 'orange',
                             effect: 'leaf',
-                            link: 'https://kathy0106.github.io/OurStory12thtokyo/',
+                            headerImg: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=800&q=80',
+                            docLink: 'https://docs.google.com/document/d/11eFLaGqOmRfXx90pVCWGF0iNIQRwECa3X3VmFjqQgdk/edit?usp=drivesdk',
                             weatherCity: 'Nagoya,JP',
 
+                            // Info Tab 數據
                             flights: {
                                 out: { code: 'CX524', date: '10/31', dep: '01:00', arr: '06:40' },
                                 in: { code: 'CX505', date: '11/08', dep: '18:00', arr: '22:25' }
@@ -493,43 +506,53 @@
                             shopping: ['飛驒牛味噌', '清酒', '紅葉手信'],
                             expenses: [],
                             
+                            // 完整行程 Day 1 - Day 9
                             days: [
                                 { weekday: 'Sat', dateStr: '10/31', events: [
-                                    { time: '08:00', title: '取車', desc: '成田機場取車', category: 'transport', loc: 'Narita' },
+                                    { time: '06:40', title: '抵達 NRT', desc: '取車出發去沼津', category: 'flight', loc: 'Narita Airport' },
                                     { time: '11:30', title: '沼津港 (丸天)', desc: '海鮮丼', category: 'food', loc: 'Numazu Port' },
-                                    { time: '19:00', title: 'Sawayaka', desc: '必食漢堡扒', category: 'food', loc: 'Numazu' }
+                                    { time: '13:30', title: '三島大吊橋', desc: '日本最長', category: 'sightseeing', loc: 'Mishima Skywalk' },
+                                    { time: '19:00', title: 'Sawayaka', desc: '必食漢堡扒', category: 'food', loc: 'Numazu' },
+                                    { time: '21:00', title: 'Check-in', desc: 'Daiwa Roynet Numazu', category: 'hotel', loc: 'Numazu' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '11/01', events: [
                                     { time: '10:30', title: '大室山', desc: '搭吊車', category: 'sightseeing', loc: 'Omuro Mountain' },
-                                    { time: '14:30', title: '修善寺', desc: '竹林小徑', category: 'sightseeing', loc: 'Shuzenji' }
+                                    { time: '14:30', title: '修善寺溫泉', desc: '竹林小徑', category: 'sightseeing', loc: 'Shuzenji' },
+                                    { time: '19:00', title: '鰻魚飯 櫻家', desc: '三島市內', category: 'food', loc: 'Sakuraya' }
                                 ]},
                                 { weekday: 'Mon', dateStr: '11/02', events: [
-                                    { time: '11:00', title: '諏訪湖', desc: '立石公園', category: 'sightseeing', loc: 'Suwa Lake' },
-                                    { time: '14:30', title: '松本城', desc: '國寶城', category: 'sightseeing', loc: 'Matsumoto Castle' }
+                                    { time: '11:00', title: '諏訪湖', desc: '立石公園 (你的名字)', category: 'sightseeing', loc: 'Suwa Lake' },
+                                    { time: '14:30', title: '松本城', desc: '國寶城', category: 'sightseeing', loc: 'Matsumoto Castle' },
+                                    { time: '21:00', title: 'Check-in', desc: 'Onyado Nono Matsumoto', category: 'hotel', loc: 'Matsumoto' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '11/03', events: [
                                     { time: '09:30', title: '善光寺', desc: '長野名勝', category: 'sightseeing', loc: 'Zenkoji' },
                                     { time: '13:00', title: '地獄谷野猿公苑', desc: '馬騮浸溫泉', category: 'sightseeing', loc: 'Snow Monkey Park' },
-                                    { time: '16:30', title: '季之庭', desc: 'Check-in 嘆溫泉', category: 'highlight', loc: 'Kusatsu Onsen' }
+                                    { time: '16:30', title: 'Check-in 季之庭', desc: '草津溫泉 (紀念日)', category: 'highlight', loc: 'Kusatsu Onsen' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '11/04', events: [
-                                    { time: '13:00', title: '河口湖', desc: '大石公園睇富士山', category: 'sightseeing', loc: 'Kawaguchiko' },
-                                    { time: '16:30', title: 'Check-in', desc: 'HOTEL CLAD', category: 'hotel', loc: 'Gotemba' }
+                                    { time: '13:00', title: '河口湖', desc: '大石公園', category: 'sightseeing', loc: 'Kawaguchiko' },
+                                    { time: '14:30', title: '紅葉迴廊', desc: '紅葉隧道', category: 'sightseeing', loc: 'Momiji Corridor' },
+                                    { time: '16:30', title: 'Check-in', desc: 'HOTEL CLAD (御殿場)', category: 'hotel', loc: 'Gotemba' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '11/05', events: [
+                                    { time: '06:30', title: '山中湖', desc: '逆富士', category: 'sightseeing', loc: 'Yamanakako' },
                                     { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping', category: 'shopping', loc: 'Gotemba Outlet' },
-                                    { time: '18:00', title: '東京還車', desc: '淺草', category: 'transport', loc: 'Asakusa' }
+                                    { time: '18:00', title: '東京還車', desc: '淺草/上野', category: 'transport', loc: 'Asakusa' },
+                                    { time: '19:30', title: '鳥貴族', desc: '晚餐', category: 'food', loc: 'Torikizoku' }
                                 ]},
                                 { weekday: 'Fri', dateStr: '11/06', events: [
-                                    { time: '10:00', title: '澀谷 Sky', desc: '觀景台', category: 'sightseeing', loc: 'Shibuya Sky' },
-                                    { time: '19:00', title: 'Mantensushi', desc: 'Omakase (已預約)', category: 'highlight', loc: 'Nihonbashi' }
+                                    { time: '10:00', title: '銀座 / 澀谷 Sky', desc: '觀景台', category: 'sightseeing', loc: 'Shibuya Sky' },
+                                    { time: '16:30', title: '東京鐵塔', desc: '停車場打卡位', category: 'sightseeing', loc: 'Tokyo Tower' },
+                                    { time: '19:00', title: 'Mantensushi', desc: '10+1 紀念 Omakase', category: 'highlight', loc: 'Nihonbashi' }
                                 ]},
                                 { weekday: 'Sat', dateStr: '11/07', events: [
                                     { time: '10:30', title: '吉祥寺', desc: '井之頭公園', category: 'sightseeing', loc: 'Kichijoji' },
                                     { time: '14:00', title: '下北澤', desc: '古著店', category: 'shopping', loc: 'Shimokitazawa' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '11/08', events: [
-                                    { time: '14:00', title: 'Skyliner', desc: '上野 -> 成田', category: 'transport', loc: 'Ueno' },
+                                    { time: '10:00', title: '最後衝刺', desc: '淺草/上野', category: 'shopping', loc: 'Ueno' },
+                                    { time: '14:00', title: 'Skyliner', desc: '上野 -> 成田', category: 'transport', loc: 'Ueno Station' },
                                     { time: '18:00', title: '回程', desc: 'CX505', category: 'flight', loc: 'Narita Airport' }
                                 ]}
                             ]
@@ -585,7 +608,6 @@
                     this.selectedDayIndex = 0; // Reset to Day 1
                 },
                 fetchWeather() {
-                    // 根據目前 Trip ID 決定城市 (簡單版)
                     let query = this.activeTrip.weatherCity;
                     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&lang=zh_tw&appid=${this.apiKey}`)
                     .then(res => res.json())
@@ -593,8 +615,7 @@
                         this.weather.city_name = data.name;
                         this.weather.temp = Math.round(data.main.temp);
                         this.weather.feels_like = Math.round(data.main.feels_like);
-                        // Weather Icon logic...
-                        this.weather.icon = 'fa-sun'; // default for demo
+                        this.weather.icon = 'fa-sun'; // default
                     })
                     .catch(() => { this.weather.temp = '--'; });
                 },
@@ -617,16 +638,13 @@
                         window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`, '_blank');
                     }
                 },
-                // Add Item Logic (Mock)
                 addShoppingItem() { if(this.newShopItem) this.activeTrip.shopping.push(this.newShopItem); this.newShopItem = ''; },
                 removeShoppingItem(idx) { this.activeTrip.shopping.splice(idx, 1); },
                 deleteExpense(idx) { this.activeTrip.expenses.splice(idx, 1); },
                 
-                // Modal
                 openAddModal() { this.showModal = true; },
                 confirmAdd() { 
                     if(this.newItem.title && this.currentView === 'detail') {
-                        // Push to current day
                         this.activeTrip.days[this.selectedDayIndex].events.push({...this.newItem});
                     }
                     this.showModal = false; 
