@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V56 (奶油風)</title>
+    <title>我的旅遊手帳 V60 (完美奶油版)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -17,11 +17,11 @@
         :root {
             --bg-cream: #FFFDF7;      /* 奶油白背景 */
             --card-white: #FFFFFF;    /* 卡片白 */
-            --text-brown: #5D4037;    /* 深啡文字 (代替黑色) */
+            --text-brown: #5D4037;    /* 深啡文字 */
             --text-light: #A1887F;    /* 淺啡文字 */
-            --accent-pink: #FFCDD2;   /* 粉紅裝飾 */
-            --accent-green: #C8E6C9;  /* 粉綠裝飾 */
-            --shadow-soft: 0 8px 24px rgba(149, 117, 205, 0.08); /* 柔和紫色陰影 */
+            --accent-pink: #F48FB1;   /* 粉紅裝飾 */
+            --accent-green: #A5D6A7;  /* 粉綠裝飾 */
+            --shadow-soft: 0 8px 24px rgba(149, 117, 205, 0.08);
         }
 
         body {
@@ -69,9 +69,17 @@
             transition: all 0.3s ease;
         }
 
-        /* Progress Bar Animation */
-        .progress-plane {
-            transition: left 1s ease-out;
+        /* Accordion Transition */
+        .accordion-enter-active,
+        .accordion-leave-active {
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 500px;
+            overflow: hidden;
+        }
+        .accordion-enter-from,
+        .accordion-leave-to {
+            max-height: 0;
+            opacity: 0;
         }
     </style>
 </head>
@@ -185,47 +193,43 @@
 
                     <div v-if="activeTab === 'itinerary'">
                         
-                        <div class="px-5 pt-6 pb-2">
-                            <div class="cream-card p-5 relative overflow-hidden">
-                                <div class="flex justify-between items-start mb-4">
-                                    <div>
-                                        <div class="text-xs text-[#A1887F] font-bold mb-1">距離出發</div>
-                                        <div class="flex items-baseline gap-2">
-                                            <span class="text-4xl font-bold font-mono" :style="{ color: activeTrip.theme === 'pink' ? '#F06292' : '#FF9800' }">{{ getCountdown(activeTrip.date) }}</span>
-                                            <span class="text-sm text-[#A1887F]">天</span>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <i :class="['fa-solid', weather.icon, 'text-3xl mb-1']" :style="{ color: activeTrip.theme === 'pink' ? '#F06292' : '#FF9800' }"></i>
-                                        <div class="text-xs font-bold text-[#5D4037]">{{ weather.city_name }} {{ weather.temp }}°</div>
-                                    </div>
+                        <div class="sticky top-0 z-40 bg-[#FFFDF7]/95 backdrop-blur-md shadow-sm border-b border-[#F0EBE0] px-5 pt-4 pb-2 transition-all duration-300">
+                            
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold bg-white px-2 py-1 rounded-lg border border-[#F0EBE0] text-[#A1887F]">還有</span>
+                                    <span class="text-xl font-bold font-mono" :style="{ color: activeTrip.theme === 'pink' ? '#F48FB1' : '#FFB74D' }">
+                                        {{ getCountdown(activeTrip.date) }} <span class="text-[10px] text-[#A1887F] font-sans">天</span>
+                                    </span>
                                 </div>
                                 
-                                <div class="relative h-2 bg-[#F5F5F5] rounded-full mt-2">
-                                    <div class="absolute left-0 top-0 h-full rounded-full" 
-                                         :style="{ width: '30%', backgroundColor: activeTrip.theme === 'pink' ? '#F48FB1' : '#FFCC80' }">
-                                    </div>
-                                    <div class="absolute top-1/2 -translate-y-1/2 text-lg transform -translate-x-1/2" 
-                                         :style="{ left: '30%', color: activeTrip.theme === 'pink' ? '#F06292' : '#FF9800' }">
-                                        <i class="fa-solid fa-plane"></i>
-                                    </div>
+                                <div class="text-center">
+                                    <span class="text-xs font-bold text-[#A1887F] block uppercase">{{ activeTrip.days[selectedDayIndex].weekday }}</span>
+                                    <span class="text-sm font-bold text-[#5D4037]">{{ activeTrip.days[selectedDayIndex].dateStr.split(' ')[0] }}</span>
                                 </div>
-                                <div class="text-[10px] text-center text-[#A1887F] mt-2 tracking-widest font-bold opacity-60">READY FOR ADVENTURE</div>
+
+                                <div class="text-right flex flex-col items-end">
+                                    <div class="flex items-center gap-1">
+                                        <div class="text-sm font-bold text-[#5D4037]">{{ weather.temp }}°</div>
+                                        <i :class="['fa-solid', weather.icon, 'text-lg']" :style="{ color: activeTrip.theme === 'pink' ? '#F48FB1' : '#FFB74D' }"></i>
+                                    </div>
+                                    <div class="text-[9px] text-[#A1887F]">{{ weather.city_name }}</div>
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2">
+                                <div v-for="(day, index) in activeTrip.days" :key="index" 
+                                     @click="selectedDayIndex = index"
+                                     class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all duration-300 snap-center cursor-pointer border shadow-sm"
+                                     :class="selectedDayIndex === index ? 'bg-[#F48FB1] border-[#F48FB1] text-white scale-105 shadow-md' : 'bg-white border-[#F0EBE0] text-[#A1887F]'"
+                                     :style="selectedDayIndex === index && activeTrip.theme === 'orange' ? 'background-color: #FFB74D; border-color: #FFB74D;' : ''">
+                                    <span class="text-[9px] font-bold uppercase">{{ day.weekday }}</span>
+                                    <span class="text-xs font-bold">{{ day.dateStr.split(' ')[0] }}</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="flex space-x-3 overflow-x-auto no-scrollbar px-5 py-3 mb-2">
-                            <div v-for="(day, index) in activeTrip.days" :key="index" 
-                                 @click="selectedDayIndex = index"
-                                 class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-16 rounded-2xl transition-all duration-300 snap-center cursor-pointer border shadow-sm"
-                                 :class="selectedDayIndex === index ? 'bg-[#F48FB1] border-[#F48FB1] text-white scale-105 shadow-md' : 'bg-white border-[#F0EBE0] text-[#A1887F]'"
-                                 :style="selectedDayIndex === index && activeTrip.theme === 'orange' ? 'background-color: #FFB74D; border-color: #FFB74D;' : ''">
-                                <span class="text-[9px] font-bold uppercase mb-0.5">{{ day.weekday }}</span>
-                                <span class="text-lg font-bold">{{ day.dateStr.split(' ')[0] }}</span>
-                            </div>
-                        </div>
-
-                        <div class="px-5 pt-2 space-y-4 relative">
+                        <div class="px-5 pt-4 space-y-4 relative">
                             <div class="absolute left-[26px] top-4 bottom-4 w-0.5 bg-[#EFEBE9] z-0 rounded-full"></div>
 
                             <div v-for="(item, idx) in currentDayEvents" :key="idx" class="relative pl-12 group">
@@ -288,9 +292,10 @@
                             <div class="p-4 text-white font-bold flex justify-between text-sm" :style="{ backgroundColor: activeTrip.theme === 'pink' ? '#F48FB1' : '#FFB74D' }">
                                 <span><i class="fa-solid fa-plane mr-2"></i>航班資訊 (CX)</span>
                             </div>
-                            <div class="p-5 text-sm bg-white">
+                            <div class="p-5 text-sm bg-white space-y-6">
                                 <div v-if="activeTrip.flights">
-                                    <div class="mb-5">
+                                    <div>
+                                        <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-blue-400 mr-1"></span>去程 (OUTBOUND)</div>
                                         <div class="flex justify-between items-center mb-2">
                                             <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.out.dep }}</div>
                                             <div class="flex-1 px-4 flex flex-col items-center">
@@ -302,6 +307,29 @@
                                             <span>HKG → JP ({{ activeTrip.flights.out.code }})</span>
                                             <span>{{ activeTrip.flights.out.date }}</span>
                                         </div>
+                                        <a :href="`https://www.google.com/search?q=${activeTrip.flights.out.code}+flight+status`" target="_blank" class="block w-full text-center py-2 mt-2 rounded-lg border border-[#E0E0E0] text-[#A1887F] text-xs font-bold hover:bg-[#F5F5F5] transition-colors">
+                                            <i class="fa-solid fa-wifi mr-1"></i> 查看實時狀態
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="border-t border-dashed border-[#E0E0E0]"></div>
+
+                                    <div>
+                                        <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-pink-400 mr-1"></span>回程 (INBOUND)</div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.dep }}</div>
+                                            <div class="flex-1 px-4 flex flex-col items-center">
+                                                <div class="h-0.5 w-full bg-[#E0E0E0] relative rounded-full"><i class="fa-solid fa-plane text-[#BDBDBD] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs" style="transform: translate(-50%, -50%) rotate(180deg);"></i></div>
+                                            </div>
+                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.arr }}</div>
+                                        </div>
+                                        <div class="flex justify-between text-xs font-bold bg-[#F5F5F5] p-3 rounded-xl text-[#757575]">
+                                            <span>JP → HKG ({{ activeTrip.flights.in.code }})</span>
+                                            <span>{{ activeTrip.flights.in.date }}</span>
+                                        </div>
+                                        <a :href="`https://www.google.com/search?q=${activeTrip.flights.in.code}+flight+status`" target="_blank" class="block w-full text-center py-2 mt-2 rounded-lg border border-[#E0E0E0] text-[#A1887F] text-xs font-bold hover:bg-[#F5F5F5] transition-colors">
+                                            <i class="fa-solid fa-wifi mr-1"></i> 查看實時狀態
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -350,6 +378,23 @@
                                 <span class="text-sm">查看完整 Google Doc 行程</span>
                             </div>
                         </div>
+
+                        <div class="cream-card p-5">
+                            <h3 class="font-bold mb-3 text-sm" :style="{ color: activeTrip.theme === 'pink' ? '#F48FB1' : '#FFB74D' }"><i class="fa-solid fa-coins mr-2"></i>匯率換算 (JPY)</h3>
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="flex-1 bg-[#F5F5F5] rounded-xl p-3 flex items-center">
+                                    <span class="text-[#A1887F] mr-2 text-xs font-bold">JPY</span>
+                                    <input type="number" v-model="calcJpy" @input="convert('jpy')" class="w-full bg-transparent outline-none font-bold text-lg text-[#5D4037]" placeholder="0">
+                                </div>
+                                <i class="fa-solid fa-arrow-right-arrow-left text-[#D7CCC8] text-xs"></i>
+                                <div class="flex-1 bg-[#F5F5F5] rounded-xl p-3 flex items-center">
+                                    <span class="text-[#A1887F] mr-2 text-xs font-bold">HKD</span>
+                                    <input type="number" v-model="calcHkd" @input="convert('hkd')" class="w-full bg-transparent outline-none font-bold text-lg text-[#5D4037]" placeholder="0">
+                                </div>
+                            </div>
+                            <div class="text-right text-[10px] text-[#A1887F]">匯率: {{ exchangeRate }}</div>
+                        </div>
+
                     </div>
 
                     <div v-if="activeTab === 'shopping'" class="px-5 pt-4">
@@ -420,7 +465,7 @@
                     </div>
                     <input type="range" min="12" max="24" step="1" v-model="settings.fontSize" class="w-full accent-[#A1887F]">
                 </div>
-                <div class="text-center text-xs text-[#D7CCC8] mt-4">V56 Creamy</div>
+                <div class="text-center text-xs text-[#D7CCC8] mt-4">V60 Creamy</div>
             </div>
         </div>
 
