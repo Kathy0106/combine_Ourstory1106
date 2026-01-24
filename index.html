@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V40</title>
+    <title>我的旅遊手帳 V41</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -131,56 +131,97 @@
 
             <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-24">
                 
-                <div class="bg-white rounded-3xl p-5 soft-shadow mb-6 text-center relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1" :style="{ backgroundColor: currentTheme.main }"></div>
-                    <p class="text-xs text-gray-400 mb-1">距離出發</p>
-                    <div class="text-4xl font-bold font-mono" :style="{ color: currentTheme.main }">
-                        {{ getCountdown(currentTripData.startDate) }} <span class="text-sm text-gray-400 font-sans">天</span>
-                    </div>
-                    <div class="mt-3 flex justify-center items-center gap-2 text-xs text-gray-500 bg-gray-50 rounded-full py-1 px-3 w-max mx-auto">
-                        <i class="fa-regular fa-calendar"></i> {{ currentTripData.dateRange }}
-                    </div>
-                </div>
-
-                <div class="flex gap-4 mb-6 overflow-x-auto no-scrollbar py-2">
-                    <div v-for="day in 3" class="min-w-[100px] bg-white rounded-2xl p-3 soft-shadow flex flex-col items-center justify-center text-center">
-                        <span class="text-xs text-gray-400 mb-1">{{ currentTripData.weatherCity }}</span>
-                        <i class="fa-solid fa-sun text-2xl mb-1 text-yellow-400"></i>
-                        <span class="font-bold text-slate-700">18°C</span>
-                    </div>
-                </div>
-
-                <div class="space-y-4 relative">
-                    <div class="absolute left-[19px] top-4 bottom-0 w-0.5 bg-gray-200 z-0"></div>
-
-                    <div class="relative z-10 flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full text-white flex items-center justify-center font-bold shadow-md text-sm" :style="{ backgroundColor: currentTheme.main }">
-                            D1
+                <div v-if="activeTab === 'itinerary'">
+                    
+                    <div class="bg-white rounded-3xl p-5 soft-shadow mb-6 text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1" :style="{ backgroundColor: currentTheme.main }"></div>
+                        <p class="text-xs text-gray-400 mb-1">距離出發</p>
+                        <div class="text-4xl font-bold font-mono" :style="{ color: currentTheme.main }">
+                            {{ getCountdown(currentTripData.startDate) }} <span class="text-sm text-gray-400 font-sans">天</span>
                         </div>
-                        <div>
-                            <div class="font-bold text-xl text-slate-800">4月18日</div>
-                            <div class="text-xs text-gray-400">星期六 • 東京抵達</div>
+                        <div class="mt-3 flex justify-center items-center gap-2 text-xs text-gray-500 bg-gray-50 rounded-full py-1 px-3 w-max mx-auto">
+                            <i class="fa-regular fa-calendar"></i> {{ currentTripData.dateRange }}
                         </div>
                     </div>
 
-                    <div v-for="(event, idx) in currentTripData.itinerary" :key="idx" class="ml-12 relative group">
-                        <div class="bg-white rounded-2xl p-4 soft-shadow mb-4 border-l-4 transition-transform active:scale-95" :style="{ borderLeftColor: currentTheme.main }">
-                            <div class="flex justify-between items-start mb-1">
-                                <span class="text-xs font-bold px-2 py-0.5 rounded text-white" :style="{ backgroundColor: currentTheme.main }">{{ event.time }}</span>
-                                <button class="text-gray-300"><i class="fa-solid fa-ellipsis"></i></button>
+                    <div class="flex gap-4 mb-6 overflow-x-auto no-scrollbar py-2">
+                        <div v-for="day in 3" class="min-w-[100px] bg-white rounded-2xl p-3 soft-shadow flex flex-col items-center justify-center text-center">
+                            <span class="text-xs text-gray-400 mb-1">{{ currentTripData.weatherCity }}</span>
+                            <i class="fa-solid fa-sun text-2xl mb-1 text-yellow-400"></i>
+                            <span class="font-bold text-slate-700">18°C</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 relative">
+                        <div class="absolute left-[19px] top-4 bottom-0 w-0.5 bg-gray-200 z-0"></div>
+
+                        <div class="relative z-10 flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full text-white flex items-center justify-center font-bold shadow-md text-sm" :style="{ backgroundColor: currentTheme.main }">
+                                D1
                             </div>
-                            <h4 class="font-bold text-lg text-slate-800 mb-1">{{ event.title }}</h4>
-                            <p class="text-sm text-gray-500 flex items-center gap-1"><i class="fa-solid fa-location-dot text-xs"></i> {{ event.loc }}</p>
+                            <div>
+                                <div class="font-bold text-xl text-slate-800">4月18日</div>
+                                <div class="text-xs text-gray-400">星期六 • 東京抵達</div>
+                            </div>
+                        </div>
+
+                        <div v-for="(event, idx) in currentTripData.itinerary" :key="idx" class="ml-12 relative group">
+                            <div class="bg-white rounded-2xl p-4 soft-shadow mb-4 border-l-4 transition-transform active:scale-95" :style="{ borderLeftColor: currentTheme.main }">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded text-white" :style="{ backgroundColor: currentTheme.main }">{{ event.time }}</span>
+                                    <button class="text-gray-300"><i class="fa-solid fa-ellipsis"></i></button>
+                                </div>
+                                <h4 class="font-bold text-lg text-slate-800 mb-1">{{ event.title }}</h4>
+                                <p class="text-sm text-gray-500 flex items-center gap-1"><i class="fa-solid fa-location-dot text-xs"></i> {{ event.loc }}</p>
+                            </div>
+                        </div>
+
+                        <div class="ml-12">
+                            <button class="w-full py-3 rounded-2xl border-2 border-dashed border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-plus"></i> 新增行程
+                            </button>
                         </div>
                     </div>
-
-                    <div class="ml-12">
-                        <button class="w-full py-3 rounded-2xl border-2 border-dashed border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-plus"></i> 新增行程
-                        </button>
-                    </div>
-
                 </div>
+
+                <div v-if="activeTab === 'booking'">
+                    <div class="text-center py-10">
+                        <i class="fa-solid fa-ticket text-4xl text-gray-300 mb-3"></i>
+                        <p class="text-gray-500">預約管理頁面</p>
+                        <p class="text-xs text-gray-400 mt-1">機票、酒店、門票都在這裡</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 soft-shadow mb-4 flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                             <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center"><i class="fa-solid fa-plane"></i></div>
+                             <div>
+                                 <div class="font-bold text-sm">CX500 香港 -> 東京</div>
+                                 <div class="text-xs text-gray-400">2026/04/18 • 10:00</div>
+                             </div>
+                        </div>
+                        <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">已確認</span>
+                    </div>
+                </div>
+
+                <div v-if="activeTab === 'expenses'">
+                     <div class="bg-white rounded-3xl p-6 soft-shadow mb-6 text-center">
+                        <p class="text-xs text-gray-400 mb-1">總花費 (HKD)</p>
+                        <div class="text-4xl font-bold text-slate-800">$12,500</div>
+                    </div>
+                     <div class="text-center py-10 text-gray-400">
+                        <p>暫無支出紀錄</p>
+                         <button class="mt-4 px-4 py-2 bg-gray-100 rounded-full text-sm font-bold">記一筆</button>
+                    </div>
+                </div>
+
+                <div v-if="activeTab === 'shopping'">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white rounded-2xl p-3 soft-shadow aspect-square flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200">
+                             <i class="fa-solid fa-plus text-2xl mb-2"></i>
+                             <span class="text-xs">新增物品</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="bg-white absolute bottom-0 w-full px-6 py-4 rounded-t-[30px] shadow-[0_-5px_30px_rgba(0,0,0,0.05)] flex justify-between items-center z-50">
@@ -321,6 +362,7 @@
                     this.settings.themeColor = trip.defaultTheme;
                     this.settings.effect = trip.defaultEffect;
                     this.currentView = 'trip_detail';
+                    this.activeTab = 'itinerary'; // Reset tab
                 },
                 changeTheme(color) {
                     this.settings.themeColor = color;
