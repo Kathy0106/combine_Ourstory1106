@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V49</title>
+    <title>我的旅遊手帳 V50</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -19,14 +19,14 @@
             background-color: #FFF9F5;
             overscroll-behavior-y: none;
             -webkit-tap-highlight-color: transparent;
-            font-size: 14px; /* 預設字體縮小 */
+            font-size: 14px;
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .soft-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .soft-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
         .card-press:active { transform: scale(0.98); transition: transform 0.1s; }
         
-        /* 飄落動畫 */
+        /* 飄落動畫 (修正 Z-index 確保在最頂層) */
         @keyframes fall {
             0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 1; }
             100% { transform: translateY(110vh) translateX(20px) rotate(360deg); opacity: 0; }
@@ -36,19 +36,26 @@
             top: -10%;
             user-select: none;
             pointer-events: none;
-            z-index: 0;
+            z-index: 9999; /* 確保在所有層級之上 */
             animation-name: fall;
             animation-timing-function: linear;
             animation-iteration-count: infinite;
         }
+        
+        /* 修正 Header 圖片顯示 */
+        .trip-header-bg {
+            background-size: cover;
+            background-position: center;
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden text-slate-700">
+<body class="h-screen w-screen overflow-hidden text-slate-700" :style="{ fontSize: settings.fontSize + 'px' }">
 
     <div id="app" class="h-full flex flex-col relative transition-colors duration-700" :style="{ backgroundColor: currentTheme.bg }">
 
-        <div v-if="currentEffect !== 'none'" class="absolute inset-0 overflow-hidden pointer-events-none z-0">
-            <div v-for="n in 15" :key="n" class="falling-item text-lg opacity-60" 
+        <div v-if="currentEffect !== 'none'" class="absolute inset-0 overflow-hidden pointer-events-none z-[9999]">
+            <div v-for="n in 12" :key="n" class="falling-item text-xl opacity-70" 
                  :style="{ 
                     left: Math.random() * 100 + 'vw', 
                     animationDuration: (Math.random() * 5 + 5) + 's', 
@@ -63,23 +70,22 @@
             
             <div class="mb-6 flex justify-between items-end">
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800">我的旅程</h1>
-                    <p class="text-xs text-gray-400 mt-1">開始規劃你的下一趟旅行 ✈️</p>
+                    <h1 class="text-2xl font-bold text-slate-800">早晨！☀️</h1>
+                    <p class="text-xs text-gray-400 mt-1">準備好出發未？</p>
                 </div>
-                <button @click="showSettings = true" class="w-8 h-8 rounded-full bg-white soft-shadow flex items-center justify-center text-gray-400 hover:text-gray-600">
+                <button @click="showSettings = true" class="w-9 h-9 rounded-full bg-white soft-shadow flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
                     <i class="fa-solid fa-gear text-sm"></i>
                 </button>
             </div>
 
             <div class="space-y-5">
-                
-                <div @click="selectTrip('karuizawa')" class="relative w-full h-[180px] rounded-[25px] soft-shadow overflow-hidden card-press cursor-pointer group bg-white">
-                    <div class="absolute inset-0 bg-cover bg-center" :style="{ backgroundImage: `url(${trips.karuizawa.headerImg})` }"></div>
+                <div @click="selectTrip('karuizawa')" class="relative w-full aspect-[16/9] rounded-[25px] soft-shadow overflow-hidden card-press cursor-pointer group bg-white">
+                    <div class="absolute inset-0 trip-header-bg" :style="{ backgroundImage: `url(${trips.karuizawa.headerImg})` }"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 w-full p-5 text-white">
                         <div class="flex justify-between items-end">
                             <div>
-                                <div class="text-[10px] font-bold bg-pink-500/80 px-2 py-0.5 rounded-md inline-block mb-1 backdrop-blur-sm">🌸 櫻花季</div>
+                                <div class="text-[10px] font-bold bg-pink-500/90 px-2 py-0.5 rounded-md inline-block mb-1 backdrop-blur-sm shadow-sm">🌸 櫻花季</div>
                                 <h3 class="text-xl font-bold mb-0.5">{{ trips.karuizawa.name }}</h3>
                                 <p class="text-[10px] opacity-90 font-mono"><i class="fa-solid fa-calendar mr-1"></i> {{ trips.karuizawa.range }}</p>
                             </div>
@@ -92,13 +98,13 @@
                     </div>
                 </div>
 
-                <div @click="selectTrip('central')" class="relative w-full h-[180px] rounded-[25px] soft-shadow overflow-hidden card-press cursor-pointer group bg-white">
-                    <div class="absolute inset-0 bg-cover bg-center" :style="{ backgroundImage: `url(${trips.central.headerImg})` }"></div>
+                <div @click="selectTrip('central')" class="relative w-full aspect-[16/9] rounded-[25px] soft-shadow overflow-hidden card-press cursor-pointer group bg-white">
+                    <div class="absolute inset-0 trip-header-bg" :style="{ backgroundImage: `url(${trips.central.headerImg})` }"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 w-full p-5 text-white">
                         <div class="flex justify-between items-end">
                             <div>
-                                <div class="text-[10px] font-bold bg-orange-500/80 px-2 py-0.5 rounded-md inline-block mb-1 backdrop-blur-sm">🍁 紅葉季</div>
+                                <div class="text-[10px] font-bold bg-orange-500/90 px-2 py-0.5 rounded-md inline-block mb-1 backdrop-blur-sm shadow-sm">🍁 紅葉季</div>
                                 <h3 class="text-xl font-bold mb-0.5">{{ trips.central.name }}</h3>
                                 <p class="text-[10px] opacity-90 font-mono"><i class="fa-solid fa-calendar mr-1"></i> {{ trips.central.range }}</p>
                             </div>
@@ -111,7 +117,7 @@
                     </div>
                 </div>
 
-                 <div class="border-2 border-dashed border-gray-200 rounded-[25px] p-4 flex items-center justify-center text-gray-300 card-press cursor-pointer h-24 hover:bg-white transition-colors">
+                 <div class="border-2 border-dashed border-gray-300 rounded-[25px] p-4 flex items-center justify-center text-gray-300 card-press cursor-pointer h-24 hover:bg-white transition-colors hover:border-gray-400 hover:text-gray-400">
                     <span class="text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-plus"></i> 新增旅程</span>
                 </div>
             </div>
@@ -120,13 +126,17 @@
 
         <div v-if="currentView === 'detail'" class="flex-1 flex flex-col relative z-10 h-full">
             
-            <div class="relative h-[220px] flex-shrink-0 bg-cover bg-center transition-all duration-500"
+            <div class="relative w-full aspect-[16/10] max-h-[260px] flex-shrink-0 trip-header-bg shadow-md"
                  :style="{ backgroundImage: `url(${activeTrip.headerImg})` }">
                 
-                <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70"></div>
                 
-                <button @click="currentView = 'home'" class="absolute top-6 left-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white z-50">
+                <button @click="currentView = 'home'" class="absolute top-6 left-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white z-50 hover:bg-white/30 transition shadow-sm">
                     <i class="fa-solid fa-arrow-left text-sm"></i>
+                </button>
+                
+                 <button @click="showSettings = true" class="absolute top-6 right-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white z-50 hover:bg-white/30 transition shadow-sm">
+                    <i class="fa-solid fa-gear text-sm"></i>
                 </button>
 
                 <div class="absolute bottom-6 right-4 flex space-x-3 z-20">
@@ -136,7 +146,7 @@
                     <button @click="activeTab = 'expenses'" :class="tabClass('expenses')"><i class="fa-solid fa-yen-sign"></i></button>
                 </div>
                 
-                <div class="absolute bottom-8 left-5 text-white text-shadow drop-shadow-lg pr-28">
+                <div class="absolute bottom-8 left-5 text-white text-shadow drop-shadow-lg pr-32">
                     <h1 class="text-xl font-bold tracking-widest leading-tight mb-1">{{ activeTrip.name }}</h1>
                     <p class="text-[10px] opacity-90"><i class="fa-solid fa-calendar mr-1"></i> {{ activeTrip.range }}</p>
                 </div>
@@ -148,17 +158,20 @@
                     <div v-if="activeTab === 'itinerary'">
                         
                         <div class="sticky top-0 z-40 px-4 pt-4 pb-2 transition-all duration-300" :style="{ backgroundColor: currentTheme.bg }">
-                            <div class="bg-white rounded-xl p-3 soft-shadow flex justify-between items-center border border-gray-50">
-                                <div class="flex items-baseline gap-2">
-                                    <span class="text-xs text-gray-400 font-bold">距離出發</span>
-                                    <span class="text-xl font-bold font-mono" :style="{ color: currentTheme.main }">
+                            <div class="bg-white rounded-xl p-3 soft-shadow flex justify-between items-center border border-gray-50/50">
+                                <div>
+                                    <div class="text-[10px] text-gray-400 font-bold mb-0.5">距離出發</div>
+                                    <div class="text-xl font-bold font-mono" :style="{ color: currentTheme.main }">
                                         {{ getCountdown(activeTrip.date) }} <span class="text-[10px] text-gray-400 font-sans font-normal">天</span>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="h-1 flex-1 mx-3 rounded-full bg-gray-100 overflow-hidden">
-                                    <div class="h-full w-1/3 rounded-full" :style="{ backgroundColor: currentTheme.main }"></div>
+                                <div class="text-right">
+                                    <div class="text-[10px] text-gray-400">{{ weather.city_name }}</div>
+                                    <div class="flex items-center gap-1 justify-end">
+                                        <i :class="['fa-solid', weather.icon]" :style="{ color: currentTheme.main }"></i>
+                                        <span class="font-bold text-slate-600">{{ weather.temp }}°</span>
+                                    </div>
                                 </div>
-                                <i class="fa-solid fa-plane text-gray-300 text-xs"></i>
                             </div>
                         </div>
 
@@ -168,8 +181,8 @@
                                  class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-16 rounded-xl transition-all duration-300 snap-center cursor-pointer border border-white/60 soft-shadow"
                                  :class="selectedDayIndex === index ? 'text-white shadow-md scale-105' : 'bg-white text-gray-400'"
                                  :style="{ backgroundColor: selectedDayIndex === index ? currentTheme.main : 'white' }">
-                                <span class="text-[10px] font-bold uppercase">{{ day.weekday }}</span>
-                                <span class="text-lg font-bold">{{ day.dateStr.split('/')[1] }}</span>
+                                <span class="text-[9px] font-bold uppercase">{{ day.weekday }}</span>
+                                <span class="text-sm font-bold">{{ day.dateStr }}</span>
                                 <span class="text-[9px] opacity-80">Day {{ index + 1 }}</span>
                             </div>
                         </div>
@@ -188,11 +201,11 @@
                         <div class="px-4 pt-2 space-y-0 relative">
                             <div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-gray-200 z-0"></div>
 
-                            <div v-for="(item, idx) in currentDayEvents" :key="idx" class="relative pl-10 pb-6 group">
+                            <div v-for="(item, idx) in currentDayEvents" :key="idx" class="relative pl-10 pb-8 group">
                                 
-                                <div v-if="idx > 0" class="absolute -top-5 left-10 right-0 flex items-center text-[9px] text-gray-400 mb-2 z-50">
-                                    <span class="bg-white px-2 py-0.5 rounded-full border border-gray-100 flex items-center gap-1 shadow-sm">
-                                        <i :class="getTransportIcon(item.transportType)"></i>
+                                <div v-if="idx > 0" class="absolute -top-7 left-10 right-0 flex items-center text-[10px] text-gray-400 mb-2 z-50">
+                                    <span class="bg-white px-2 py-0.5 rounded-full border border-gray-100 flex items-center gap-1.5 shadow-sm font-medium">
+                                        <i :class="[getTransportIcon(item.transportType), 'text-' + activeTrip.theme + '-500']"></i>
                                         {{ item.travelTime || '移動' }}
                                     </span>
                                 </div>
@@ -224,7 +237,7 @@
                                             <span v-if="item.category === 'highlight'" class="text-[9px] bg-yellow-50 text-yellow-600 px-1.5 py-0.5 rounded border border-yellow-100">
                                                 <i class="fa-solid fa-heart mr-0.5"></i>紀念日
                                             </span>
-                                            <span v-if="item.loc" class="text-[9px] bg-gray-50 text-gray-400 px-1.5 py-0.5 rounded border border-gray-100">
+                                            <span v-if="item.loc" class="text-[9px] bg-gray-50 text-gray-500 px-1.5 py-0.5 rounded border border-gray-100">
                                                 <i class="fa-solid fa-location-arrow mr-0.5"></i>導航
                                             </span>
                                         </div>
@@ -233,6 +246,7 @@
                             </div>
                             
                             <div v-if="currentDayEvents.length === 0" class="text-center text-gray-400 py-10">
+                                <i class="fa-solid fa-calendar-plus text-3xl mb-2 opacity-20"></i>
                                 <p class="text-xs">點擊右下角新增行程</p>
                             </div>
                         </div>
@@ -240,43 +254,46 @@
 
                     <div v-if="activeTab === 'info'" class="space-y-5 px-4 pt-2">
                         
-                        <div class="bg-white rounded-xl p-0 soft-shadow overflow-hidden border-l-4" :style="{ borderLeftColor: currentTheme.main }">
-                            <div class="bg-gray-50 p-3 font-bold flex justify-between items-center text-sm" :style="{ color: currentTheme.main }">
-                                <span><i class="fa-solid fa-file-lines mr-2"></i>完整 Google Doc 行程</span>
-                            </div>
-                            <div class="p-3">
-                                <a :href="activeTrip.docLink" target="_blank" class="block w-full text-white font-bold py-3 rounded-lg shadow-md hover:opacity-90 transition-colors text-center text-sm" :style="{ backgroundColor: currentTheme.main }">
-                                    <i class="fa-brands fa-google-drive mr-2"></i> 點擊查看文檔
-                                </a>
-                            </div>
-                        </div>
-
                         <div class="bg-white rounded-xl p-0 soft-shadow overflow-hidden" v-if="activeTrip.rental">
                             <div class="bg-blue-50 p-3 text-blue-600 font-bold flex justify-between text-sm">
                                 <span><i class="fa-solid fa-car mr-2"></i>租車資訊</span>
                             </div>
                             <div class="p-4 space-y-3 text-sm">
                                 <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                                    <span class="text-gray-500">預約號碼</span>
+                                    <span class="text-gray-500 text-xs">預約號碼</span>
                                     <span class="text-lg font-bold tracking-widest text-slate-800">{{ activeTrip.rental.no }}</span>
                                 </div>
-                                <div class="flex gap-4">
-                                    <div class="flex-1 bg-blue-50/50 p-2 rounded-lg border border-blue-100">
-                                        <p class="text-blue-400 text-[10px] mb-0.5">取車</p>
-                                        <p class="text-sm font-bold text-slate-800">{{ activeTrip.rental.pickup }}</p>
+                                <div class="flex gap-3">
+                                    <div class="flex-1 bg-blue-50/50 p-2 rounded-lg border border-blue-100 text-center">
+                                        <p class="text-blue-400 text-[10px] mb-0.5 font-bold">取車</p>
+                                        <p class="text-sm font-bold text-slate-800">{{ activeTrip.rental.pickup.split('@')[0] }}</p>
+                                        <p class="text-[10px] text-gray-500">{{ activeTrip.rental.pickup.split('@')[1] }}</p>
                                     </div>
-                                    <div class="flex-1 bg-red-50/50 p-2 rounded-lg border border-red-100">
-                                        <p class="text-red-400 text-[10px] mb-0.5">還車</p>
-                                        <p class="text-sm font-bold text-slate-800">{{ activeTrip.rental.return }}</p>
+                                    <div class="flex-1 bg-red-50/50 p-2 rounded-lg border border-red-100 text-center">
+                                        <p class="text-red-400 text-[10px] mb-0.5 font-bold">還車</p>
+                                        <p class="text-sm font-bold text-slate-800">{{ activeTrip.rental.return.split('@')[0] }}</p>
+                                        <p class="text-[10px] text-gray-500">{{ activeTrip.rental.return.split('@')[1] }}</p>
                                     </div>
                                 </div>
-                                <div class="text-xs text-gray-500">
-                                    <p class="mb-1"><strong>保險:</strong> {{ activeTrip.rental.insurance }}</p>
-                                    <p v-if="activeTrip.rental.note" class="text-red-500 font-bold"><i class="fa-solid fa-snowflake mr-1"></i>{{ activeTrip.rental.note }}</p>
+                                <div class="text-xs text-gray-500 flex justify-between">
+                                    <span><strong>保險:</strong> {{ activeTrip.rental.insurance }}</span>
+                                    <span v-if="activeTrip.rental.note" class="text-red-500 font-bold"><i class="fa-solid fa-snowflake mr-1"></i>{{ activeTrip.rental.note }}</span>
                                 </div>
-                                <button @click="openMap(activeTrip.rental.pickupLoc)" class="w-full bg-blue-500 text-white py-3 rounded-lg font-bold shadow-md active:scale-95 transition-transform text-sm mt-1">
+                                <button @click="openMap(activeTrip.rental.pickupLoc)" class="w-full bg-blue-500 text-white py-3 rounded-lg font-bold shadow-md active:scale-95 transition-transform text-sm mt-1 flex items-center justify-center">
                                     <i class="fa-solid fa-location-arrow mr-2"></i> 導航去取車
                                 </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-0 soft-shadow overflow-hidden border-2 border-red-100">
+                            <div class="bg-red-50 p-3 text-red-600 font-bold flex justify-between items-center text-sm">
+                                <span><i class="fa-regular fa-clock mr-2"></i>關鍵行動鬧鐘</span>
+                            </div>
+                            <div class="p-4 space-y-2 text-sm">
+                                <div v-for="(alarm, idx) in activeTrip.alarms" :key="idx" class="flex gap-3 border-b border-gray-50 pb-2 last:border-0 last:pb-0 items-center">
+                                    <span class="font-bold text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded">{{ alarm.date }}</span> 
+                                    <span class="text-slate-700 font-medium">{{ alarm.task }}</span>
+                                </div>
                             </div>
                         </div>
 
@@ -285,31 +302,33 @@
                                 <span><i class="fa-solid fa-plane mr-2"></i>航班資訊 (CX)</span>
                             </div>
                             <div class="p-4 text-sm">
-                                <div class="mb-4">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.out.dep }}</div>
-                                        <div class="flex-1 px-4 flex flex-col items-center">
-                                            <div class="h-0.5 w-full bg-gray-200 relative"><i class="fa-solid fa-plane text-gray-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs"></i></div>
+                                <div v-if="activeTrip.flights">
+                                    <div class="mb-4">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.out.dep }}</div>
+                                            <div class="flex-1 px-4 flex flex-col items-center">
+                                                <div class="h-0.5 w-full bg-gray-200 relative"><i class="fa-solid fa-plane text-gray-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs"></i></div>
+                                            </div>
+                                            <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.out.arr }}</div>
                                         </div>
-                                        <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.out.arr }}</div>
-                                    </div>
-                                    <div class="flex justify-between text-xs font-bold bg-gray-50 p-2 rounded-lg text-gray-600">
-                                        <span>HKG → JP ({{ activeTrip.flights.out.code }})</span>
-                                        <span>{{ activeTrip.flights.out.date }}</span>
-                                    </div>
-                                </div>
-                                <div class="border-t-2 border-dashed border-gray-100 my-4"></div>
-                                <div>
-                                    <div class="flex justify-between items-center mb-1">
-                                        <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.in.dep }}</div>
-                                        <div class="flex-1 px-4 flex flex-col items-center">
-                                            <div class="h-0.5 w-full bg-gray-200 relative"><i class="fa-solid fa-plane text-gray-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs"></i></div>
+                                        <div class="flex justify-between text-xs font-bold bg-gray-50 p-2 rounded-lg text-gray-600">
+                                            <span>HKG → JP ({{ activeTrip.flights.out.code }})</span>
+                                            <span>{{ activeTrip.flights.out.date }}</span>
                                         </div>
-                                        <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.in.arr }}</div>
                                     </div>
-                                    <div class="flex justify-between text-xs font-bold bg-gray-50 p-2 rounded-lg text-gray-600">
-                                        <span>JP → HKG ({{ activeTrip.flights.in.code }})</span>
-                                        <span>{{ activeTrip.flights.in.date }}</span>
+                                    <div class="border-t border-dashed border-gray-200 my-3"></div>
+                                    <div>
+                                        <div class="flex justify-between items-center mb-1">
+                                            <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.in.dep }}</div>
+                                            <div class="flex-1 px-4 flex flex-col items-center">
+                                                <div class="h-0.5 w-full bg-gray-200 relative"><i class="fa-solid fa-plane text-gray-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs"></i></div>
+                                            </div>
+                                            <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.in.arr }}</div>
+                                        </div>
+                                        <div class="flex justify-between text-xs font-bold bg-gray-50 p-2 rounded-lg text-gray-600">
+                                            <span>JP → HKG ({{ activeTrip.flights.in.code }})</span>
+                                            <span>{{ activeTrip.flights.in.date }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -333,13 +352,14 @@
 
                         <div class="space-y-3 pb-8">
                             <h3 class="font-bold text-gray-500 ml-1 text-sm">住宿列表</h3>
-                            <div v-for="hotel in activeTrip.hotels" :key="hotel.name" class="bg-white rounded-xl p-3 soft-shadow flex items-center gap-4" @click="openMap(hotel.name)">
+                            <div v-for="hotel in activeTrip.hotels" :key="hotel.name" class="bg-white rounded-xl p-3 soft-shadow flex items-center gap-3" @click="openMap(hotel.name)">
                                 <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-lg shadow-sm" :style="{ backgroundColor: currentTheme.main }">
                                     <i class="fa-solid fa-bed"></i>
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="font-bold text-sm text-slate-800">{{ hotel.name }}</h4>
                                     <p class="text-xs text-gray-500 mt-0.5">{{ hotel.dates }}</p>
+                                    <p v-if="hotel.note" class="text-[10px] text-red-500 mt-0.5 font-bold"><i class="fa-solid fa-gift mr-1"></i>{{ hotel.note }}</p>
                                 </div>
                                 <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
                             </div>
@@ -414,6 +434,23 @@
             </div>
         </div>
 
+        <div v-if="showSettings" class="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center" @click.self="showSettings = false">
+            <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold">設定</h3>
+                    <button @click="showSettings = false" class="text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-sm font-bold text-gray-500">字體大小</span>
+                        <span class="text-xs text-gray-400">{{ settings.fontSize }}px</span>
+                    </div>
+                    <input type="range" min="12" max="18" step="1" v-model="settings.fontSize" class="w-full accent-slate-500">
+                </div>
+                <div class="text-center text-xs text-gray-300 mt-4">V50 Build 2026.01</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -427,6 +464,7 @@
                     activeTab: 'itinerary',
                     selectedDayIndex: 0,
                     showModal: false,
+                    showSettings: false, // Fix: Added
                     newShopItem: '',
                     
                     exchangeRate: 0.053,
@@ -435,6 +473,13 @@
                     
                     weather: { city_name: '', temp: '--', feels_like: '--', icon: 'fa-spinner fa-spin' },
                     apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4',
+                    
+                    // Global Settings
+                    settings: {
+                        themeColor: 'pink',
+                        effect: 'flower',
+                        fontSize: 14 // Fix: Default size
+                    },
 
                     themes: {
                         pink: { main: '#DB7093', bg: '#FFF0F5' },   
@@ -451,6 +496,7 @@
                             effect: 'flower',
                             headerImg: './header_karuizawa.jpg',
                             docLink: 'https://docs.google.com/document/d/1-4mgjTycE9bGWhuitIkigPSM4_0fBPlZX2RoVRCTlXw/edit?usp=drivesdk',
+                            weatherCity: 'Karuizawa,JP',
                             
                             flights: {
                                 out: { code: 'CX524', date: '4/18', dep: '01:00', arr: '06:40' },
@@ -458,9 +504,9 @@
                             },
                             rental: {
                                 company: 'Toyota Rent a Car',
-                                pickup: '4/20 09:30',
+                                pickup: '4/20 09:30 @ T-CAT (水天宮)',
                                 pickupLoc: 'Toyota Rent a Car T-CAT',
-                                return: '4/22 17:00',
+                                return: '4/22 17:00 @ T-CAT (水天宮)',
                                 insurance: 'NOC 安心保險',
                                 no: '98147748300',
                                 note: ''
@@ -533,7 +579,8 @@
                                 { weekday: 'Sat', dateStr: '4/25', events: [
                                     { time: '10:30', title: '東京一番街', desc: 'Character Street', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk' },
                                     { time: '12:00', title: 'Manten Sushi', desc: '丸之內店', category: 'food', loc: 'Manten Sushi Marunouchi', transportType: 'walk' },
-                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛', category: 'transport', loc: 'T-CAT', transportType: 'car' },
+                                    { time: '14:00', title: '前往 Marunouchi', desc: '行 15 min', category: 'transport', loc: 'Marunouchi', transportType: 'walk', travelTime: '15 min' },
+                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛 (巴士/的士 20 min)', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '20 min' },
                                     { time: '14:45', title: '前往機場', desc: 'CX501 回程', category: 'transport', loc: 'Narita Airport', transportType: 'bus', travelTime: '60 min' }
                                 ]}
                             ]
@@ -547,16 +594,17 @@
                             effect: 'leaf',
                             headerImg: './header_central.jpg',
                             docLink: 'https://docs.google.com/document/d/11eFLaGqOmRfXx90pVCWGF0iNIQRwECa3X3VmFjqQgdk/edit?usp=drivesdk',
-                            
+                            weatherCity: 'Nagoya,JP',
+
                             flights: {
                                 out: { code: 'CX524', date: '10/31', dep: '01:00', arr: '06:40' },
                                 in: { code: 'CX505', date: '11/08', dep: '18:00', arr: '22:25' }
                             },
                             rental: {
                                 company: 'Toyota Rent a Car',
-                                pickup: '10/31 08:00',
+                                pickup: '10/31 08:00 @ 成田機場',
                                 pickupLoc: 'Toyota Rent a Car Narita Airport',
-                                return: '11/05 18:00',
+                                return: '11/05 18:00 @ 淺草/上野',
                                 insurance: 'NOC 安心保險',
                                 note: '必須指定雪胎 (Snow Tires)'
                             },
@@ -575,7 +623,7 @@
                                 { date: '9/30', task: '預約 鳥貴族' }
                             ],
 
-                            shopping: ['飛驒牛味噌', '清酒', '紅葉手信'],
+                            shopping: [],
                             expenses: [],
                             
                             // 完整行程 Day 1 - Day 9
