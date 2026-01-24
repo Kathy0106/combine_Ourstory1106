@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V45</title>
+    <title>我的旅遊手帳 V47</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -235,8 +235,8 @@
                                 <span><i class="fa-regular fa-clock mr-2"></i>關鍵行動鬧鐘 (Set Alarm)</span>
                             </div>
                             <div class="p-4 space-y-3 text-xs">
-                                <div v-for="(alarm, idx) in activeTrip.alarms" :key="idx" class="flex gap-2">
-                                    <span class="font-bold w-12">{{ alarm.date }}</span> 
+                                <div v-for="(alarm, idx) in activeTrip.alarms" :key="idx" class="flex gap-2 border-b border-gray-50 pb-2 last:border-0 last:pb-0">
+                                    <span class="font-bold w-12 text-red-500">{{ alarm.date }}</span> 
                                     <span>{{ alarm.task }}</span>
                                 </div>
                             </div>
@@ -428,7 +428,7 @@
                             range: 'Apr 18 - 25, 2026',
                             theme: 'pink',
                             effect: 'flower',
-                            headerImg: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=800&q=80',
+                            headerImg: './header_karuizawa.jpg',
                             docLink: 'https://docs.google.com/document/d/1-4mgjTycE9bGWhuitIkigPSM4_0fBPlZX2RoVRCTlXw/edit?usp=drivesdk',
                             weatherCity: 'Karuizawa,JP',
                             
@@ -438,8 +438,8 @@
                             },
                             rental: {
                                 company: 'Toyota Rent a Car',
-                                pickup: '4/20 09:30 @ T-CAT',
-                                return: '4/22 17:00 @ T-CAT',
+                                pickup: '4/20 09:30 @ T-CAT (水天宮)',
+                                return: '4/22 17:00 @ T-CAT (水天宮)',
                                 insurance: 'NOC 安心保險',
                                 no: '98147748300',
                                 note: ''
@@ -459,74 +459,76 @@
                             
                             days: [
                                 { weekday: 'Sat', dateStr: '4/18', events: [
-                                    { time: '06:40', title: '抵達成田 (NRT)', desc: '橙色櫃台買飛去 T-CAT', category: 'flight', loc: 'Narita Airport' },
-                                    { time: '07:45', title: '巴士 -> T-CAT', desc: '利木津巴士，4個喼寄艙', category: 'transport', loc: 'T-CAT' },
-                                    { time: '09:00', title: 'Check-in 酒店', desc: '的士直達 VIA INN PRIME', category: 'hotel', loc: 'VIA INN PRIME Nihonbashi' },
-                                    { time: '11:00', title: '利久牛舌 (午餐)', desc: '上野 Parco_ya 6F，「極」定食', category: 'food', loc: 'Rikyu Ueno' },
-                                    { time: '13:00', title: '根津神社', desc: '杜鵑花祭', category: 'sightseeing', loc: 'Nezu Shrine' },
-                                    { time: '15:30', title: '淺草散步', desc: '雷門/仲見世通', category: 'sightseeing', loc: 'Sensoji' },
-                                    { time: '17:00', title: '米久本店', desc: '百年牛鍋 (壽喜燒)', category: 'food', loc: 'Yonekyu Honten' }
+                                    { time: '06:40', title: '抵達成田 (NRT)', desc: '橙色櫃台買飛去 T-CAT', category: 'flight', loc: 'Narita Airport', transportType: 'flight' },
+                                    { time: '07:45', title: '巴士 -> T-CAT', desc: '利木津巴士，4個喼寄艙', category: 'transport', loc: 'T-CAT', transportType: 'bus', travelTime: '75 min' },
+                                    { time: '09:00', title: 'Check-in 酒店', desc: '的士直達 VIA INN PRIME', category: 'hotel', loc: 'VIA INN PRIME Nihonbashi', transportType: 'car', travelTime: '10 min' },
+                                    { time: '11:00', title: '利久牛舌 (午餐)', desc: '上野 Parco_ya 6F，「極」定食', category: 'food', loc: 'Rikyu Ueno', transportType: 'train', travelTime: '30 min' },
+                                    { time: '13:00', title: '根津神社', desc: '杜鵑花祭', category: 'sightseeing', loc: 'Nezu Shrine', transportType: 'bus', travelTime: '20 min' },
+                                    { time: '15:30', title: '淺草散步', desc: '雷門/仲見世通', category: 'sightseeing', loc: 'Sensoji', transportType: 'bus', travelTime: '25 min' },
+                                    { time: '17:00', title: '米久本店', desc: '百年牛鍋 (壽喜燒)', category: 'food', loc: 'Yonekyu Honten', transportType: 'walk', travelTime: '10 min' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '4/19', events: [
-                                    { time: '09:30', title: '龜戶天神社', desc: '紫藤花 (水天宮前->錦糸町)', category: 'sightseeing', loc: 'Kameido Tenjin' },
-                                    { time: '12:30', title: '山笑ふ (午餐)', desc: '表參道店 Shabu Shabu (已預約)', category: 'food', loc: 'Yama Warau Omotesando' },
-                                    { time: '14:30', title: 'Harakado', desc: '7F 屋頂花園', category: 'sightseeing', loc: 'Harakado' },
-                                    { time: '19:00', title: '牛かつもと村', desc: '澀谷分店 炸牛排', category: 'food', loc: 'Gyukatsu Motomura Shibuya' }
+                                    { time: '09:30', title: '龜戶天神社', desc: '紫藤花 (水天宮前->錦糸町)', category: 'sightseeing', loc: 'Kameido Tenjin', transportType: 'train', travelTime: '30 min' },
+                                    { time: '12:30', title: '山笑ふ (午餐)', desc: '表參道店 Shabu Shabu (已預約)', category: 'food', loc: 'Yama Warau Omotesando', transportType: 'train', travelTime: '45 min' },
+                                    { time: '14:30', title: 'Harakado', desc: '7F 屋頂花園', category: 'sightseeing', loc: 'Harakado', transportType: 'walk', travelTime: '5 min' },
+                                    { time: '19:00', title: '牛かつもと村', desc: '澀谷分店 炸牛排', category: 'food', loc: 'Gyukatsu Motomura Shibuya', transportType: 'walk', travelTime: '20 min' }
                                 ]},
                                 { weekday: 'Mon', dateStr: '4/20', events: [
-                                    { time: '09:00', title: 'Check-out', desc: '行去 T-CAT', category: 'other', loc: 'T-CAT' },
-                                    { time: '09:30', title: '取車', desc: 'Toyota T-CAT (No: 98147748300)', category: 'transport', loc: 'Toyota Rent a Car T-CAT' },
-                                    { time: '10:30', title: '三芳 PA', desc: '休息站', category: 'transport', loc: 'Miyoshi PA' },
-                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵 或 村民食堂', category: 'food', loc: 'Karuizawa' },
-                                    { time: '14:30', title: 'Outlet Shopping', desc: 'MC: 292 677 245*55 (泊 P7)', category: 'shopping', loc: 'Prince Shopping Plaza' },
-                                    { time: '18:00', title: 'Check-in', desc: 'Toyoko Inn 佐久平', category: 'hotel', loc: 'Toyoko Inn Sakudaira' },
-                                    { time: '20:00', title: '暖暮拉麵', desc: 'Aeon Mall 佐久平 2樓', category: 'food', loc: 'Danbo Ramen Sakudaira' }
+                                    { time: '09:00', title: 'Check-out', desc: '行去 T-CAT', category: 'other', loc: 'T-CAT', transportType: 'walk' },
+                                    { time: '09:30', title: '取車', desc: 'Toyota T-CAT (No: 98147748300)', category: 'transport', loc: 'Toyota Rent a Car T-CAT', transportType: 'walk' },
+                                    { time: '10:30', title: '三芳 PA', desc: '休息站', category: 'transport', loc: 'Miyoshi PA', transportType: 'car', travelTime: '60 min (45km)' },
+                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵 或 村民食堂', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '90 min (120km)' },
+                                    { time: '14:30', title: 'Outlet Shopping', desc: 'MC: 292 677 245*55 (泊 P7)', category: 'shopping', loc: 'Prince Shopping Plaza', transportType: 'car', travelTime: '20 min' },
+                                    { time: '18:00', title: 'Check-in', desc: 'Toyoko Inn 佐久平', category: 'hotel', loc: 'Toyoko Inn Sakudaira', transportType: 'car', travelTime: '40 min (30km)' },
+                                    { time: '20:00', title: '暖暮拉麵', desc: 'Aeon Mall 佐久平 2樓', category: 'food', loc: 'Danbo Ramen Sakudaira', transportType: 'walk', travelTime: '8 min' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '4/21', events: [
-                                    { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝 (自駕移動)', category: 'highlight', loc: 'Karuizawa' },
-                                    { time: '19:00', title: '慶功晚餐', desc: '川上庵 或 燒肉', category: 'food', loc: 'Karuizawa' }
+                                    { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝 (自駕移動)', category: 'highlight', loc: 'Karuizawa', transportType: 'car' },
+                                    { time: '19:00', title: '慶功晚餐', desc: '川上庵 或 燒肉', category: 'food', loc: 'Karuizawa', transportType: 'car' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '4/22', events: [
-                                    { time: '10:00', title: '白絲瀑布', desc: 'MC: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls' },
-                                    { time: '11:00', title: 'Rogotei 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei' },
-                                    { time: '12:30', title: '舊輕井澤銀座通', desc: '掃街、布丁', category: 'sightseeing', loc: 'Kyu-Karuizawa Ginza' },
-                                    { time: '14:00', title: '橫川 SA', desc: '釜飯便當', category: 'food', loc: 'Yokokawa SA' },
-                                    { time: '17:00', title: '東京還車', desc: 'T-CAT B1', category: 'transport', loc: 'T-CAT' },
-                                    { time: '18:00', title: 'Check-in', desc: '八重翠東京酒店', category: 'hotel', loc: 'Yaekit' },
-                                    { time: '20:45', title: '壽司郎', desc: '八重洲地下街 南1號', category: 'food', loc: 'Sushiro Yaesu' }
+                                    { time: '10:00', title: '白絲瀑布', desc: 'MC: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls', transportType: 'car', travelTime: '45 min' },
+                                    { time: '11:00', title: 'Rogotei 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei', transportType: 'car', travelTime: '30 min' },
+                                    { time: '12:30', title: '舊輕井澤銀座通', desc: '掃街、布丁', category: 'sightseeing', loc: 'Kyu-Karuizawa Ginza', transportType: 'car' },
+                                    { time: '14:00', title: '橫川 SA', desc: '釜飯便當', category: 'food', loc: 'Yokokawa SA', transportType: 'car', travelTime: '45 min (35km)' },
+                                    { time: '17:00', title: '東京還車', desc: 'T-CAT B1 停車場', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '2.5 hr (130km)' },
+                                    { time: '18:00', title: 'Check-in', desc: '八重翠東京酒店', category: 'hotel', loc: 'Yaekit', transportType: 'walk', travelTime: '15 min' },
+                                    { time: '20:45', title: '壽司郎', desc: '八重洲地下街 南1號', category: 'food', loc: 'Sushiro Yaesu', transportType: 'walk', travelTime: '10 min' },
+                                    { time: '21:30', title: '返酒店開餐', desc: '八重翠東京酒店', category: 'hotel', loc: 'Yaekit', transportType: 'walk' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '4/23', events: [
-                                    { time: '06:45', title: '出發 Disney', desc: '八丁堀 -> 舞濱 (07:30 到門口)', category: 'transport', loc: 'Maihama' },
-                                    { time: '08:30', title: 'Disney Sea', desc: '搶 Standby Pass (Frozen)', category: 'ticket', loc: 'Tokyo DisneySea' },
+                                    { time: '06:45', title: '出發 Disney', desc: '八丁堀 -> 舞濱 (07:30 到門口)', category: 'transport', loc: 'Maihama', transportType: 'train', travelTime: '45 min' },
+                                    { time: '08:30', title: 'Disney Sea', desc: '搶 Standby Pass (Frozen)', category: 'ticket', loc: 'Tokyo DisneySea', transportType: 'walk' },
                                     { time: '13:00', title: '午餐', desc: 'Mobile Order 慳時間', category: 'food', loc: 'DisneySea' },
-                                    { time: '20:30', title: '撤退回程', desc: '單軌 -> 京葉線 -> 八丁堀', category: 'transport', loc: 'Hatchobori' },
-                                    { time: '21:00', title: '救命晚餐', desc: '麥當勞 (Samurai Mac 厚牛堡)', category: 'food', loc: 'McDonalds Hatchobori' }
+                                    { time: '20:30', title: '撤退回程', desc: '單軌 -> 京葉線 -> 八丁堀', category: 'transport', loc: 'Hatchobori', transportType: 'train', travelTime: '30 min' },
+                                    { time: '21:00', title: '救命晚餐', desc: '麥當勞 (Samurai Mac 厚牛堡)', category: 'food', loc: 'McDonalds Hatchobori', transportType: 'walk', travelTime: '15 min' }
                                 ]},
                                 { weekday: 'Fri', dateStr: '4/24', events: [
-                                    { time: '09:30', title: '前往豐洲', desc: '的士 (約 ¥2000)', category: 'transport', loc: 'Toyosu Market' },
-                                    { time: '10:00', title: '大和壽司', desc: '需排隊', category: 'food', loc: 'Daiwa Sushi' },
-                                    { time: '13:30', title: 'TeamLab Planets', desc: '新豐洲站旁', category: 'sightseeing', loc: 'TeamLab Planets' },
-                                    { time: '18:30', title: '銀座 篝', desc: '雞白湯拉麵', category: 'food', loc: 'Ginza Kagari' }
+                                    { time: '09:30', title: '前往豐洲', desc: '的士 (約 ¥2000)', category: 'transport', loc: 'Toyosu Market', transportType: 'car', travelTime: '15 min' },
+                                    { time: '10:00', title: '大和壽司', desc: '需排隊', category: 'food', loc: 'Daiwa Sushi', transportType: 'walk' },
+                                    { time: '13:30', title: 'TeamLab Planets', desc: '新豐洲站旁', category: 'sightseeing', loc: 'TeamLab Planets', transportType: 'walk' },
+                                    { time: '18:30', title: '銀座 篝', desc: '雞白湯拉麵', category: 'food', loc: 'Ginza Kagari', transportType: 'train', travelTime: '20 min' }
                                 ]},
                                 { weekday: 'Sat', dateStr: '4/25', events: [
-                                    { time: '10:30', title: '東京一番街', desc: 'Character Street', category: 'shopping', loc: 'Tokyo Station' },
-                                    { time: '12:00', title: 'Manten Sushi', desc: '丸之內店', category: 'food', loc: 'Manten Sushi Marunouchi' },
-                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛', category: 'transport', loc: 'T-CAT' },
-                                    { time: '14:45', title: '前往機場', desc: 'CX501 回程', category: 'transport', loc: 'Narita Airport' }
+                                    { time: '10:30', title: '東京一番街', desc: 'Character Street', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk' },
+                                    { time: '12:00', title: 'Manten Sushi', desc: '丸之內店', category: 'food', loc: 'Manten Sushi Marunouchi', transportType: 'walk' },
+                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛', category: 'transport', loc: 'T-CAT', transportType: 'car' },
+                                    { time: '14:45', title: '前往機場', desc: 'CX501 回程', category: 'transport', loc: 'Narita Airport', transportType: 'bus', travelTime: '60 min' }
                                 ]}
                             ]
                         },
                         central: {
                             id: 'central',
-                            name: 'OurTrip 10+1 日本中部',
+                            name: '🍁 日本中部紅葉之旅',
                             date: '2026-10-31', 
                             range: 'Oct 31 - Nov 08, 2026',
                             theme: 'orange',
                             effect: 'leaf',
-                            headerImg: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=800&q=80',
+                            headerImg: './header_central.jpg',
                             docLink: 'https://docs.google.com/document/d/11eFLaGqOmRfXx90pVCWGF0iNIQRwECa3X3VmFjqQgdk/edit?usp=drivesdk',
                             weatherCity: 'Nagoya,JP',
 
+                            // Info Tab 數據
                             flights: {
                                 out: { code: 'CX524', date: '10/31', dep: '01:00', arr: '06:40' },
                                 in: { code: 'CX505', date: '11/08', dep: '18:00', arr: '22:25' }
@@ -552,75 +554,82 @@
                                 { date: '9/01', task: '搶 Mantensushi' },
                                 { date: '9/30', task: '預約 鳥貴族' }
                             ],
-                            shopping: [],
+
+                            shopping: ['飛驒牛味噌', '清酒', '紅葉手信'],
                             expenses: [],
                             
+                            // 完整行程 Day 1 - Day 9
                             days: [
                                 { weekday: 'Sat', dateStr: '10/31', events: [
-                                    { time: '06:40', title: '抵達 NRT', desc: '租車櫃台取車', category: 'flight', loc: 'Narita Airport' },
-                                    { time: '08:00', title: '出發沼津', desc: '自駕 3 hr', category: 'transport', loc: 'Numazu' },
-                                    { time: '11:30', title: '沼津港 (丸天)', desc: 'MC: 650 583 339*01', category: 'food', loc: 'Numazu Port' },
-                                    { time: '13:30', title: '三島大吊橋', desc: 'MC: 50 238 668*85', category: 'sightseeing', loc: 'Mishima Skywalk' },
-                                    { time: '16:00', title: 'Sawayaka 攞飛', desc: '沼津學園通店 (MC: 50 104 702*76)', category: 'other', loc: 'Sawayaka Numazu' },
-                                    { time: '17:00', title: 'Check-in 酒店', desc: 'Daiwa Roynet (泊 Plaza Verde)', category: 'hotel', loc: 'Daiwa Roynet Numazu' },
-                                    { time: '19:00', title: 'Dinner: Sawayaka', desc: '必食拳頭漢堡', category: 'food', loc: 'Sawayaka Numazu' }
+                                    { time: '06:40', title: '抵達 NRT', desc: '取車出發去沼津', category: 'flight', loc: 'Narita Airport', transportType: 'flight' },
+                                    { time: '08:00', title: '出發沼津', desc: '自駕 3 hr', category: 'transport', loc: 'Numazu', transportType: 'car', travelTime: '3 hr (180km)' },
+                                    { time: '11:30', title: '沼津港 (丸天)', desc: 'MC: 650 583 339*01 (魚市場立體停車場)', category: 'food', loc: 'Numazu Port', transportType: 'car', travelTime: '15 min' },
+                                    { time: '13:30', title: '三島大吊橋', desc: 'MC: 50 238 668*85 (日本最長吊橋)', category: 'sightseeing', loc: 'Mishima Skywalk', transportType: 'car', travelTime: '30 min' },
+                                    { time: '16:00', title: 'Sawayaka 攞飛', desc: '沼津學園通店 (MC: 50 104 702*76) 必做!', category: 'other', loc: 'Sawayaka Numazu', transportType: 'car', travelTime: '20 min' },
+                                    { time: '17:00', title: 'Check-in 酒店', desc: 'Daiwa Roynet (泊 Plaza Verde: 50 073 112*71)', category: 'hotel', loc: 'Daiwa Roynet Numazu', transportType: 'car', travelTime: '10 min' },
+                                    { time: '19:00', title: 'Dinner: Sawayaka', desc: '必食拳頭漢堡', category: 'food', loc: 'Sawayaka Numazu', transportType: 'walk', travelTime: '15 min' },
+                                    { time: '21:00', title: '返酒店休息', desc: 'Plaza Verde 停車場', category: 'hotel', loc: 'Daiwa Roynet Numazu', transportType: 'walk' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '11/01', events: [
-                                    { time: '10:30', title: '大室山', desc: 'MC: 48 846 512*63 (搭吊車)', category: 'sightseeing', loc: 'Omuro Mountain' },
-                                    { time: '12:30', title: 'Lunch: 蕎麥麵', desc: '伊豆高原附近', category: 'food', loc: 'Izu Kogen' },
-                                    { time: '14:30', title: '修善寺溫泉', desc: 'MC: 16 186 084*42 (竹林小徑)', category: 'sightseeing', loc: 'Shuzenji' },
-                                    { time: '19:00', title: '鰻魚飯 櫻家', desc: '三島市內 (055-975-4520)', category: 'food', loc: 'Sakuraya' }
+                                    { time: '10:30', title: '大室山', desc: 'MC: 48 846 512*63 (搭吊車)', category: 'sightseeing', loc: 'Omuro Mountain', transportType: 'car', travelTime: '60 min (40km)' },
+                                    { time: '12:30', title: 'Lunch: 蕎麥麵', desc: '伊豆高原附近', category: 'food', loc: 'Izu Kogen', transportType: 'car', travelTime: '10 min' },
+                                    { time: '14:30', title: '修善寺溫泉', desc: 'MC: 16 186 084*42 (竹林小徑)', category: 'sightseeing', loc: 'Shuzenji', transportType: 'car', travelTime: '45 min' },
+                                    { time: '19:00', title: '鰻魚飯 櫻家', desc: '三島市內 (055-975-4520)', category: 'food', loc: 'Sakuraya', transportType: 'car', travelTime: '30 min' },
+                                    { time: '20:30', title: '返酒店休息', desc: 'Daiwa Roynet Hotel', category: 'hotel', loc: 'Daiwa Roynet Numazu', transportType: 'car', travelTime: '20 min' }
                                 ]},
                                 { weekday: 'Mon', dateStr: '11/02', events: [
-                                    { time: '11:00', title: '諏訪湖', desc: '立石公園 (MC: 75 236 391*70)', category: 'sightseeing', loc: 'Tateishi Park' },
-                                    { time: '13:00', title: 'Lunch: 山賊燒', desc: '松本市內', category: 'food', loc: 'Matsumoto' },
-                                    { time: '14:30', title: '松本城', desc: 'MC: 75 851 375*66', category: 'sightseeing', loc: 'Matsumoto Castle' },
-                                    { time: '18:30', title: 'Dinner: 馬肉刺身', desc: '市內居酒屋', category: 'food', loc: 'Matsumoto Station' },
-                                    { time: '21:00', title: 'Check-in 松本', desc: 'Onyado Nono (MC: 75 791 881*76)', category: 'hotel', loc: 'Onyado Nono Matsumoto' }
+                                    { time: '11:00', title: '諏訪湖', desc: '立石公園 (MC: 75 236 391*70)', category: 'sightseeing', loc: 'Tateishi Park', transportType: 'car', travelTime: '2.5 hr (160km)' },
+                                    { time: '13:00', title: 'Lunch: 山賊燒', desc: '松本市內', category: 'food', loc: 'Matsumoto', transportType: 'car', travelTime: '40 min' },
+                                    { time: '14:30', title: '松本城', desc: 'MC: 75 851 375*66', category: 'sightseeing', loc: 'Matsumoto Castle', transportType: 'car', travelTime: '10 min' },
+                                    { time: '18:30', title: 'Dinner: 馬肉刺身', desc: '市內居酒屋', category: 'food', loc: 'Matsumoto Station', transportType: 'walk' },
+                                    { time: '21:00', title: 'Check-in 松本', desc: 'Onyado Nono (MC: 75 791 881*76)', category: 'hotel', loc: 'Onyado Nono Matsumoto', transportType: 'walk' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '11/03', events: [
-                                    { time: '09:30', title: '善光寺', desc: '第1停車場', category: 'sightseeing', loc: 'Zenkoji' },
-                                    { time: '12:00', title: 'Enza Cafe', desc: '地獄谷入口 (MC: 341 818 200*82)', category: 'food', loc: 'Enza Cafe' },
-                                    { time: '13:00', title: '地獄谷野猿公苑', desc: '行30分鐘睇馬騮', category: 'sightseeing', loc: 'Snow Monkey Park' },
-                                    { time: '16:30', title: 'Check-in 季之庭', desc: 'MC: 341 448 004*52 (1周年紀念)', category: 'highlight', loc: 'Tokinoniwa' }
+                                    { time: '09:30', title: '善光寺', desc: '第1停車場', category: 'sightseeing', loc: 'Zenkoji', transportType: 'car', travelTime: '1 hr (65km)' },
+                                    { time: '12:00', title: 'Enza Cafe', desc: '地獄谷入口 (MC: 341 818 200*82)', category: 'food', loc: 'Enza Cafe', transportType: 'car', travelTime: '45 min' },
+                                    { time: '13:00', title: '地獄谷野猿公苑', desc: '行30分鐘睇馬騮', category: 'sightseeing', loc: 'Snow Monkey Park', transportType: 'walk', travelTime: '30 min' },
+                                    { time: '16:30', title: 'Check-in 季之庭', desc: 'MC: 341 448 004*52 (1周年紀念)', category: 'highlight', loc: 'Tokinoniwa', transportType: 'car', travelTime: '1 hr (40km)' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '11/04', events: [
-                                    { time: '13:00', title: '大石公園', desc: 'MC: 161 303 446*52', category: 'sightseeing', loc: 'Oishi Park' },
-                                    { time: '14:30', title: '紅葉迴廊', desc: 'MC: 161 361 561*66', category: 'sightseeing', loc: 'Momiji Corridor' },
-                                    { time: '16:30', title: 'Check-in CLAD', desc: 'MC: 50 806 191*75 (木之花之湯)', category: 'hotel', loc: 'HOTEL CLAD' }
+                                    { time: '13:00', title: '河口湖', desc: '大石公園 (MC: 161 303 446*52)', category: 'sightseeing', loc: 'Oishi Park', transportType: 'car', travelTime: '2.5 hr (140km)' },
+                                    { time: '14:30', title: '紅葉迴廊', desc: 'MC: 161 361 561*66', category: 'sightseeing', loc: 'Momiji Corridor', transportType: 'car', travelTime: '15 min' },
+                                    { time: '16:30', title: 'Check-in', desc: 'HOTEL CLAD (MC: 50 806 191*75)', category: 'hotel', loc: 'HOTEL CLAD', transportType: 'car', travelTime: '45 min (30km)' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '11/05', events: [
-                                    { time: '06:30', title: '山中湖逆富士', desc: '長池親水公園 (MC: 434 324 577*85)', category: 'sightseeing', loc: 'Nagaike Water Park' },
-                                    { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping', category: 'shopping', loc: 'Gotemba Outlet' },
-                                    { time: '14:00', title: '箱根神社', desc: '平和之鳥居 (MC: 57 123 048*31)', category: 'sightseeing', loc: 'Hakone Shrine' },
-                                    { time: '18:00', title: '東京還車', desc: '淺草/上野 (入滿油)', category: 'transport', loc: 'Asakusa' },
-                                    { time: '19:30', title: 'Dinner: 鳥貴族', desc: '淺草店 Mega Beer', category: 'food', loc: 'Torikizoku Asakusa' }
+                                    { time: '06:30', title: '山中湖逆富士', desc: '長池親水公園 (MC: 434 324 577*85)', category: 'sightseeing', loc: 'Nagaike Water Park', transportType: 'car', travelTime: '30 min' },
+                                    { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping', category: 'shopping', loc: 'Gotemba Outlet', transportType: 'car', travelTime: '40 min' },
+                                    { time: '14:00', title: '箱根神社', desc: '平和之鳥居 (MC: 57 123 048*31)', category: 'sightseeing', loc: 'Hakone Shrine', transportType: 'car', travelTime: '40 min' },
+                                    { time: '18:00', title: '東京還車', desc: '淺草/上野 (入滿油)', category: 'transport', loc: 'Asakusa', transportType: 'car', travelTime: '2 hr (90km)' },
+                                    { time: '19:30', title: 'Dinner: 鳥貴族', desc: '淺草店 Mega Beer', category: 'food', loc: 'Torikizoku Asakusa', transportType: 'walk' },
+                                    { time: '21:30', title: '返酒店休息', desc: '淺草東武酒店', category: 'hotel', loc: 'Asakusa Tobu Hotel', transportType: 'walk' }
                                 ]},
                                 { weekday: 'Fri', dateStr: '11/06', events: [
-                                    { time: '10:00', title: '銀座 / 澀谷 Sky', desc: 'Shopping', category: 'shopping', loc: 'Ginza' },
-                                    { time: '16:30', title: '東京鐵塔', desc: '停車場打卡位', category: 'sightseeing', loc: 'Tokyo Tower' },
-                                    { time: '19:00', title: 'Mantensushi', desc: '10+1 紀念 Omakase', category: 'highlight', loc: 'Mantensushi Nihonbashi' }
+                                    { time: '10:00', title: '銀座 / 澀谷 Sky', desc: 'Shopping', category: 'shopping', loc: 'Ginza', transportType: 'train', travelTime: '20 min' },
+                                    { time: '16:30', title: '東京鐵塔', desc: '停車場打卡位', category: 'sightseeing', loc: 'Tokyo Tower', transportType: 'train', travelTime: '30 min' },
+                                    { time: '19:00', title: 'Mantensushi', desc: '10+1 紀念 Omakase', category: 'highlight', loc: 'Mantensushi Nihonbashi', transportType: 'train' },
+                                    { time: '21:30', title: '返酒店休息', desc: '淺草東武酒店', category: 'hotel', loc: 'Asakusa Tobu Hotel', transportType: 'train' }
                                 ]},
                                 { weekday: 'Sat', dateStr: '11/07', events: [
-                                    { time: '10:30', title: '吉祥寺', desc: 'Satou 炸牛丸 / 井之頭公園', category: 'sightseeing', loc: 'Kichijoji' },
-                                    { time: '14:00', title: '下北澤', desc: '古著店', category: 'shopping', loc: 'Shimokitazawa' },
-                                    { time: '19:00', title: 'Dinner', desc: '隨心食', category: 'food', loc: 'Shinjuku' }
+                                    { time: '10:30', title: '吉祥寺', desc: 'Satou 炸牛丸 / 井之頭公園', category: 'sightseeing', loc: 'Kichijoji', transportType: 'train', travelTime: '45 min' },
+                                    { time: '14:00', title: '下北澤', desc: '古著店', category: 'shopping', loc: 'Shimokitazawa', transportType: 'train', travelTime: '20 min' },
+                                    { time: '19:00', title: 'Dinner', desc: '隨心食', category: 'food', loc: 'Shinjuku', transportType: 'train' },
+                                    { time: '21:30', title: '返酒店休息', desc: '淺草東武酒店', category: 'hotel', loc: 'Asakusa Tobu Hotel', transportType: 'train' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '11/08', events: [
-                                    { time: '10:00', title: '最後衝刺', desc: '淺草/上野', category: 'shopping', loc: 'Ueno' },
-                                    { time: '14:00', title: 'Skyliner', desc: '上野 -> 成田', category: 'transport', loc: 'Keisei Ueno' },
+                                    { time: '10:00', title: '最後衝刺', desc: '淺草/上野', category: 'shopping', loc: 'Ueno', transportType: 'walk' },
+                                    { time: '14:00', title: 'Skyliner', desc: '上野 -> 成田', category: 'transport', loc: 'Keisei Ueno', transportType: 'train', travelTime: '45 min' },
                                     { time: '18:00', title: '回程 (CX505)', desc: '18:00 起飛', category: 'flight', loc: 'Narita Airport' }
                                 ]}
                             ]
                         }
                     },
                     
-                    // Default items
-                    shoppingList: [],
-                    expenses: [],
-                    newItem: { title: '', time: '', category: 'sightseeing', desc: '', location: '', transportType: 'train', travelTime: '' },
-                    newShopItem: '',
-                    newExpense: { name: '', amount: '', category: 'food', date: '', payment: '現金' }
+                    tabs: [
+                        { id: 'itinerary', name: '行程', icon: 'fa-solid fa-location-dot' },
+                        { id: 'info', name: '資訊', icon: 'fa-solid fa-circle-info' },
+                        { id: 'shopping', name: '購物', icon: 'fa-solid fa-bag-shopping' },
+                        { id: 'expenses', name: '記帳', icon: 'fa-solid fa-wallet' },
+                    ]
                 }
             },
             computed: {
@@ -662,9 +671,22 @@
                     this.selectedTripId = id;
                     this.currentView = 'detail';
                     this.activeTab = 'itinerary';
+                    this.selectedDayIndex = 0; // Reset to Day 1
                 },
                 fetchWeather() {
                     let query = this.activeTrip.weatherCity;
+                    // Logic to switch city based on date index if needed (e.g. Karuizawa vs Tokyo)
+                    if (this.selectedTripId === 'karuizawa') {
+                        if (this.selectedDayIndex < 2 || this.selectedDayIndex > 4) query = 'Tokyo,JP';
+                        else query = 'Karuizawa,JP';
+                    } else if (this.selectedTripId === 'central') {
+                        if (this.selectedDayIndex === 0) query = 'Numazu,JP';
+                        else if (this.selectedDayIndex === 2) query = 'Matsumoto,JP';
+                        else if (this.selectedDayIndex === 3) query = 'Kusatsu,JP';
+                        else if (this.selectedDayIndex > 5) query = 'Tokyo,JP';
+                        else query = 'Fujikawaguchiko,JP';
+                    }
+
                     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&lang=zh_tw&appid=${this.apiKey}`)
                     .then(res => res.json())
                     .then(data => {
@@ -694,6 +716,17 @@
                         window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`, '_blank');
                     }
                 },
+                addShoppingItem() { if(this.newShopItem) this.activeTrip.shopping.push(this.newShopItem); this.newShopItem = ''; },
+                removeShoppingItem(idx) { this.activeTrip.shopping.splice(idx, 1); },
+                deleteExpense(idx) { this.activeTrip.expenses.splice(idx, 1); },
+                
+                openAddModal() { this.showModal = true; },
+                confirmAdd() { 
+                    if(this.newItem.title && this.currentView === 'detail') {
+                        this.activeTrip.days[this.selectedDayIndex].events.push({...this.newItem});
+                    }
+                    this.showModal = false; 
+                },
                 tabClass(tab) {
                     const color = this.currentTheme.main;
                     return this.activeTab === tab 
@@ -703,16 +736,6 @@
                 convert(type) {
                     if (type === 'jpy') this.calcHkd = (this.calcJpy * this.exchangeRate).toFixed(2);
                     else this.calcJpy = (this.calcHkd / this.exchangeRate).toFixed(0);
-                },
-                addShoppingItem() { if(this.newShopItem) this.activeTrip.shopping.push(this.newShopItem); this.newShopItem = ''; },
-                removeShoppingItem(idx) { this.activeTrip.shopping.splice(idx, 1); },
-                deleteExpense(idx) { this.activeTrip.expenses.splice(idx, 1); },
-                openAddModal() { this.showModal = true; },
-                confirmAdd() { 
-                    if(this.newItem.title && this.currentView === 'detail') {
-                        this.activeTrip.days[this.selectedDayIndex].events.push({...this.newItem});
-                    }
-                    this.showModal = false; 
                 }
             }
         }).mount('#app');
