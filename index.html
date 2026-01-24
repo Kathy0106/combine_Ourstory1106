@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant" :style="{ fontSize: settings.fontSize + 'px' }">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V63</title>
+    <title>我的旅遊手帳 V64</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -79,11 +79,33 @@
             max-height: 0;
             opacity: 0;
         }
+        
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid currentColor;
+            margin-top: -8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden" :style="{ fontSize: settings.fontSize + 'px' }">
+<body class="h-screen w-screen overflow-hidden">
 
-    <div id="app" class="h-full flex flex-col relative transition-colors duration-700">
+    <div id="app" class="h-full flex flex-col relative transition-colors duration-700" :style="{ fontSize: settings.fontSize + 'px' }">
 
         <div v-if="currentEffect !== 'none'" class="absolute inset-0 overflow-hidden pointer-events-none z-[9998]">
             <div v-for="n in 12" :key="n" class="falling-item opacity-60" 
@@ -201,12 +223,11 @@
                             <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2">
                                 <div v-for="(day, index) in activeTrip.days" :key="index" 
                                      @click="selectedDayIndex = index"
-                                     class="flex-shrink-0 flex flex-col items-center justify-center w-20 h-24 rounded-2xl transition-all duration-300 snap-center cursor-pointer border-2 border-dashed shadow-sm"
+                                     class="flex-shrink-0 flex flex-col items-center justify-center w-20 h-20 rounded-2xl transition-all duration-300 snap-center cursor-pointer border-2 border-dashed shadow-sm"
                                      :class="selectedDayIndex === index ? 'bg-[#F48FB1] border-[#F48FB1] text-white scale-105 shadow-md' : 'bg-white border-[#F0EBE0] text-[#A1887F]'"
                                      :style="selectedDayIndex === index && activeTrip.theme === 'orange' ? 'background-color: #FFB74D; border-color: #FFB74D;' : ''">
-                                    <span class="text-xs font-bold uppercase mb-1">{{ day.weekday }}</span>
-                                    <span class="text-3xl font-bold">{{ day.dateStr.split('/')[1] }}</span>
-                                    <span class="text-[10px] opacity-80 mt-1">D{{ index + 1 }}</span>
+                                    <span class="text-xs font-bold uppercase mb-0.5">{{ day.weekday }}</span>
+                                    <span class="text-3xl font-black">{{ day.dateStr.split('/')[1] }}</span>
                                 </div>
                             </div>
                         </div>
@@ -459,7 +480,7 @@
                     </div>
                     <input type="range" min="12" max="24" step="1" v-model="settings.fontSize" class="w-full accent-[#A1887F]">
                 </div>
-                <div class="text-center text-xs text-[#D7CCC8] mt-4">V63 Big Date</div>
+                <div class="text-center text-xs text-[#D7CCC8] mt-4">V64 Square & Fixed</div>
             </div>
         </div>
 
