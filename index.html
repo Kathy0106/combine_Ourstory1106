@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V42 (融合版)</title>
+    <title>我的旅遊手帳 V43</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -102,7 +102,7 @@
                     <div class="p-4 flex justify-between items-center">
                         <div>
                             <div class="text-xs text-gray-400 mb-1">距離出發</div>
-                            <div class="text-2xl font-bold text-orange-500 font-mono">{{ getCountdown('2026-11-01') }} <span class="text-xs text-gray-400 font-sans">天</span></div>
+                            <div class="text-2xl font-bold text-orange-500 font-mono">{{ getCountdown('2026-10-31') }} <span class="text-xs text-gray-400 font-sans">天</span></div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center">
                             <i class="fa-solid fa-chevron-right"></i>
@@ -130,54 +130,145 @@
             <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-24">
                 
                 <div v-if="activeTab === 'itinerary'">
-                    <div class="bg-white rounded-3xl p-5 soft-shadow mb-6 text-center relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-full h-1" :style="{ backgroundColor: currentTheme.main }"></div>
-                        <p class="text-xs text-gray-400 mb-1">距離出發</p>
-                        <div class="text-4xl font-bold font-mono" :style="{ color: currentTheme.main }">
-                            {{ getCountdown(activeTrip.date) }} <span class="text-sm text-gray-400 font-sans">天</span>
+                    
+                    <div class="flex space-x-3 overflow-x-auto no-scrollbar mb-6 py-2">
+                        <div v-for="(day, index) in activeTrip.days" :key="index" 
+                             @click="selectedDayIndex = index"
+                             class="flex-shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl transition-all duration-300 snap-center cursor-pointer border border-white/50"
+                             :class="selectedDayIndex === index ? 'text-white shadow-lg scale-105' : 'bg-white text-gray-400'"
+                             :style="{ backgroundColor: selectedDayIndex === index ? currentTheme.main : 'white' }">
+                            <span class="text-xs font-bold uppercase">{{ day.weekday }}</span>
+                            <span class="text-xl font-bold">{{ day.dateStr }}</span>
+                            <span class="text-[10px] opacity-80">D{{ index + 1 }}</span>
                         </div>
-                        <div class="mt-2 text-xs text-gray-400">{{ activeTrip.range }}</div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-white to-gray-50 rounded-2xl p-4 mb-6 flex items-center justify-between shadow-sm text-slate-600 border border-gray-100">
+                        <div>
+                            <div class="text-xs opacity-70 flex items-center gap-1">
+                                <i class="fa-solid fa-location-dot" :style="{ color: currentTheme.main }"></i> {{ weather.city_name }}
+                            </div>
+                            <div class="text-2xl font-bold">{{ weather.temp }}°C <span class="text-sm font-normal text-gray-500">體感 {{ weather.feels_like }}°C</span></div>
+                        </div>
+                        <i :class="['fa-solid', weather.icon, 'text-4xl drop-shadow-sm']" :style="{ color: currentTheme.main }"></i>
                     </div>
 
                     <div class="space-y-4 relative">
                         <div class="absolute left-[19px] top-4 bottom-0 w-0.5 bg-gray-200 z-0"></div>
                         
-                        <div v-for="(day, idx) in activeTrip.itinerary" :key="idx" class="mb-6 relative z-10">
-                            <div class="flex items-center gap-3 mb-3">
-                                <div class="w-10 h-10 rounded-full text-white flex items-center justify-center font-bold shadow-md text-sm" :style="{ backgroundColor: currentTheme.main }">
-                                    D{{ idx + 1 }}
+                        <div v-for="(item, i) in currentDayEvents" :key="i" class="ml-12 mb-3 bg-white rounded-2xl p-4 soft-shadow border-l-4 group relative transition-transform active:scale-95" :style="{ borderLeftColor: currentTheme.main }">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-xs font-bold px-2 py-0.5 rounded text-white" :style="{ backgroundColor: currentTheme.main }">{{ item.time }}</span>
+                                <div class="flex gap-2">
+                                    <button @click.stop="openMap(item.location)" class="text-gray-300 hover:text-blue-500"><i class="fa-solid fa-location-arrow"></i></button>
                                 </div>
-                                <div class="font-bold text-lg text-slate-800">{{ day.date }}</div>
                             </div>
+                            <h4 class="font-bold text-slate-800 text-lg mb-1">{{ item.title }}</h4>
+                            <p class="text-sm text-gray-500 flex items-start gap-1">
+                                <i class="fa-regular fa-note-sticky mt-1 text-xs opacity-50"></i>
+                                <span class="whitespace-pre-line">{{ item.desc }}</span>
+                            </p>
                             
-                            <div v-for="(item, i) in day.events" :key="i" class="ml-12 mb-3 bg-white rounded-2xl p-4 soft-shadow border-l-4" :style="{ borderLeftColor: currentTheme.main }">
-                                <div class="flex justify-between items-start mb-1">
-                                    <span class="text-xs font-bold px-2 py-0.5 rounded text-white" :style="{ backgroundColor: currentTheme.main }">{{ item.time }}</span>
-                                </div>
-                                <h4 class="font-bold text-slate-800">{{ item.title }}</h4>
-                                <p class="text-sm text-gray-500 mt-1 whitespace-pre-line">{{ item.desc }}</p>
+                            <div class="flex flex-wrap gap-2 mt-3">
+                                <span v-if="item.category" class="text-[10px] px-2 py-1 rounded-md bg-gray-100 text-gray-500">
+                                    {{ itemCategoryName(item.category) }}
+                                </span>
+                                <span v-if="item.transportType" class="text-[10px] px-2 py-1 rounded-md bg-blue-50 text-blue-500">
+                                    <i :class="getTransportIcon(item.transportType)"></i> {{ item.travelTime || '移動' }}
+                                </span>
                             </div>
+                        </div>
+
+                        <div v-if="currentDayEvents.length === 0" class="ml-12 py-10 text-gray-400 text-sm">
+                            本日暫無行程，點擊右下角新增
                         </div>
                     </div>
                 </div>
 
-                <div v-if="activeTab === 'info'">
-                    <div class="bg-white rounded-2xl p-5 soft-shadow mb-6 text-center">
-                        <i class="fa-solid fa-book-open text-4xl mb-3" :style="{ color: currentTheme.main }"></i>
-                        <h3 class="font-bold mb-2">網頁版詳細行程</h3>
-                        <p class="text-xs text-gray-400 mb-4">點擊下方按鈕查看 GitHub 完整版</p>
-                        <a :href="activeTrip.link" target="_blank" class="block w-full py-3 rounded-xl text-white font-bold shadow-md transition-transform active:scale-95" :style="{ backgroundColor: currentTheme.main }">
-                            前往詳細頁面 <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
-                        </a>
-                    </div>
+                <div v-if="activeTab === 'info'" class="space-y-6">
                     
-                    <div class="bg-white rounded-2xl p-4 soft-shadow">
-                        <h3 class="font-bold text-gray-600 mb-3"><i class="fa-solid fa-clipboard-check mr-2"></i>準備清單</h3>
-                        <div class="space-y-2 text-sm">
-                            <label class="flex items-center gap-2"><input type="checkbox" :class="`accent-${activeTrip.theme}-500`"> 護照 & 簽證</label>
-                            <label class="flex items-center gap-2"><input type="checkbox" :class="`accent-${activeTrip.theme}-500`"> 機票 & 酒店確認信</label>
-                            <label class="flex items-center gap-2"><input type="checkbox" :class="`accent-${activeTrip.theme}-500`"> 旅遊保險</label>
-                            <label class="flex items-center gap-2"><input type="checkbox" :class="`accent-${activeTrip.theme}-500`"> 上網卡 (SIM/WiFi)</label>
+                    <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-l-4" :style="{ borderLeftColor: currentTheme.main }">
+                        <div class="bg-gray-50 p-3 font-bold flex justify-between items-center" :style="{ color: currentTheme.main }">
+                            <span><i class="fa-solid fa-link mr-2"></i>網頁版詳細行程</span>
+                        </div>
+                        <div class="p-4">
+                            <a :href="activeTrip.link" target="_blank" 
+                               class="block w-full text-white font-bold py-3 rounded-xl shadow-md transition-transform active:scale-95 text-center"
+                               :style="{ backgroundColor: currentTheme.main }">
+                                <i class="fa-brands fa-github mr-2"></i> 點擊前往 GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-2 border-red-100">
+                        <div class="bg-red-50 p-3 text-red-600 font-bold flex justify-between items-center">
+                            <span><i class="fa-regular fa-bell mr-2"></i>關鍵行動鬧鐘</span>
+                        </div>
+                        <div class="p-4 space-y-3 text-xs">
+                            <div v-for="(alarm, idx) in activeTrip.alarms" :key="idx" class="flex gap-2 border-b border-gray-50 pb-2 last:border-0 last:pb-0">
+                                <span class="font-bold w-12 text-red-500">{{ alarm.date }}</span> 
+                                <span>{{ alarm.task }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden">
+                        <div class="p-3 text-white font-bold flex justify-between" :style="{ backgroundColor: currentTheme.main }">
+                            <span><i class="fa-solid fa-plane mr-2"></i>航班資訊</span>
+                        </div>
+                        <div class="p-5">
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs text-gray-400 mb-1"><span>去程 (HKG → JP)</span></div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.out.dep }}</div>
+                                    <div class="h-0.5 w-10 bg-gray-200 relative flex justify-center"><i class="fa-solid fa-plane text-gray-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i></div>
+                                    <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.out.arr }}</div>
+                                </div>
+                                <div class="flex justify-between text-sm font-bold bg-gray-50 p-2 rounded-lg">
+                                    <span>{{ activeTrip.flights.out.code }}</span>
+                                    <span>{{ activeTrip.flights.out.date }}</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-dashed border-gray-200 my-4"></div>
+                            <div>
+                                <div class="flex justify-between text-xs text-gray-400 mb-1"><span>回程 (JP → HKG)</span></div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.in.dep }}</div>
+                                    <div class="h-0.5 w-10 bg-gray-200 relative flex justify-center"><i class="fa-solid fa-plane text-gray-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i></div>
+                                    <div class="text-xl font-bold text-slate-700">{{ activeTrip.flights.in.arr }}</div>
+                                </div>
+                                <div class="flex justify-between text-sm font-bold bg-gray-50 p-2 rounded-lg">
+                                    <span>{{ activeTrip.flights.in.code }}</span>
+                                    <span>{{ activeTrip.flights.in.date }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden" v-if="activeTrip.rental">
+                        <div class="bg-blue-50 p-3 text-blue-600 font-bold flex justify-between">
+                            <span><i class="fa-solid fa-car mr-2"></i>租車資訊</span>
+                        </div>
+                        <div class="p-5 text-sm space-y-2">
+                            <p><strong>公司:</strong> {{ activeTrip.rental.company }}</p>
+                            <p><strong>取車:</strong> {{ activeTrip.rental.pickup }}</p>
+                            <p><strong>還車:</strong> {{ activeTrip.rental.return }}</p>
+                            <p v-if="activeTrip.rental.note" class="text-red-500 font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ activeTrip.rental.note }}</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-gray-500 ml-1">住宿列表</h3>
+                        <div v-for="hotel in activeTrip.hotels" :key="hotel.name" class="bg-white rounded-2xl p-4 soft-shadow flex items-center gap-4" @click="openMap(hotel.name)">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-white text-xl" :style="{ backgroundColor: currentTheme.main }">
+                                <i class="fa-solid fa-bed"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-sm">{{ hotel.name }}</h4>
+                                <p class="text-xs text-gray-400 mt-1">{{ hotel.dates }}</p>
+                                <p v-if="hotel.note" class="text-[10px] text-red-400 mt-1"><i class="fa-solid fa-gift mr-1"></i>{{ hotel.note }}</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -186,13 +277,14 @@
                     <div class="bg-white rounded-2xl p-4 soft-shadow mb-4">
                         <h3 class="font-bold mb-3">待購清單 ({{ activeTrip.shopping.length }})</h3>
                         <div class="space-y-3">
-                            <div v-for="(item, idx) in activeTrip.shopping" :key="idx" class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
-                                <input type="checkbox" class="w-5 h-5 rounded" :class="`accent-${activeTrip.theme}-500`">
+                            <div v-for="(item, idx) in activeTrip.shopping" :key="idx" class="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-xl shadow-sm">
+                                <input type="checkbox" class="w-5 h-5 rounded border-gray-300" :class="`accent-${activeTrip.theme}-500`">
                                 <span class="text-sm font-bold">{{ item }}</span>
+                                <button @click="removeShoppingItem(idx)" class="ml-auto text-gray-300 hover:text-red-400"><i class="fa-solid fa-trash"></i></button>
                             </div>
-                            <div class="flex gap-2 mt-2">
-                                <input v-model="newShopItem" placeholder="新增物品..." class="flex-1 bg-gray-100 p-2 rounded-lg text-sm outline-none">
-                                <button @click="addShoppingItem" class="w-10 h-10 rounded-lg text-white flex items-center justify-center" :style="{ backgroundColor: currentTheme.main }"><i class="fa-solid fa-plus"></i></button>
+                            <div class="flex gap-2 mt-4">
+                                <input v-model="newShopItem" placeholder="新增物品..." class="flex-1 bg-gray-100 p-3 rounded-xl text-sm outline-none">
+                                <button @click="addShoppingItem" class="w-12 h-12 rounded-xl text-white flex items-center justify-center shadow-md transition-transform active:scale-95" :style="{ backgroundColor: currentTheme.main }"><i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -207,13 +299,16 @@
                         <div v-for="(exp, idx) in activeTrip.expenses" :key="idx" class="flex justify-between items-center py-3 border-b border-gray-100 last:border-0">
                             <div>
                                 <div class="font-bold text-sm">{{ exp.item }}</div>
-                                <div class="text-xs text-gray-400">{{ exp.date }}</div>
+                                <div class="text-xs text-gray-400">{{ exp.date }} • {{ exp.cat }}</div>
                             </div>
-                            <div class="font-bold" :style="{ color: currentTheme.main }">${{ exp.amount }}</div>
+                            <div class="flex items-center gap-3">
+                                <div class="font-bold" :style="{ color: currentTheme.main }">${{ exp.amount }}</div>
+                                <button @click="deleteExpense(idx)" class="text-gray-300 text-xs"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
                         <div v-if="activeTrip.expenses.length === 0" class="text-center text-gray-400 py-4 text-sm">暫無紀錄</div>
                     </div>
-                    <button class="w-full mt-4 py-3 rounded-xl text-white font-bold shadow-md" :style="{ backgroundColor: currentTheme.main }">記一筆</button>
+                    <button class="w-full mt-4 py-3 rounded-xl text-white font-bold shadow-md transition-transform active:scale-95" :style="{ backgroundColor: currentTheme.main }">記一筆</button>
                 </div>
 
             </div>
@@ -235,6 +330,33 @@
             </div>
         </div>
 
+        <button v-if="currentView === 'detail'" @click="openAddModal" class="absolute bottom-24 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl z-50 text-white transition-transform active:scale-90" :style="{ backgroundColor: currentTheme.main }">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+
+        <div v-if="showModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm" @click.self="showModal = false">
+            <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold" :style="{ color: currentTheme.main }">新增項目</h3>
+                    <button @click="showModal = false" class="text-gray-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+
+                <div class="space-y-4">
+                    <input v-model="newItem.title" type="text" placeholder="標題 / 項目名稱" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none">
+                    <div class="flex gap-2">
+                        <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-gray-50 rounded-xl outline-none">
+                        <select v-model="newItem.category" class="w-2/3 p-3 bg-gray-50 rounded-xl outline-none">
+                            <option value="sightseeing">景點</option>
+                            <option value="food">美食</option>
+                            <option value="shopping">購物</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button @click="confirmAdd" class="w-full text-white font-bold py-4 rounded-xl mt-6 shadow-lg" :style="{ backgroundColor: currentTheme.main }">確認新增</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -243,16 +365,22 @@
         createApp({
             data() {
                 return {
-                    currentView: 'home', // 'home' or 'detail'
-                    selectedTripId: 'karuizawa', // default
+                    currentView: 'home', 
+                    selectedTripId: 'karuizawa', 
                     activeTab: 'itinerary',
+                    selectedDayIndex: 0,
+                    showModal: false,
                     newShopItem: '',
                     
+                    weather: { city_name: '', temp: '--', feels_like: '--', icon: 'fa-spinner fa-spin' },
+                    apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4',
+
                     themes: {
-                        pink: { main: '#FB7185', bg: '#FFF0F3' },   // 櫻花粉
-                        orange: { main: '#F97316', bg: '#FFF7ED' }  // 紅葉橙
+                        pink: { main: '#FB7185', bg: '#FFF0F3' },   
+                        orange: { main: '#F97316', bg: '#FFF7ED' }  
                     },
 
+                    // 這裡預載了你提供的舊 App 數據
                     trips: {
                         karuizawa: {
                             id: 'karuizawa',
@@ -262,101 +390,147 @@
                             theme: 'pink',
                             effect: 'flower',
                             link: 'https://kathy0106.github.io/OurStory11thtokyo/',
-                            shopping: [],
+                            weatherCity: 'Karuizawa,JP',
+                            
+                            // Rich Info Data
+                            flights: {
+                                out: { code: 'CX524', date: '4/18', dep: '01:00', arr: '06:40' },
+                                in: { code: 'CX501', date: '4/25', dep: '21:30', arr: '02:00' }
+                            },
+                            rental: {
+                                company: 'Toyota Rent a Car',
+                                pickup: '4/20 09:30 @ T-CAT (水天宮)',
+                                return: '4/22 17:00 @ T-CAT (水天宮)',
+                                note: '予約番号: 98147748300'
+                            },
+                            hotels: [
+                                { name: 'VIA INN PRIME 日本橋人形町', dates: '4/18 - 4/20' },
+                                { name: 'Toyoko Inn 佐久平站淺間口', dates: '4/20 - 4/22' },
+                                { name: '八重翠東京酒店', dates: '4/22 - 4/25' }
+                            ],
+                            alarms: [
+                                { date: '即刻', task: '買機票' },
+                                { date: '1/20', task: 'Book 輕井澤燒肉' },
+                                { date: '3/23', task: '搶 Disney Pass' }
+                            ],
+
+                            shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
                             expenses: [],
-                            itinerary: [
-                                { date: '4/18 (六) Day 1', events: [
-                                    { time: '06:40', title: '抵達 NRT', desc: '成田機場 T2 -> 買飛去 T-CAT' },
-                                    { time: '09:00', title: 'Check-in', desc: 'VIA INN PRIME 日本橋人形町' },
-                                    { time: '11:00', title: '午餐', desc: '利久牛舌 (上野)' },
-                                    { time: '13:00', title: '景點', desc: '根津神社 (杜鵑花祭)' },
-                                    { time: '17:00', title: '晚餐', desc: '米久本店 (百年牛鍋)' }
+                            
+                            days: [
+                                { weekday: 'Sat', dateStr: '4/18', events: [
+                                    { time: '06:40', title: '抵達成田 (NRT)', desc: '買飛去 T-CAT', category: 'flight', loc: 'Narita Airport' },
+                                    { time: '09:00', title: 'Check-in 酒店', desc: 'VIA INN PRIME', category: 'hotel', loc: 'Ningyocho' },
+                                    { time: '11:00', title: '利久牛舌', desc: '上野 Parco_ya', category: 'food', loc: 'Ueno' },
+                                    { time: '13:00', title: '根津神社', desc: '杜鵑花祭', category: 'sightseeing', loc: 'Nezu Shrine' },
+                                    { time: '17:00', title: '米久本店', desc: '百年牛鍋', category: 'food', loc: 'Asakusa' }
                                 ]},
-                                { date: '4/19 (日) Day 2', events: [
-                                    { time: '09:30', title: '龜戶天神社', desc: '紫藤花' },
-                                    { time: '12:30', title: '午餐', desc: '山笑ふ 表參道' },
-                                    { time: '19:00', title: '晚餐', desc: '牛かつもと村 (澀谷)' }
+                                { weekday: 'Sun', dateStr: '4/19', events: [
+                                    { time: '09:30', title: '龜戶天神社', desc: '紫藤花', category: 'sightseeing', loc: 'Kameido Tenjin' },
+                                    { time: '12:30', title: '山笑ふ', desc: 'Shabu Shabu (已預約)', category: 'food', loc: 'Omotesando' },
+                                    { time: '19:00', title: '牛かつもと村', desc: '炸牛排', category: 'food', loc: 'Shibuya' }
                                 ]},
-                                { date: '4/20 (一) Day 3', events: [
-                                    { time: '09:30', title: '取車', desc: 'Toyota Rent a Car T-CAT' },
-                                    { time: '14:30', title: '輕井澤 Outlet', desc: 'Shopping Time!' },
-                                    { time: '18:00', title: 'Check-in', desc: 'Toyoko Inn 佐久平' }
+                                { weekday: 'Mon', dateStr: '4/20', events: [
+                                    { time: '09:30', title: '取車', desc: 'Toyota Rent a Car T-CAT', category: 'transport', loc: 'T-CAT' },
+                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵', category: 'food', loc: 'Karuizawa' },
+                                    { time: '14:30', title: 'Outlet Shopping', desc: '血拼時間', category: 'shopping', loc: 'Prince Shopping Plaza' }
                                 ]},
-                                { date: '4/21 (二) Day 4', events: [
-                                    { time: '08:00', title: 'Pre-wedding', desc: '全日婚紗拍攝' },
-                                    { time: '19:00', title: '慶功晚餐', desc: '輕井澤燒肉' }
+                                { weekday: 'Tue', dateStr: '4/21', events: [
+                                    { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝', category: 'highlight', loc: 'Karuizawa' },
+                                    { time: '19:00', title: '慶功晚餐', desc: 'Rogotei 燒肉', category: 'food', loc: 'Rogotei' }
                                 ]},
-                                { date: '4/22 (三) Day 5', events: [
-                                    { time: '10:00', title: '白絲瀑布', desc: '輕井澤名勝' },
-                                    { time: '17:00', title: '東京還車', desc: 'T-CAT 還車' },
-                                    { time: '18:00', title: 'Check-in', desc: '八重翠東京酒店' }
+                                { weekday: 'Wed', dateStr: '4/22', events: [
+                                    { time: '10:00', title: '白絲瀑布', desc: '名勝打卡', category: 'sightseeing', loc: 'Shiraito Falls' },
+                                    { time: '17:00', title: '東京還車', desc: 'T-CAT', category: 'transport', loc: 'T-CAT' }
                                 ]},
-                                { date: '4/23 (四) Day 6', events: [
-                                    { time: '07:30', title: 'Disney Sea', desc: '全日迪士尼海洋' },
-                                    { time: '21:00', title: '宵夜', desc: '麥當勞厚牛堡' }
+                                { weekday: 'Thu', dateStr: '4/23', events: [
+                                    { time: '07:30', title: 'Disney Sea', desc: '入園搶 Pass (Fantasy Springs)', category: 'ticket', loc: 'DisneySea' },
+                                    { time: '21:00', title: '宵夜', desc: '麥當勞厚牛堡', category: 'food', loc: 'Hatchobori' }
                                 ]},
-                                { date: '4/24 (五) Day 7', events: [
-                                    { time: '10:00', title: '大和壽司', desc: '豐洲市場' },
-                                    { time: '13:30', title: 'TeamLab', desc: 'Planets TOKYO' },
-                                    { time: '18:30', title: '晚餐', desc: '銀座 篝 雞白湯拉麵' }
+                                { weekday: 'Fri', dateStr: '4/24', events: [
+                                    { time: '10:00', title: '大和壽司', desc: '豐洲市場', category: 'food', loc: 'Toyosu' },
+                                    { time: '13:30', title: 'TeamLab', desc: 'Planets', category: 'sightseeing', loc: 'TeamLab Planets' }
                                 ]},
-                                { date: '4/25 (六) Day 8', events: [
-                                    { time: '10:30', title: '東京一番街', desc: '最後衝刺' },
-                                    { time: '14:45', title: '回程', desc: '前往機場 (CX501)' }
+                                { weekday: 'Sat', dateStr: '4/25', events: [
+                                    { time: '10:30', title: '東京一番街', desc: '最後衝刺', category: 'shopping', loc: 'Tokyo Station' },
+                                    { time: '14:45', title: '前往機場', desc: '巴士/Skyliner', category: 'transport', loc: 'Narita Airport' }
                                 ]}
                             ]
                         },
                         central: {
                             id: 'central',
                             name: '🍁 日本中部紅葉之旅',
-                            date: '2026-11-01', // 假定日期
+                            date: '2026-10-31', 
                             range: 'Oct 31 - Nov 08, 2026',
                             theme: 'orange',
                             effect: 'leaf',
                             link: 'https://kathy0106.github.io/OurStory12thtokyo/',
-                            shopping: [],
+                            weatherCity: 'Nagoya,JP',
+
+                            flights: {
+                                out: { code: 'CX524', date: '10/31', dep: '01:00', arr: '06:40' },
+                                in: { code: 'CX505', date: '11/08', dep: '18:00', arr: '22:25' }
+                            },
+                            rental: {
+                                company: 'Toyota Rent a Car',
+                                pickup: '10/31 08:00 @ 成田機場',
+                                return: '11/05 18:00 @ 淺草/上野',
+                                note: '必須指定雪胎 (Snow Tires)'
+                            },
+                            hotels: [
+                                { name: 'Daiwa Roynet Numazu', dates: '10/31 - 11/2' },
+                                { name: 'Onyado Nono Matsumoto', dates: '11/2 - 11/3' },
+                                { name: '湯宿 季之庭 (草津)', dates: '11/3 - 11/4', note: '1st Wedding Anniversary' },
+                                { name: 'HOTEL CLAD (御殿場)', dates: '11/4 - 11/5' },
+                                { name: '淺草東武酒店', dates: '11/5 - 11/8' }
+                            ],
+                            alarms: [
+                                { date: '即刻', task: '買機票' },
+                                { date: '4/25', task: '搶訂 季之庭' },
+                                { date: '9/01', task: '搶 Mantensushi' }
+                            ],
+
+                            shopping: ['飛驒牛味噌', '清酒', '紅葉手信'],
                             expenses: [],
-                            itinerary: [
-                                { date: '10/31 (六) Day 1', events: [
-                                    { time: '06:40', title: '抵達 NRT', desc: '取車出發去沼津' },
-                                    { time: '11:30', title: '午餐', desc: '沼津港 (丸天)' },
-                                    { time: '19:00', title: '晚餐', desc: 'Sawayaka 漢堡扒 (沼津)' },
-                                    { time: '21:00', title: 'Check-in', desc: 'Daiwa Roynet Numazu' }
+                            
+                            days: [
+                                { weekday: 'Sat', dateStr: '10/31', events: [
+                                    { time: '08:00', title: '取車', desc: '成田機場取車', category: 'transport', loc: 'Narita' },
+                                    { time: '11:30', title: '沼津港 (丸天)', desc: '海鮮丼', category: 'food', loc: 'Numazu Port' },
+                                    { time: '19:00', title: 'Sawayaka', desc: '必食漢堡扒', category: 'food', loc: 'Numazu' }
                                 ]},
-                                { date: '11/01 (日) Day 2', events: [
-                                    { time: '10:30', title: '大室山', desc: '伊豆高原' },
-                                    { time: '14:30', title: '修善寺溫泉', desc: '竹林小徑' }
+                                { weekday: 'Sun', dateStr: '11/01', events: [
+                                    { time: '10:30', title: '大室山', desc: '搭吊車', category: 'sightseeing', loc: 'Omuro Mountain' },
+                                    { time: '14:30', title: '修善寺', desc: '竹林小徑', category: 'sightseeing', loc: 'Shuzenji' }
                                 ]},
-                                { date: '11/02 (一) Day 3', events: [
-                                    { time: '11:00', title: '諏訪湖', desc: '立石公園 (你的名字)' },
-                                    { time: '14:30', title: '松本城', desc: '國寶城' },
-                                    { time: '21:00', title: 'Check-in', desc: 'Onyado Nono Matsumoto' }
+                                { weekday: 'Mon', dateStr: '11/02', events: [
+                                    { time: '11:00', title: '諏訪湖', desc: '立石公園', category: 'sightseeing', loc: 'Suwa Lake' },
+                                    { time: '14:30', title: '松本城', desc: '國寶城', category: 'sightseeing', loc: 'Matsumoto Castle' }
                                 ]},
-                                { date: '11/03 (二) Day 4', events: [
-                                    { time: '09:30', title: '善光寺', desc: '長野必去' },
-                                    { time: '13:00', title: '地獄谷野猿公苑', desc: '睇馬騮浸溫泉' },
-                                    { time: '16:30', title: 'Check-in', desc: '季之庭 (草津) - 紀念日' }
+                                { weekday: 'Tue', dateStr: '11/03', events: [
+                                    { time: '09:30', title: '善光寺', desc: '長野名勝', category: 'sightseeing', loc: 'Zenkoji' },
+                                    { time: '13:00', title: '地獄谷野猿公苑', desc: '馬騮浸溫泉', category: 'sightseeing', loc: 'Snow Monkey Park' },
+                                    { time: '16:30', title: '季之庭', desc: 'Check-in 嘆溫泉', category: 'highlight', loc: 'Kusatsu Onsen' }
                                 ]},
-                                { date: '11/04 (三) Day 5', events: [
-                                    { time: '13:00', title: '河口湖', desc: '大石公園 / 紅葉迴廊' },
-                                    { time: '16:30', title: 'Check-in', desc: 'HOTEL CLAD (御殿場)' }
+                                { weekday: 'Wed', dateStr: '11/04', events: [
+                                    { time: '13:00', title: '河口湖', desc: '大石公園睇富士山', category: 'sightseeing', loc: 'Kawaguchiko' },
+                                    { time: '16:30', title: 'Check-in', desc: 'HOTEL CLAD', category: 'hotel', loc: 'Gotemba' }
                                 ]},
-                                { date: '11/05 (四) Day 6', events: [
-                                    { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping' },
-                                    { time: '18:00', title: '東京還車', desc: '淺草/上野' },
-                                    { time: '19:30', title: '晚餐', desc: '鳥貴族 (淺草)' }
+                                { weekday: 'Thu', dateStr: '11/05', events: [
+                                    { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping', category: 'shopping', loc: 'Gotemba Outlet' },
+                                    { time: '18:00', title: '東京還車', desc: '淺草', category: 'transport', loc: 'Asakusa' }
                                 ]},
-                                { date: '11/06 (五) Day 7', events: [
-                                    { time: '10:00', title: 'Shopping', desc: '銀座 / 澀谷 Sky' },
-                                    { time: '19:00', title: '紀念日晚餐', desc: 'Mantensushi Omakase' }
+                                { weekday: 'Fri', dateStr: '11/06', events: [
+                                    { time: '10:00', title: '澀谷 Sky', desc: '觀景台', category: 'sightseeing', loc: 'Shibuya Sky' },
+                                    { time: '19:00', title: 'Mantensushi', desc: 'Omakase (已預約)', category: 'highlight', loc: 'Nihonbashi' }
                                 ]},
-                                { date: '11/07 (六) Day 8', events: [
-                                    { time: '10:30', title: '吉祥寺', desc: '井之頭公園' },
-                                    { time: '14:00', title: '下北澤', desc: '古著店' }
+                                { weekday: 'Sat', dateStr: '11/07', events: [
+                                    { time: '10:30', title: '吉祥寺', desc: '井之頭公園', category: 'sightseeing', loc: 'Kichijoji' },
+                                    { time: '14:00', title: '下北澤', desc: '古著店', category: 'shopping', loc: 'Shimokitazawa' }
                                 ]},
-                                { date: '11/08 (日) Day 9', events: [
-                                    { time: '14:00', title: '機場', desc: 'Skyliner -> 成田' },
-                                    { time: '18:00', title: '回程', desc: 'CX505' }
+                                { weekday: 'Sun', dateStr: '11/08', events: [
+                                    { time: '14:00', title: 'Skyliner', desc: '上野 -> 成田', category: 'transport', loc: 'Ueno' },
+                                    { time: '18:00', title: '回程', desc: 'CX505', category: 'flight', loc: 'Narita Airport' }
                                 ]}
                             ]
                         }
@@ -380,20 +554,49 @@
                 currentEffect() {
                     return this.activeTrip.effect;
                 },
+                currentDayEvents() {
+                    return this.activeTrip.days[this.selectedDayIndex].events || [];
+                },
                 effectIcon() {
                     if (this.currentEffect === 'flower') return 'fa-solid fa-fan'; 
                     if (this.currentEffect === 'leaf') return 'fa-brands fa-canadian-maple-leaf'; 
                     return '';
                 },
                 totalExpenses() {
-                    return this.activeTrip.expenses.reduce((sum, item) => sum + item.amount, 0);
+                    return this.activeTrip.expenses.reduce((sum, item) => sum + parseInt(item.amount || 0), 0);
                 }
+            },
+            watch: {
+                selectedDayIndex() {
+                    this.fetchWeather();
+                },
+                selectedTripId() {
+                    this.fetchWeather();
+                }
+            },
+            mounted() {
+                this.fetchWeather();
             },
             methods: {
                 selectTrip(id) {
                     this.selectedTripId = id;
                     this.currentView = 'detail';
                     this.activeTab = 'itinerary';
+                    this.selectedDayIndex = 0; // Reset to Day 1
+                },
+                fetchWeather() {
+                    // 根據目前 Trip ID 決定城市 (簡單版)
+                    let query = this.activeTrip.weatherCity;
+                    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&lang=zh_tw&appid=${this.apiKey}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.weather.city_name = data.name;
+                        this.weather.temp = Math.round(data.main.temp);
+                        this.weather.feels_like = Math.round(data.main.feels_like);
+                        // Weather Icon logic...
+                        this.weather.icon = 'fa-sun'; // default for demo
+                    })
+                    .catch(() => { this.weather.temp = '--'; });
                 },
                 getCountdown(dateString) {
                     const target = new Date(dateString);
@@ -401,11 +604,32 @@
                     const diff = target - now;
                     return Math.ceil(diff / (1000 * 60 * 60 * 24));
                 },
-                addShoppingItem() {
-                    if (this.newShopItem) {
-                        this.activeTrip.shopping.push(this.newShopItem);
-                        this.newShopItem = '';
+                itemCategoryName(cat) {
+                    const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班', ticket: '門票', highlight: '紀念日' };
+                    return map[cat] || '其他';
+                },
+                getTransportIcon(type) {
+                    const map = { walk: 'fa-person-walking', train: 'fa-train-subway', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane' };
+                    return `fa-solid ${map[type] || 'fa-arrow-right'}`;
+                },
+                openMap(location) {
+                    if (location) {
+                        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`, '_blank');
                     }
+                },
+                // Add Item Logic (Mock)
+                addShoppingItem() { if(this.newShopItem) this.activeTrip.shopping.push(this.newShopItem); this.newShopItem = ''; },
+                removeShoppingItem(idx) { this.activeTrip.shopping.splice(idx, 1); },
+                deleteExpense(idx) { this.activeTrip.expenses.splice(idx, 1); },
+                
+                // Modal
+                openAddModal() { this.showModal = true; },
+                confirmAdd() { 
+                    if(this.newItem.title && this.currentView === 'detail') {
+                        // Push to current day
+                        this.activeTrip.days[this.selectedDayIndex].events.push({...this.newItem});
+                    }
+                    this.showModal = false; 
                 }
             }
         }).mount('#app');
