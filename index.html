@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V54</title>
+    <title>我的旅遊手帳 V55</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -19,7 +19,7 @@
             background-color: #FFF9F5;
             overscroll-behavior-y: none;
             -webkit-tap-highlight-color: transparent;
-            /* Font size is now controlled by Vue on the HTML tag */
+            /* Font size controlled by Vue style binding */
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -35,8 +35,8 @@
             position: fixed;
             top: -10%;
             user-select: none;
-            pointer-events: none;
-            z-index: 9999;
+            pointer-events: none; /* 關鍵：讓點擊穿透特效層 */
+            z-index: 9998;
             animation-name: fall;
             animation-timing-function: linear;
             animation-iteration-count: infinite;
@@ -63,7 +63,7 @@
             opacity: 0;
         }
         
-        /* Range Slider Styling */
+        /* Slider Styling */
         input[type=range] {
             -webkit-appearance: none; 
             background: transparent; 
@@ -104,12 +104,12 @@
 
         <div v-if="currentView === 'home'" class="flex-1 flex flex-col px-5 pt-8 pb-6 z-10 overflow-y-auto">
             
-            <div class="mb-6 flex justify-between items-end">
+            <div class="mb-6 flex justify-between items-end relative z-50">
                 <div>
                     <h1 class="text-2xl font-bold text-slate-800">早晨！☀️</h1>
                     <p class="text-xs text-gray-400 mt-1">準備好出發未？</p>
                 </div>
-                <button @click="showSettings = true" class="w-10 h-10 rounded-full bg-white soft-shadow flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors z-50 relative">
+                <button @click="showSettings = true" class="w-10 h-10 rounded-full bg-white soft-shadow flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors relative z-50">
                     <i class="fa-solid fa-gear text-lg"></i>
                 </button>
             </div>
@@ -193,24 +193,28 @@
 
                     <div v-if="activeTab === 'itinerary'">
                         
-                        <div class="sticky top-0 z-40 px-5 pt-5 pb-2 transition-all duration-300" :style="{ backgroundColor: currentTheme.bg }">
-                            <div class="bg-white rounded-2xl p-4 soft-shadow flex justify-between items-center border border-gray-50/50">
+                        <div class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 px-5 py-3 flex justify-between items-center transition-all duration-300">
+                            <div class="flex items-center gap-3">
+                                <div class="text-center bg-gray-100 rounded-lg px-3 py-1 min-w-[60px]">
+                                    <div class="text-[9px] text-gray-400 font-bold">還有</div>
+                                    <div class="text-lg font-bold font-mono" :style="{ color: currentTheme.main }">{{ getCountdown(activeTrip.date) }} <span class="text-[9px] text-gray-400 font-sans">天</span></div>
+                                </div>
+                                <div class="border-l border-gray-200 pl-3">
+                                    <div class="text-lg font-bold text-slate-800 leading-none mb-0.5">{{ activeTrip.days[selectedDayIndex].dateStr }}</div>
+                                    <div class="text-[10px] text-gray-400 uppercase tracking-wide">{{ activeTrip.days[selectedDayIndex].weekday }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-2 text-right">
                                 <div>
-                                    <div class="text-[10px] text-gray-400 font-bold mb-0.5">距離出發</div>
-                                    <div class="text-xl font-bold font-mono" :style="{ color: currentTheme.main }">
-                                        {{ getCountdown(activeTrip.date) }} <span class="text-[10px] text-gray-400 font-sans font-normal">天</span>
-                                    </div>
+                                    <div class="text-[10px] text-gray-500 font-bold">{{ weather.city_name }}</div>
+                                    <div class="text-base font-bold text-slate-700 leading-none">{{ weather.temp }}°</div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="text-[10px] text-gray-400 font-bold">{{ weather.city_name }}</div>
-                                    <div class="text-sm font-bold text-slate-700 flex items-center justify-end gap-1">
-                                        {{ weather.temp }}°C <i :class="['fa-solid', weather.icon]" :style="{ color: currentTheme.main }"></i>
-                                    </div>
-                                </div>
+                                <i :class="['fa-solid', weather.icon, 'text-2xl']" :style="{ color: currentTheme.main }"></i>
                             </div>
                         </div>
 
-                        <div class="flex space-x-3 overflow-x-auto no-scrollbar px-5 py-2 mb-2">
+                        <div class="flex space-x-2 overflow-x-auto no-scrollbar px-5 py-3 mb-1">
                             <div v-for="(day, index) in activeTrip.days" :key="index" 
                                  @click="selectedDayIndex = index"
                                  class="flex-shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl transition-all duration-300 snap-center cursor-pointer border border-white/60 soft-shadow"
@@ -218,19 +222,8 @@
                                  :style="{ backgroundColor: selectedDayIndex === index ? currentTheme.main : 'white' }">
                                 <span class="text-[10px] font-bold uppercase">{{ day.weekday }}</span>
                                 <span class="text-xl font-bold">{{ day.dateStr.split(' ')[0] }}</span>
-                                <span class="text-[10px] opacity-80">Day {{ index + 1 }}</span>
+                                <span class="text-[9px] opacity-80">Day {{ index + 1 }}</span>
                             </div>
-                        </div>
-
-                        <div class="mx-4 rounded-xl p-3 mb-4 flex items-center justify-between shadow-sm text-white"
-                             :class="activeTrip.theme === 'pink' ? 'bg-gradient-to-r from-pink-300 to-rose-300' : 'bg-gradient-to-r from-orange-300 to-amber-300'">
-                            <div>
-                                <div class="text-[10px] opacity-90 flex items-center gap-1 mb-0.5">
-                                    <i class="fa-solid fa-location-dot"></i> {{ weather.city_name }}
-                                </div>
-                                <div class="text-2xl font-bold">{{ weather.temp }}°C <span class="text-[10px] font-normal opacity-80 ml-1">體感 {{ weather.feels_like }}°</span></div>
-                            </div>
-                            <i :class="['fa-solid', weather.icon, 'text-4xl drop-shadow-md opacity-90']"></i>
                         </div>
 
                         <div class="px-4 pt-2 space-y-0 relative">
@@ -389,6 +382,7 @@
                                 <div class="flex-1">
                                     <h4 class="font-bold text-sm text-slate-800">{{ hotel.name }}</h4>
                                     <p class="text-xs text-gray-500 mt-0.5">{{ hotel.dates }}</p>
+                                    <p v-if="hotel.note" class="text-[10px] text-red-500 mt-0.5 font-bold"><i class="fa-solid fa-gift mr-1"></i>{{ hotel.note }}</p>
                                 </div>
                                 <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
                             </div>
@@ -502,9 +496,9 @@
                         <span class="text-sm font-bold text-gray-500">字體大小</span>
                         <span class="text-xs text-gray-400">{{ settings.fontSize }}px</span>
                     </div>
-                    <input type="range" min="12" max="24" step="1" v-model="settings.fontSize" class="w-full accent-slate-500" @input="updateFontSize">
+                    <input type="range" min="12" max="24" step="1" v-model="settings.fontSize" class="w-full accent-slate-500">
                 </div>
-                <div class="text-center text-xs text-gray-300 mt-4">V54 Final</div>
+                <div class="text-center text-xs text-gray-300 mt-4">V55 Fixed</div>
             </div>
         </div>
 
@@ -532,6 +526,7 @@
                     weather: { city_name: '', temp: '--', feels_like: '--', icon: 'fa-spinner fa-spin' },
                     apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4',
                     
+                    // Global Settings
                     settings: {
                         themeColor: 'pink',
                         effect: 'flower',
@@ -578,7 +573,7 @@
                                 { date: '1/20', task: 'Book 輕井澤燒肉' },
                                 { date: '3/23', task: '搶 Disney Pass' }
                             ],
-                            shopping: [],
+                            shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
                             expenses: [],
                             
                             days: [
@@ -636,7 +631,7 @@
                                 { weekday: 'Sat', dateStr: '4/25', events: [
                                     { time: '10:30', title: '東京一番街', desc: 'Character Street', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk', travelTime: '15 min' },
                                     { time: '12:00', title: 'Manten Sushi', desc: '丸之內店', category: 'food', loc: 'Manten Sushi Marunouchi', transportType: 'walk', travelTime: '10 min' },
-                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '20 min' },
+                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛 (巴士/的士 20 min)', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '20 min' },
                                     { time: '14:45', title: '前往機場', desc: 'CX501 回程', category: 'transport', loc: 'Narita Airport', transportType: 'bus', travelTime: '60 min' }
                                 ]}
                             ]
@@ -652,7 +647,6 @@
                             docLink: 'https://docs.google.com/document/d/11eFLaGqOmRfXx90pVCWGF0iNIQRwECa3X3VmFjqQgdk/edit?usp=drivesdk',
                             weatherCity: 'Nagoya,JP',
 
-                            // Info Tab 數據
                             flights: {
                                 out: { code: 'CX524', date: '10/31', dep: '01:00', arr: '06:40' },
                                 in: { code: 'CX505', date: '11/08', dep: '18:00', arr: '22:25' }
@@ -680,7 +674,7 @@
                                 { date: '9/30', task: '預約 鳥貴族' }
                             ],
 
-                            shopping: ['飛驒牛味噌', '清酒', '紅葉手信'],
+                            shopping: ['沼津 乾物', '伊豆 山葵漬物', '松本 味噌/蘋果', '草津 溫泉粉', '御殿場 Outlet 戰利品', '東京 手信'],
                             expenses: [],
                             
                             // 完整行程 Day 1 - Day 9
@@ -877,9 +871,6 @@
                 convert(type) {
                     if (type === 'jpy') this.calcHkd = (this.calcJpy * this.exchangeRate).toFixed(2);
                     else this.calcJpy = (this.calcHkd / this.exchangeRate).toFixed(0);
-                },
-                updateFontSize() {
-                    // Font size is bound to style tag on body, Vue handles update
                 }
             }
         }).mount('#app');
