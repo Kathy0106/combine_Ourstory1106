@@ -552,8 +552,7 @@
                                 { weekday: 'Sat', dateStr: '4/25', events: [
                                     { time: '10:30', title: '東京一番街', desc: 'Character Street', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk', travelTime: '15 min' },
                                     { time: '12:00', title: 'Manten Sushi', desc: '丸之內店', category: 'food', loc: 'Manten Sushi Marunouchi', transportType: 'walk', travelTime: '10 min' },
-                                    { time: '14:00', title: '前往 Marunouchi', desc: '行 15 min', category: 'transport', loc: 'Marunouchi', transportType: 'walk', travelTime: '15 min' },
-                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛 (巴士/的士 20 min)', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '20 min' },
+                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '20 min' },
                                     { time: '14:45', title: '前往機場', desc: 'CX501 回程', category: 'transport', loc: 'Narita Airport', transportType: 'bus', travelTime: '60 min' }
                                 ]}
                             ]
@@ -708,6 +707,7 @@
                 selectedTripId() {
                     this.fetchWeather();
                     this.selectedDayIndex = 0; // Reset day when switching trip
+                    this.settings.themeColor = this.activeTrip.theme;
                 }
             },
             mounted() {
@@ -718,11 +718,15 @@
                     this.selectedTripId = id;
                     this.currentView = 'detail';
                     this.activeTab = 'itinerary';
-                    this.selectedDayIndex = 0; // Reset to Day 1
+                    // Auto set theme color based on trip
+                    this.settings.themeColor = this.trips[id].theme;
+                },
+                changeTheme(color) {
+                     this.settings.themeColor = color;
                 },
                 fetchWeather() {
                     let query = this.activeTrip.weatherCity;
-                    // Logic to switch city based on date index
+                    // Logic to switch city based on date index if needed (e.g. Karuizawa vs Tokyo)
                     if (this.selectedTripId === 'karuizawa') {
                         if (this.selectedDayIndex < 2 || this.selectedDayIndex > 4) query = 'Tokyo,JP';
                         else query = 'Karuizawa,JP';
