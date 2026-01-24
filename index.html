@@ -155,7 +155,7 @@
                                     <span class="text-xs font-bold px-2 py-0.5 rounded text-white" :style="{ backgroundColor: currentTheme.main }">{{ item.time }}</span>
                                 </div>
                                 <h4 class="font-bold text-slate-800">{{ item.title }}</h4>
-                                <p class="text-sm text-gray-500 mt-1">{{ item.desc }}</p>
+                                <p class="text-sm text-gray-500 mt-1 whitespace-pre-line">{{ item.desc }}</p>
                             </div>
                         </div>
                     </div>
@@ -262,39 +262,101 @@
                             theme: 'pink',
                             effect: 'flower',
                             link: 'https://kathy0106.github.io/OurStory11thtokyo/',
-                            shopping: ['保暖襪', '隱形眼鏡', 'Head dress'],
+                            shopping: [],
                             expenses: [],
                             itinerary: [
-                                { date: '4/18 (六)', events: [
-                                    { time: '10:00', title: '抵達東京成田', desc: 'NRT Airport' },
-                                    { time: '13:00', title: '新幹線往輕井澤', desc: 'Tokyo Station' },
-                                    { time: '15:00', title: 'Check-in 酒店', desc: 'Karuizawa Prince Hotel' }
+                                { date: '4/18 (六) Day 1', events: [
+                                    { time: '06:40', title: '抵達 NRT', desc: '成田機場 T2 -> 買飛去 T-CAT' },
+                                    { time: '09:00', title: 'Check-in', desc: 'VIA INN PRIME 日本橋人形町' },
+                                    { time: '11:00', title: '午餐', desc: '利久牛舌 (上野)' },
+                                    { time: '13:00', title: '景點', desc: '根津神社 (杜鵑花祭)' },
+                                    { time: '17:00', title: '晚餐', desc: '米久本店 (百年牛鍋)' }
                                 ]},
-                                { date: '4/19 (日)', events: [
-                                    { time: '09:00', title: 'Pre-wedding 拍攝', desc: '全日拍攝行程' },
-                                    { time: '18:00', title: '慶功晚餐', desc: '燒肉' }
+                                { date: '4/19 (日) Day 2', events: [
+                                    { time: '09:30', title: '龜戶天神社', desc: '紫藤花' },
+                                    { time: '12:30', title: '午餐', desc: '山笑ふ 表參道' },
+                                    { time: '19:00', title: '晚餐', desc: '牛かつもと村 (澀谷)' }
+                                ]},
+                                { date: '4/20 (一) Day 3', events: [
+                                    { time: '09:30', title: '取車', desc: 'Toyota Rent a Car T-CAT' },
+                                    { time: '14:30', title: '輕井澤 Outlet', desc: 'Shopping Time!' },
+                                    { time: '18:00', title: 'Check-in', desc: 'Toyoko Inn 佐久平' }
+                                ]},
+                                { date: '4/21 (二) Day 4', events: [
+                                    { time: '08:00', title: 'Pre-wedding', desc: '全日婚紗拍攝' },
+                                    { time: '19:00', title: '慶功晚餐', desc: '輕井澤燒肉' }
+                                ]},
+                                { date: '4/22 (三) Day 5', events: [
+                                    { time: '10:00', title: '白絲瀑布', desc: '輕井澤名勝' },
+                                    { time: '17:00', title: '東京還車', desc: 'T-CAT 還車' },
+                                    { time: '18:00', title: 'Check-in', desc: '八重翠東京酒店' }
+                                ]},
+                                { date: '4/23 (四) Day 6', events: [
+                                    { time: '07:30', title: 'Disney Sea', desc: '全日迪士尼海洋' },
+                                    { time: '21:00', title: '宵夜', desc: '麥當勞厚牛堡' }
+                                ]},
+                                { date: '4/24 (五) Day 7', events: [
+                                    { time: '10:00', title: '大和壽司', desc: '豐洲市場' },
+                                    { time: '13:30', title: 'TeamLab', desc: 'Planets TOKYO' },
+                                    { time: '18:30', title: '晚餐', desc: '銀座 篝 雞白湯拉麵' }
+                                ]},
+                                { date: '4/25 (六) Day 8', events: [
+                                    { time: '10:30', title: '東京一番街', desc: '最後衝刺' },
+                                    { time: '14:45', title: '回程', desc: '前往機場 (CX501)' }
                                 ]}
                             ]
                         },
                         central: {
                             id: 'central',
                             name: '🍁 日本中部紅葉之旅',
-                            date: '2026-11-01',
-                            range: 'Nov 01 - 10, 2026',
+                            date: '2026-11-01', // 假定日期
+                            range: 'Oct 31 - Nov 08, 2026',
                             theme: 'orange',
                             effect: 'leaf',
                             link: 'https://kathy0106.github.io/OurStory12thtokyo/',
-                            shopping: ['飛驒牛味噌', '清酒', '紅葉手信'],
+                            shopping: [],
                             expenses: [],
                             itinerary: [
-                                { date: '11/01 (日)', events: [
-                                    { time: '09:00', title: '抵達名古屋中部機場', desc: 'NGO Airport' },
-                                    { time: '11:00', title: '取車自駕', desc: 'Toyota Rent a Car' },
-                                    { time: '18:00', title: '晚餐: 蓬萊軒鰻魚飯', desc: 'Atsuta Horaiken' }
+                                { date: '10/31 (六) Day 1', events: [
+                                    { time: '06:40', title: '抵達 NRT', desc: '取車出發去沼津' },
+                                    { time: '11:30', title: '午餐', desc: '沼津港 (丸天)' },
+                                    { time: '19:00', title: '晚餐', desc: 'Sawayaka 漢堡扒 (沼津)' },
+                                    { time: '21:00', title: 'Check-in', desc: 'Daiwa Roynet Numazu' }
                                 ]},
-                                { date: '11/02 (一)', events: [
-                                    { time: '10:00', title: '香嵐溪紅葉', desc: '日本紅葉名所' },
-                                    { time: '16:00', title: '前往高山', desc: '宿高山市' }
+                                { date: '11/01 (日) Day 2', events: [
+                                    { time: '10:30', title: '大室山', desc: '伊豆高原' },
+                                    { time: '14:30', title: '修善寺溫泉', desc: '竹林小徑' }
+                                ]},
+                                { date: '11/02 (一) Day 3', events: [
+                                    { time: '11:00', title: '諏訪湖', desc: '立石公園 (你的名字)' },
+                                    { time: '14:30', title: '松本城', desc: '國寶城' },
+                                    { time: '21:00', title: 'Check-in', desc: 'Onyado Nono Matsumoto' }
+                                ]},
+                                { date: '11/03 (二) Day 4', events: [
+                                    { time: '09:30', title: '善光寺', desc: '長野必去' },
+                                    { time: '13:00', title: '地獄谷野猿公苑', desc: '睇馬騮浸溫泉' },
+                                    { time: '16:30', title: 'Check-in', desc: '季之庭 (草津) - 紀念日' }
+                                ]},
+                                { date: '11/04 (三) Day 5', events: [
+                                    { time: '13:00', title: '河口湖', desc: '大石公園 / 紅葉迴廊' },
+                                    { time: '16:30', title: 'Check-in', desc: 'HOTEL CLAD (御殿場)' }
+                                ]},
+                                { date: '11/05 (四) Day 6', events: [
+                                    { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping' },
+                                    { time: '18:00', title: '東京還車', desc: '淺草/上野' },
+                                    { time: '19:30', title: '晚餐', desc: '鳥貴族 (淺草)' }
+                                ]},
+                                { date: '11/06 (五) Day 7', events: [
+                                    { time: '10:00', title: 'Shopping', desc: '銀座 / 澀谷 Sky' },
+                                    { time: '19:00', title: '紀念日晚餐', desc: 'Mantensushi Omakase' }
+                                ]},
+                                { date: '11/07 (六) Day 8', events: [
+                                    { time: '10:30', title: '吉祥寺', desc: '井之頭公園' },
+                                    { time: '14:00', title: '下北澤', desc: '古著店' }
+                                ]},
+                                { date: '11/08 (日) Day 9', events: [
+                                    { time: '14:00', title: '機場', desc: 'Skyliner -> 成田' },
+                                    { time: '18:00', title: '回程', desc: 'CX505' }
                                 ]}
                             ]
                         }
