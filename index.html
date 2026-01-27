@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OurStory❤️</title>
+    <title>Ourstory❤️</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -210,6 +210,7 @@
                                      :style="selectedDayIndex === index && activeTrip.theme === 'orange' ? 'background-color: #FFB74D; border-color: #FFB74D;' : ''">
                                     <span class="text-xs font-bold uppercase mb-0.5">{{ day.weekday }}</span>
                                     <span class="text-3xl font-black">{{ day.dateStr.split('/')[1] }}</span>
+                                    <span class="text-[10px] opacity-80 mt-0.5">Day {{ index + 1 }}</span>
                                 </div>
                             </div>
 
@@ -237,8 +238,8 @@
                                                 <div class="text-[10px] font-bold uppercase tracking-wider opacity-60 text-[#8D6E63]">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
                                             </div>
                                             <h3 class="text-lg font-bold mb-1.5 leading-tight text-[#5D4037]">{{ item.title }}</h3>
-                                            <div class="text-xs text-[#8D6E63] mb-2 flex items-start gap-1.5 leading-relaxed" v-if="item.desc">
-                                                <span class="whitespace-pre-line">{{ item.desc }}</span>
+                                            <div class="text-xs text-[#8D6E63] mb-2 flex items-start gap-1.5 leading-relaxed whitespace-pre-line" v-if="item.desc">
+                                                {{ item.desc }}
                                             </div>
 
                                             <div class="flex flex-wrap gap-1.5 mt-2">
@@ -440,6 +441,27 @@
             <i class="fa-solid fa-plus"></i>
         </button>
 
+        <div v-if="showModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm" @click.self="showModal = false">
+            <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-[#5D4037]">新增項目</h3>
+                    <button @click="showModal = false" class="text-[#BDBDBD]"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <div class="space-y-4">
+                    <input v-model="newItem.title" type="text" placeholder="標題 / 項目名稱" class="w-full p-3 bg-[#F5F5F5] rounded-xl border-none outline-none text-sm text-[#5D4037]">
+                    <div class="flex gap-2">
+                        <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#5D4037]">
+                        <select v-model="newItem.category" class="w-2/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#5D4037]">
+                            <option value="sightseeing">景點</option>
+                            <option value="food">美食</option>
+                            <option value="shopping">購物</option>
+                        </select>
+                    </div>
+                </div>
+                <button @click="confirmAdd" class="w-full text-white font-bold py-3 rounded-xl mt-6 shadow-lg text-sm" :style="{ backgroundColor: activeTrip.theme === 'pink' ? '#F48FB1' : '#FFB74D' }">確認新增</button>
+            </div>
+        </div>
+
         <div v-if="showSettings" class="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center" @click.self="showSettings = false">
             <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
                 <div class="flex justify-between items-center mb-6">
@@ -531,8 +553,8 @@
                             
                             days: [
                                 { weekday: 'Sat', dateStr: '4/18', events: [
-                                    { time: '06:40', title: '抵達成田 (NRT)', desc: '橙色櫃台買飛去 T-CAT', category: 'flight', transportType: 'flight' },
-                                    { time: '07:45', title: '巴士 -> T-CAT', desc: '利木津巴士，4個喼寄艙', category: 'transport', transportType: 'bus', travelTime: '75 min (60km)' },
+                                    { time: '06:40', title: '抵達成田 (NRT)', desc: '橙色櫃台買飛去 T-CAT', category: 'flight', transportType: 'flight', location: 'Narita Airport' },
+                                    { time: '07:45', title: '巴士 -> T-CAT', desc: '利木津巴士，4個喼寄艙', category: 'transport', transportType: 'bus', travelTime: '75 min (60km)', location: 'T-CAT' },
                                     { time: '09:00', title: 'Check-in 酒店', desc: '的士直達 VIA INN PRIME', category: 'hotel', transportType: 'car', travelTime: '10 min', location: 'VIA INN PRIME Nihonbashi' },
                                     { time: '11:00', title: '利久牛舌 (午餐)', desc: '上野 Parco_ya 6F，「極」定食', category: 'food', loc: 'Rikyu Ueno', transportType: 'train', travelTime: '30 min', location: 'Rikyu Ueno' },
                                     { time: '13:00', title: '根津神社', desc: '杜鵑花祭', category: 'sightseeing', loc: 'Nezu Shrine', transportType: 'bus', travelTime: '20 min', location: 'Nezu Shrine' },
@@ -551,16 +573,16 @@
                                     { time: '09:00', title: 'Check-out', desc: '行去 T-CAT', category: 'other', loc: 'T-CAT', transportType: 'walk', travelTime: '10 min', location: 'T-CAT' },
                                     { time: '09:30', title: '取車', desc: 'Toyota T-CAT (No: 98147748300)', category: 'transport', loc: 'Toyota Rent a Car T-CAT', transportType: 'walk', travelTime: '5 min', location: 'Toyota Rent a Car T-CAT' },
                                     { time: '10:30', title: '三芳 PA', desc: '休息站', category: 'transport', loc: 'Miyoshi PA', transportType: 'car', travelTime: '60 min (45km)', mapcode: '33 444 555*66', tips: '有靚廁所', location: 'Miyoshi PA' },
-                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵 或 村民食堂', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '90 min (120km)', location: 'Karuizawa' },
+                                    { time: '13:00', title: '輕井澤午餐', desc: 'Option A: 川上庵 (榆樹街小鎮)\nOption B: 村民食堂\n☎️ 村民食堂: 0267-44-3571', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '90 min (120km)', location: 'Karuizawa', mapcode: '292 701 462*82', tips: '星野區停車場', location: 'Karuizawa Hoshino Area' },
                                     { time: '14:30', title: 'Outlet Shopping', desc: 'MC: 292 677 245*55 (泊 P7)', category: 'shopping', loc: 'Prince Shopping Plaza', transportType: 'car', travelTime: '20 min', mapcode: '292 677 245*55', tips: '記得拎 Coupon', location: 'Prince Shopping Plaza' },
-                                    { time: '18:00', title: 'Check-in (Toyoko Inn)', category: 'hotel', loc: 'Toyoko Inn Sakudaira', transportType: 'car', travelTime: '40 min (30km)', location: 'Toyoko Inn Sakudaira' },
+                                    { time: '18:00', title: 'Check-in (Toyoko Inn)', category: 'hotel', loc: 'Toyoko Inn Sakudaira', transportType: 'car', travelTime: '40 min (30km)', location: 'Toyoko Inn Sakudaira', mapcode: '85 748 837*33', phone: '0267-66-1045', tips: '泊 P7' },
                                     { time: '20:00', title: '暖暮拉麵', desc: 'Aeon Mall 佐久平 2樓', category: 'food', loc: 'Danbo Ramen Sakudaira', transportType: 'walk', travelTime: '8 min', location: 'Danbo Ramen Sakudaira' },
-                                    { time: '21:00', title: '回程酒店 (Toyoko Inn)', category: 'hotel', desc: '休息', transportType: 'walk', location: 'Toyoko Inn Sakudaira' }
+                                    { time: '21:00', title: '回程酒店 (Toyoko Inn)', category: 'hotel', desc: '休息', transportType: 'walk', location: 'Toyoko Inn Sakudaira', mapcode: '85 748 837*33' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '4/21', events: [
                                     { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝 (自駕移動)', category: 'highlight', loc: 'Karuizawa', transportType: 'car', travelTime: '全日', location: 'Karuizawa' },
                                     { time: '19:00', title: '慶功晚餐', desc: '川上庵 或 燒肉', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '15 min', location: 'Karuizawa' },
-                                    { time: '21:00', title: '回程酒店 (Toyoko Inn)', category: 'hotel', desc: '休息', transportType: 'car', location: 'Toyoko Inn Sakudaira' }
+                                    { time: '21:00', title: '回程酒店 (Toyoko Inn)', category: 'hotel', desc: '休息', transportType: 'car', location: 'Toyoko Inn Sakudaira', mapcode: '85 748 837*33' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '4/22', events: [
                                     { time: '10:00', title: '白絲瀑布', desc: 'MC: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls', transportType: 'car', travelTime: '45 min (25km)', mapcode: '292 701 645*63', location: 'Shiraito Falls' },
@@ -660,7 +682,7 @@
                                     { time: '13:00', title: 'Lunch: 山賊燒', desc: '松本市內', category: 'food', loc: 'Matsumoto', transportType: 'car', travelTime: '40 min', location: 'Matsumoto' },
                                     { time: '14:30', title: '松本城', desc: 'MC: 75 851 375*66', category: 'sightseeing', loc: 'Matsumoto Castle', transportType: 'car', travelTime: '10 min', mapcode: '75 851 375*66', location: 'Matsumoto Castle' },
                                     { time: '18:30', title: 'Dinner: 馬肉刺身', desc: '市內居酒屋', category: 'food', loc: 'Matsumoto Station', transportType: 'walk', location: 'Matsumoto Station' },
-                                    { time: '21:00', title: 'Check-in (Onyado Nono)', category: 'hotel', desc: 'MC: 75 791 881*76', loc: 'Onyado Nono Matsumoto', transportType: 'walk', mapcode: '75 791 881*76', location: 'Onyado Nono Matsumoto' }
+                                    { time: '21:00', title: 'Check-in (Onyado Nono)', category: 'hotel', desc: 'MC: 75 821 474*88', loc: 'Onyado Nono Matsumoto', transportType: 'walk', mapcode: '75 821 474*88', phone: '0263-37-5489', location: 'Onyado Nono Matsumoto' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '11/03', events: [
                                     { time: '09:30', title: '善光寺', desc: '第1停車場', category: 'sightseeing', loc: 'Zenkoji', transportType: 'car', travelTime: '1 hr (65km)', location: 'Zenkoji' },
@@ -788,7 +810,6 @@
                     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&lang=zh_tw&appid=${this.apiKey}`)
                     .then(res => res.json())
                     .then(data => {
-                        this.weather.city_name = cityMap[query] || data.name;
                         this.weather.temp = Math.round(data.main.temp);
                         this.weather.feels_like = Math.round(data.main.feels_like);
                         this.weather.icon = 'fa-sun'; 
@@ -809,10 +830,17 @@
                     const map = { walk: 'fa-person-walking', train: 'fa-train-subway', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane' };
                     return `fa-solid ${map[type] || 'fa-arrow-right'}`;
                 },
-                openMap(location) {
-                    if (location) {
-                        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`, '_blank');
+                tabClass(tab) {
+                    return this.activeTab === tab 
+                        ? `bg-[#00897B] text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center transform scale-110 transition-all` 
+                        : `bg-white/90 text-[#00897B] w-8 h-8 rounded-full shadow flex items-center justify-center hover:bg-white transition-all`;
+                },
+                openMap(loc) {
+                    let query = loc;
+                    if (!query.includes('Japan') && !query.includes('日本')) {
+                        query += ', Japan';
                     }
+                    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
                 },
                 openDoc() {
                     window.open(this.activeTrip.docLink, '_blank');
@@ -829,14 +857,8 @@
                     }
                     this.showModal = false; 
                 },
-                tabClass(tab) {
-                    const color = this.currentTheme.main;
-                    return this.activeTab === tab 
-                        ? `bg-[${color}] text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center transform scale-110 transition-all` 
-                        : `bg-white/90 text-[${color}] w-8 h-8 rounded-full shadow flex items-center justify-center hover:bg-white transition-all`;
-                },
                 convert(type) {
-                    if (type === 'jpy') this.calcHkd = (this.calcJpy * this.exchangeRate).toFixed(2);
+                    if (type === 'jpy') this.calcHkd = (this.calcJpy * this.exchangeRate).toFixed(1);
                     else this.calcJpy = (this.calcHkd / this.exchangeRate).toFixed(0);
                 }
             }
