@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的旅遊手帳 V65</title>
+    <title>OurStory❤️</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -19,8 +19,6 @@
             --card-white: #FFFFFF;
             --text-brown: #5D4037;
             --text-light: #A1887F;
-            --accent-pink: #F48FB1;
-            --accent-green: #A5D6A7;
             --shadow-soft: 0 8px 24px rgba(149, 117, 205, 0.08);
         }
 
@@ -30,13 +28,12 @@
             color: var(--text-brown);
             overscroll-behavior-y: none;
             -webkit-tap-highlight-color: transparent;
-            /* Font size will be set by JS */
         }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 奶油風卡片 */
+        /* 奶油風卡片 + 虛線邊框 */
         .cream-card {
             background-color: var(--card-white);
             border-radius: 24px;
@@ -80,33 +77,11 @@
             max-height: 0;
             opacity: 0;
         }
-        
-        /* Range Slider Styling */
-        input[type=range] {
-            -webkit-appearance: none; 
-            background: transparent; 
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 2px solid currentColor;
-            margin-top: -8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
-            background: #e2e8f0;
-            border-radius: 2px;
-        }
     </style>
 </head>
 <body class="h-screen w-screen overflow-hidden">
 
-    <div id="app" class="h-full flex flex-col relative transition-colors duration-700">
+    <div id="app" class="h-full flex flex-col relative transition-colors duration-700" :style="{ fontSize: settings.fontSize + 'px' }">
 
         <div v-if="currentEffect !== 'none'" class="absolute inset-0 overflow-hidden pointer-events-none z-[9998]">
             <div v-for="n in 12" :key="n" class="falling-item opacity-60" 
@@ -121,6 +96,7 @@
         </div>
 
         <div v-if="currentView === 'home'" class="flex-1 flex flex-col px-6 pt-10 pb-6 z-10 overflow-y-auto">
+            
             <div class="mb-8 flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl font-bold" style="color: #5D4037;">早晨！☀️</h1>
@@ -177,18 +153,22 @@
             <div class="relative h-[28vh] min-h-[180px] max-h-[280px] flex-shrink-0 bg-cover bg-center transition-all duration-500 shadow-sm"
                  :style="{ backgroundImage: `url(${activeTrip.headerImg})` }">
                 <div class="absolute inset-0 bg-gradient-to-b from-[#5D4037]/20 to-[#5D4037]/60"></div>
+                
                 <button @click="currentView = 'home'" class="absolute top-6 left-5 w-10 h-10 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center text-white z-50 hover:bg-white/40 transition shadow-sm border border-white/20">
                     <i class="fa-solid fa-arrow-left text-sm"></i>
                 </button>
+                
                  <button @click="showSettings = true" class="absolute top-6 right-5 w-10 h-10 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center text-white z-50 hover:bg-white/40 transition shadow-sm border border-white/20">
                     <i class="fa-solid fa-gear text-sm"></i>
                 </button>
+
                 <div class="absolute bottom-6 right-5 flex gap-2 z-20 bg-white/90 backdrop-blur-md p-1.5 rounded-full shadow-lg border border-white/50">
                     <button @click="activeTab = 'itinerary'" :class="tabClass('itinerary')"><i class="fa-solid fa-map-location-dot text-base"></i></button>
                     <button @click="activeTab = 'info'" :class="tabClass('info')"><i class="fa-solid fa-circle-info text-base"></i></button>
                     <button @click="activeTab = 'shopping'" :class="tabClass('shopping')"><i class="fa-solid fa-basket-shopping text-base"></i></button>
                     <button @click="activeTab = 'expenses'" :class="tabClass('expenses')"><i class="fa-solid fa-yen-sign text-base"></i></button>
                 </div>
+                
                 <div class="absolute bottom-8 left-6 text-white text-shadow pr-40">
                     <h1 class="text-xl font-bold tracking-widest leading-tight mb-1 drop-shadow-md">{{ activeTrip.name }}</h1>
                     <p class="text-[10px] opacity-90 font-mono"><i class="fa-solid fa-calendar mr-1"></i> {{ activeTrip.range }}</p>
@@ -201,6 +181,7 @@
                     <div v-if="activeTab === 'itinerary'">
                         
                         <div class="sticky top-0 z-40 bg-[#FFFDF7]/95 backdrop-blur-md shadow-sm border-b-2 border-dashed border-[#F0EBE0] px-5 pt-4 pb-2 transition-all duration-300">
+                            
                             <div class="flex justify-between items-center mb-4">
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs font-bold bg-white px-2 py-1 rounded-lg border-2 dashed border-[#F0EBE0] text-[#A1887F]">還有</span>
@@ -231,6 +212,11 @@
                                     <span class="text-3xl font-black">{{ day.dateStr.split('/')[1] }}</span>
                                 </div>
                             </div>
+
+                            <div class="bg-yellow-50 border-t-2 border-dashed border-yellow-200 text-yellow-800 text-xs font-black py-2 text-center shadow-inner tracking-wide">
+                                <i class="fa-solid fa-circle-exclamation mr-1 text-yellow-600"></i>
+                                導航貼士：有電話用電話 📞 ➔ 冇先用 Mapcode 📍
+                            </div>
                         </div>
 
                         <div class="px-5 pt-4 space-y-4 relative">
@@ -243,39 +229,45 @@
                                 </div>
 
                                 <div class="cream-card p-4 relative overflow-hidden transition-all active:scale-95" @click="openMap(item.loc)">
-                                    <div class="flex justify-between items-start mb-1.5">
-                                        <div class="text-[10px] font-bold uppercase tracking-wider opacity-60 text-[#8D6E63]">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
-                                        <div v-if="item.loc" class="text-[#D7CCC8] text-xs"><i class="fa-solid fa-location-dot"></i></div>
-                                    </div>
-                                    <h3 class="text-lg font-bold mb-1.5 leading-tight text-[#5D4037]">{{ item.title }}</h3>
-                                    <div class="text-xs text-[#8D6E63] mb-2 flex items-start gap-1.5 leading-relaxed" v-if="item.desc">
-                                        <span class="whitespace-pre-line">{{ item.desc }}</span>
-                                    </div>
+                                    
+                                    <div class="flex gap-2">
+                                        
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex justify-between items-start mb-1.5">
+                                                <div class="text-[10px] font-bold uppercase tracking-wider opacity-60 text-[#8D6E63]">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
+                                            </div>
+                                            <h3 class="text-lg font-bold mb-1.5 leading-tight text-[#5D4037]">{{ item.title }}</h3>
+                                            <div class="text-xs text-[#8D6E63] mb-2 flex items-start gap-1.5 leading-relaxed" v-if="item.desc">
+                                                <span class="whitespace-pre-line">{{ item.desc }}</span>
+                                            </div>
 
-                                    <div class="flex flex-col gap-1.5 mt-2 bg-[#FDFBF7] p-2 rounded-xl border border-dashed border-[#EFEBE9]" v-if="item.mapcode || item.phone || item.tips">
-                                        <div v-if="item.mapcode" class="flex justify-between items-center text-[10px]">
-                                            <span class="text-[#A1887F] font-bold"><i class="fa-solid fa-map-pin mr-1"></i>MapCode</span>
-                                            <span class="font-mono font-bold text-[#5D4037] bg-white px-1.5 py-0.5 rounded border border-[#E0E0E0] select-all">{{ item.mapcode }}</span>
+                                            <div class="flex flex-wrap gap-1.5 mt-2">
+                                                <span v-if="idx < currentDayEvents.length" class="text-[9px] bg-[#ECEFF1] text-[#78909C] px-2 py-1 rounded-lg font-bold flex items-center gap-1 border border-dashed border-[#CFD8DC]">
+                                                    <i :class="getTransportIcon(item.transportType)"></i> {{ item.travelTime || '移動' }}
+                                                </span>
+                                                <span v-if="item.loc" class="text-[9px] bg-[#E3F2FD] text-[#42A5F5] px-2 py-1 rounded-lg font-bold border border-dashed border-[#BBDEFB]">
+                                                    <i class="fa-solid fa-location-arrow mr-0.5"></i>導航
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div v-if="item.phone" class="flex justify-between items-center text-[10px]">
-                                            <span class="text-[#A1887F] font-bold"><i class="fa-solid fa-phone mr-1"></i>電話</span>
-                                            <span class="font-mono text-[#5D4037]">{{ item.phone }}</span>
-                                        </div>
-                                        <div v-if="item.tips" class="text-[10px] text-[#FF7043] font-bold flex items-start mt-0.5">
-                                            <i class="fa-solid fa-triangle-exclamation mr-1 mt-0.5"></i>
-                                            <span>{{ item.tips }}</span>
-                                        </div>
-                                    </div>
 
-                                    <div class="flex flex-wrap gap-1.5 mt-2">
-                                        <span v-if="idx < currentDayEvents.length" class="text-[9px] bg-[#ECEFF1] text-[#78909C] px-2 py-1 rounded-lg font-bold flex items-center gap-1 border border-dashed border-[#CFD8DC]">
-                                            <i :class="getTransportIcon(item.transportType)"></i> {{ item.travelTime || '移動' }}
-                                        </span>
-                                        <span v-if="item.loc" class="text-[9px] bg-[#E3F2FD] text-[#42A5F5] px-2 py-1 rounded-lg font-bold border border-dashed border-[#BBDEFB]">
-                                            <i class="fa-solid fa-location-arrow mr-0.5"></i>導航
-                                        </span>
+                                        <div v-if="item.mapcode || item.phone" class="w-24 flex-shrink-0 flex flex-col gap-2 justify-start mt-1">
+                                            
+                                            <div v-if="item.mapcode" class="bg-white border-2 border-[#1565C0] rounded-lg p-1.5 text-center shadow-sm" @click.stop>
+                                                <div class="text-[9px] font-bold text-[#1565C0] mb-0.5 uppercase tracking-tighter">MapCode</div>
+                                                <div class="text-xs font-black text-slate-800 break-all leading-tight mb-1">{{ item.mapcode }}</div>
+                                                <div class="bg-[#1565C0] text-white text-[9px] rounded px-1 py-0.5 font-bold cursor-pointer active:scale-95">COPY</div>
+                                            </div>
+
+                                            <div v-if="item.phone" class="bg-white border-2 border-[#00897B] rounded-lg p-1.5 text-center shadow-sm" @click.stop>
+                                                <div class="text-[9px] font-bold text-[#00897B] mb-0.5 uppercase">TEL</div>
+                                                <div class="text-xs font-black text-slate-800 break-all leading-tight">{{ item.phone }}</div>
+                                            </div>
+
+                                        </div>
+
                                     </div>
-                                </div>
+                                    </div>
                             </div>
                             
                             <div v-if="currentDayEvents.length === 0" class="text-center text-[#D7CCC8] py-12">
@@ -286,6 +278,7 @@
                     </div>
 
                     <div v-if="activeTab === 'info'" class="space-y-5 px-5 pt-4">
+                        
                         <div class="cream-card overflow-hidden cursor-pointer border-2 dashed border-[#FFCDD2]" @click="toggleAlarms">
                             <div class="p-4 flex justify-between items-center" :style="{ color: activeTrip.theme === 'pink' ? '#EC407A' : '#EF6C00', backgroundColor: activeTrip.theme === 'pink' ? '#FCE4EC' : '#FFF3E0' }">
                                 <span class="text-sm font-bold"><i class="fa-regular fa-bell mr-2"></i>關鍵行動鬧鐘</span>
@@ -447,27 +440,6 @@
             <i class="fa-solid fa-plus"></i>
         </button>
 
-        <div v-if="showModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm" @click.self="showModal = false">
-            <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-[#5D4037]">新增項目</h3>
-                    <button @click="showModal = false" class="text-[#BDBDBD]"><i class="fa-solid fa-xmark text-lg"></i></button>
-                </div>
-                <div class="space-y-4">
-                    <input v-model="newItem.title" type="text" placeholder="標題 / 項目名稱" class="w-full p-3 bg-[#F5F5F5] rounded-xl border-none outline-none text-sm text-[#5D4037]">
-                    <div class="flex gap-2">
-                        <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#5D4037]">
-                        <select v-model="newItem.category" class="w-2/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#5D4037]">
-                            <option value="sightseeing">景點</option>
-                            <option value="food">美食</option>
-                            <option value="shopping">購物</option>
-                        </select>
-                    </div>
-                </div>
-                <button @click="confirmAdd" class="w-full text-white font-bold py-3 rounded-xl mt-6 shadow-lg text-sm" :style="{ backgroundColor: activeTrip.theme === 'pink' ? '#F48FB1' : '#FFB74D' }">確認新增</button>
-            </div>
-        </div>
-
         <div v-if="showSettings" class="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center" @click.self="showSettings = false">
             <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
                 <div class="flex justify-between items-center mb-6">
@@ -481,7 +453,6 @@
                     </div>
                     <input type="range" min="12" max="24" step="1" v-model="settings.fontSize" class="w-full accent-[#A1887F]">
                 </div>
-                <div class="text-center text-xs text-[#D7CCC8] mt-4">V65 Final</div>
             </div>
         </div>
 
@@ -516,8 +487,8 @@
                     },
 
                     themes: {
-                        pink: { main: '#F48FB1', bg: '#FFF0F5' }, // 柔和粉
-                        orange: { main: '#FFB74D', bg: '#FFF8E1' } // 柔和橙
+                        pink: { main: '#F48FB1', bg: '#FFF0F5' }, 
+                        orange: { main: '#FFB74D', bg: '#FFF8E1' } 
                     },
 
                     trips: {
@@ -562,60 +533,66 @@
                                 { weekday: 'Sat', dateStr: '4/18', events: [
                                     { time: '06:40', title: '抵達成田 (NRT)', desc: '橙色櫃台買飛去 T-CAT', category: 'flight', transportType: 'flight' },
                                     { time: '07:45', title: '巴士 -> T-CAT', desc: '利木津巴士，4個喼寄艙', category: 'transport', transportType: 'bus', travelTime: '75 min (60km)' },
-                                    { time: '09:00', title: 'Check-in 酒店', desc: '的士直達 VIA INN PRIME', category: 'hotel', transportType: 'car', travelTime: '10 min' },
-                                    { time: '11:00', title: '利久牛舌 (午餐)', desc: '上野 Parco_ya 6F，「極」定食', category: 'food', loc: 'Rikyu Ueno', transportType: 'train', travelTime: '30 min' },
-                                    { time: '13:00', title: '根津神社', desc: '杜鵑花祭', category: 'sightseeing', loc: 'Nezu Shrine', transportType: 'bus', travelTime: '20 min' },
-                                    { time: '15:30', title: '淺草散步', desc: '雷門/仲見世通', category: 'sightseeing', loc: 'Sensoji', transportType: 'bus', travelTime: '25 min' },
-                                    { time: '17:00', title: '米久本店', desc: '百年牛鍋 (壽喜燒)', category: 'food', loc: 'Yonekyu Honten', transportType: 'walk', travelTime: '10 min' }
+                                    { time: '09:00', title: 'Check-in 酒店', desc: '的士直達 VIA INN PRIME', category: 'hotel', transportType: 'car', travelTime: '10 min', location: 'VIA INN PRIME Nihonbashi' },
+                                    { time: '11:00', title: '利久牛舌 (午餐)', desc: '上野 Parco_ya 6F，「極」定食', category: 'food', loc: 'Rikyu Ueno', transportType: 'train', travelTime: '30 min', location: 'Rikyu Ueno' },
+                                    { time: '13:00', title: '根津神社', desc: '杜鵑花祭', category: 'sightseeing', loc: 'Nezu Shrine', transportType: 'bus', travelTime: '20 min', location: 'Nezu Shrine' },
+                                    { time: '15:30', title: '淺草散步', desc: '雷門/仲見世通', category: 'sightseeing', loc: 'Sensoji', transportType: 'bus', travelTime: '25 min', location: 'Sensoji' },
+                                    { time: '17:00', title: '米久本店', desc: '百年牛鍋 (壽喜燒)', category: 'food', loc: 'Yonekyu Honten', transportType: 'walk', travelTime: '10 min', location: 'Yonekyu Honten' },
+                                    { time: '20:00', title: '回程酒店 (VIA INN)', category: 'hotel', desc: '休息', transportType: 'walk', location: 'VIA INN PRIME Nihonbashi' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '4/19', events: [
-                                    { time: '09:30', title: '龜戶天神社', desc: '紫藤花 (水天宮前->錦糸町)', category: 'sightseeing', loc: 'Kameido Tenjin', transportType: 'train', travelTime: '30 min' },
-                                    { time: '12:30', title: '山笑ふ (午餐)', desc: '表參道店 Shabu Shabu (已預約)', category: 'food', loc: 'Yama Warau Omotesando', transportType: 'train', travelTime: '45 min' },
-                                    { time: '14:30', title: 'Harakado', desc: '7F 屋頂花園', category: 'sightseeing', loc: 'Harakado', transportType: 'walk', travelTime: '5 min' },
-                                    { time: '19:00', title: '牛かつもと村', desc: '澀谷分店 炸牛排', category: 'food', loc: 'Gyukatsu Motomura Shibuya', transportType: 'walk', travelTime: '20 min' }
+                                    { time: '09:30', title: '龜戶天神社', desc: '紫藤花 (水天宮前->錦糸町)', category: 'sightseeing', loc: 'Kameido Tenjin', transportType: 'train', travelTime: '30 min', location: 'Kameido Tenjin' },
+                                    { time: '12:30', title: '山笑ふ (午餐)', desc: '表參道店 Shabu Shabu (已預約)', category: 'food', loc: 'Yama Warau Omotesando', transportType: 'train', travelTime: '45 min', location: 'Yama Warau Omotesando' },
+                                    { time: '14:30', title: 'Harakado', desc: '7F 屋頂花園', category: 'sightseeing', loc: 'Harakado', transportType: 'walk', travelTime: '5 min', location: 'Harakado' },
+                                    { time: '19:00', title: '牛かつもと村', desc: '澀谷分店 炸牛排', category: 'food', loc: 'Gyukatsu Motomura Shibuya', transportType: 'walk', travelTime: '20 min', location: 'Gyukatsu Motomura Shibuya' },
+                                    { time: '21:00', title: '回程酒店 (VIA INN)', category: 'hotel', desc: '休息', transportType: 'train', location: 'VIA INN PRIME Nihonbashi' }
                                 ]},
                                 { weekday: 'Mon', dateStr: '4/20', events: [
-                                    { time: '09:00', title: 'Check-out', desc: '行去 T-CAT', category: 'other', loc: 'T-CAT', transportType: 'walk', travelTime: '10 min' },
-                                    { time: '09:30', title: '取車', desc: 'Toyota T-CAT (No: 98147748300)', category: 'transport', loc: 'Toyota Rent a Car T-CAT', transportType: 'walk', travelTime: '5 min' },
-                                    { time: '10:30', title: '三芳 PA', desc: '休息站', category: 'transport', loc: 'Miyoshi PA', transportType: 'car', travelTime: '60 min (45km)', mapcode: '33 444 555*66', tips: '有靚廁所' },
-                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵 或 村民食堂', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '90 min (120km)' },
-                                    { time: '14:30', title: 'Outlet Shopping', desc: 'MC: 292 677 245*55 (泊 P7)', category: 'shopping', loc: 'Prince Shopping Plaza', transportType: 'car', travelTime: '20 min', mapcode: '292 677 245*55', tips: '記得拎 Coupon' },
-                                    { time: '18:00', title: 'Check-in', desc: 'Toyoko Inn 佐久平', category: 'hotel', loc: 'Toyoko Inn Sakudaira', transportType: 'car', travelTime: '40 min (30km)' },
-                                    { time: '20:00', title: '暖暮拉麵', desc: 'Aeon Mall 佐久平 2樓', category: 'food', loc: 'Danbo Ramen Sakudaira', transportType: 'walk', travelTime: '8 min' }
+                                    { time: '09:00', title: 'Check-out', desc: '行去 T-CAT', category: 'other', loc: 'T-CAT', transportType: 'walk', travelTime: '10 min', location: 'T-CAT' },
+                                    { time: '09:30', title: '取車', desc: 'Toyota T-CAT (No: 98147748300)', category: 'transport', loc: 'Toyota Rent a Car T-CAT', transportType: 'walk', travelTime: '5 min', location: 'Toyota Rent a Car T-CAT' },
+                                    { time: '10:30', title: '三芳 PA', desc: '休息站', category: 'transport', loc: 'Miyoshi PA', transportType: 'car', travelTime: '60 min (45km)', mapcode: '33 444 555*66', tips: '有靚廁所', location: 'Miyoshi PA' },
+                                    { time: '13:00', title: '輕井澤午餐', desc: '川上庵 或 村民食堂', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '90 min (120km)', location: 'Karuizawa' },
+                                    { time: '14:30', title: 'Outlet Shopping', desc: 'MC: 292 677 245*55 (泊 P7)', category: 'shopping', loc: 'Prince Shopping Plaza', transportType: 'car', travelTime: '20 min', mapcode: '292 677 245*55', tips: '記得拎 Coupon', location: 'Prince Shopping Plaza' },
+                                    { time: '18:00', title: 'Check-in (Toyoko Inn)', category: 'hotel', loc: 'Toyoko Inn Sakudaira', transportType: 'car', travelTime: '40 min (30km)', location: 'Toyoko Inn Sakudaira' },
+                                    { time: '20:00', title: '暖暮拉麵', desc: 'Aeon Mall 佐久平 2樓', category: 'food', loc: 'Danbo Ramen Sakudaira', transportType: 'walk', travelTime: '8 min', location: 'Danbo Ramen Sakudaira' },
+                                    { time: '21:00', title: '回程酒店 (Toyoko Inn)', category: 'hotel', desc: '休息', transportType: 'walk', location: 'Toyoko Inn Sakudaira' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '4/21', events: [
-                                    { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝 (自駕移動)', category: 'highlight', loc: 'Karuizawa', transportType: 'car', travelTime: '全日' },
-                                    { time: '19:00', title: '慶功晚餐', desc: '川上庵 或 燒肉', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '15 min' }
+                                    { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝 (自駕移動)', category: 'highlight', loc: 'Karuizawa', transportType: 'car', travelTime: '全日', location: 'Karuizawa' },
+                                    { time: '19:00', title: '慶功晚餐', desc: '川上庵 或 燒肉', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '15 min', location: 'Karuizawa' },
+                                    { time: '21:00', title: '回程酒店 (Toyoko Inn)', category: 'hotel', desc: '休息', transportType: 'car', location: 'Toyoko Inn Sakudaira' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '4/22', events: [
-                                    { time: '10:00', title: '白絲瀑布', desc: 'MC: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls', transportType: 'car', travelTime: '45 min (25km)', mapcode: '292 701 645*63' },
-                                    { time: '11:00', title: 'Rogotei 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei', transportType: 'car', travelTime: '30 min' },
-                                    { time: '12:30', title: '舊輕井澤銀座通', desc: '掃街、布丁', category: 'sightseeing', loc: 'Kyu-Karuizawa Ginza', transportType: 'car', travelTime: '15 min' },
-                                    { time: '14:00', title: '橫川 SA', desc: '釜飯便當', category: 'food', loc: 'Yokokawa SA', transportType: 'car', travelTime: '45 min (35km)' },
-                                    { time: '17:00', title: '東京還車', desc: 'T-CAT B1 停車場', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '2.5 hr (130km)' },
-                                    { time: '18:00', title: 'Check-in', desc: '八重翠東京酒店', category: 'hotel', loc: 'Yaekit', transportType: 'walk', travelTime: '15 min' },
-                                    { time: '20:45', title: '壽司郎', desc: '八重洲地下街 南1號', category: 'food', loc: 'Sushiro Yaesu', transportType: 'walk', travelTime: '10 min' },
-                                    { time: '21:30', title: '返酒店開餐', desc: '八重翠東京酒店', category: 'hotel', loc: 'Yaekit', transportType: 'walk', travelTime: '5 min' }
+                                    { time: '10:00', title: '白絲瀑布', desc: 'MC: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls', transportType: 'car', travelTime: '45 min (25km)', mapcode: '292 701 645*63', location: 'Shiraito Falls' },
+                                    { time: '11:00', title: 'Rogotei 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei', transportType: 'car', travelTime: '30 min', location: 'Rogotei' },
+                                    { time: '12:30', title: '舊輕井澤銀座通', desc: '掃街、布丁', category: 'sightseeing', loc: 'Kyu-Karuizawa Ginza', transportType: 'car', travelTime: '15 min', location: 'Kyu-Karuizawa Ginza' },
+                                    { time: '14:00', title: '橫川 SA', desc: '釜飯便當', category: 'food', loc: 'Yokokawa SA', transportType: 'car', travelTime: '45 min (35km)', location: 'Yokokawa SA' },
+                                    { time: '17:00', title: '東京還車', desc: 'T-CAT B1 停車場', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '2.5 hr (130km)', location: 'T-CAT' },
+                                    { time: '18:00', title: 'Check-in (八重翠)', category: 'hotel', loc: 'Yaekit', transportType: 'walk', travelTime: '15 min', location: 'Yaekit' },
+                                    { time: '20:45', title: '壽司郎', desc: '八重洲地下街 南1號', category: 'food', loc: 'Sushiro Yaesu', transportType: 'walk', travelTime: '10 min', location: 'Sushiro Yaesu' },
+                                    { time: '21:30', title: '回程酒店 (八重翠)', category: 'hotel', loc: 'Yaekit', transportType: 'walk', travelTime: '5 min', location: 'Yaekit' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '4/23', events: [
-                                    { time: '06:45', title: '出發 Disney', desc: '八丁堀 -> 舞濱 (07:30 到門口)', category: 'transport', loc: 'Maihama', transportType: 'train', travelTime: '45 min' },
-                                    { time: '08:30', title: 'Disney Sea', desc: '搶 Standby Pass (Frozen)', category: 'ticket', loc: 'Tokyo DisneySea', transportType: 'walk', travelTime: '15 min', tips: '記得帶尿袋' },
-                                    { time: '13:00', title: '午餐', desc: 'Mobile Order 慳時間', category: 'food', loc: 'DisneySea', transportType: 'walk', travelTime: '5 min' },
-                                    { time: '20:30', title: '撤退回程', desc: '單軌 -> 京葉線 -> 八丁堀', category: 'transport', loc: 'Hatchobori', transportType: 'train', travelTime: '30 min' },
-                                    { time: '21:00', title: '救命晚餐', desc: '麥當勞 (Samurai Mac 厚牛堡)', category: 'food', loc: 'McDonalds Hatchobori', transportType: 'walk', travelTime: '15 min' }
+                                    { time: '06:45', title: '出發 Disney', desc: '八丁堀 -> 舞濱 (07:30 到門口)', category: 'transport', loc: 'Maihama', transportType: 'train', travelTime: '45 min', location: 'Tokyo DisneySea' },
+                                    { time: '08:30', title: 'Disney Sea', desc: '搶 Standby Pass (Frozen)', category: 'ticket', loc: 'Tokyo DisneySea', transportType: 'walk', travelTime: '15 min', tips: '記得帶尿袋', location: 'Tokyo DisneySea' },
+                                    { time: '13:00', title: '午餐', desc: 'Mobile Order 慳時間', category: 'food', loc: 'DisneySea', transportType: 'walk', travelTime: '5 min', location: 'DisneySea' },
+                                    { time: '20:30', title: '撤退回程', desc: '單軌 -> 京葉線 -> 八丁堀', category: 'transport', loc: 'Hatchobori', transportType: 'train', travelTime: '30 min', location: 'Hatchobori' },
+                                    { time: '21:00', title: '救命晚餐', desc: '麥當勞 (Samurai Mac 厚牛堡)', category: 'food', loc: 'McDonalds Hatchobori', transportType: 'walk', travelTime: '15 min', location: 'McDonalds Hatchobori' },
+                                    { time: '21:30', title: '回程酒店 (八重翠)', category: 'hotel', desc: '休息', transportType: 'walk', location: 'Yaekit' }
                                 ]},
                                 { weekday: 'Fri', dateStr: '4/24', events: [
-                                    { time: '09:30', title: '前往豐洲', desc: '的士 (約 ¥2000)', category: 'transport', loc: 'Toyosu Market', transportType: 'car', travelTime: '15 min' },
-                                    { time: '10:00', title: '大和壽司', desc: '需排隊', category: 'food', loc: 'Daiwa Sushi', transportType: 'walk', travelTime: '5 min' },
-                                    { time: '13:30', title: 'TeamLab Planets', desc: '新豐洲站旁', category: 'sightseeing', loc: 'TeamLab Planets', transportType: 'walk', travelTime: '10 min' },
-                                    { time: '18:30', title: '銀座 篝', desc: '雞白湯拉麵', category: 'food', loc: 'Ginza Kagari', transportType: 'train', travelTime: '20 min' }
+                                    { time: '09:30', title: '前往豐洲', desc: '的士 (約 ¥2000)', category: 'transport', loc: 'Toyosu Market', transportType: 'car', travelTime: '15 min', location: 'Toyosu Market' },
+                                    { time: '10:00', title: '大和壽司', desc: '需排隊', category: 'food', loc: 'Daiwa Sushi', transportType: 'walk', travelTime: '5 min', location: 'Daiwa Sushi' },
+                                    { time: '13:30', title: 'TeamLab Planets', desc: '新豐洲站旁', category: 'sightseeing', loc: 'TeamLab Planets', transportType: 'walk', travelTime: '10 min', location: 'TeamLab Planets' },
+                                    { time: '18:30', title: '銀座 篝', desc: '雞白湯拉麵', category: 'food', loc: 'Ginza Kagari', transportType: 'train', travelTime: '20 min', location: 'Ginza Kagari' },
+                                    { time: '20:30', title: '回程酒店 (八重翠)', category: 'hotel', desc: '休息', transportType: 'train', location: 'Yaekit' }
                                 ]},
                                 { weekday: 'Sat', dateStr: '4/25', events: [
-                                    { time: '10:30', title: '東京一番街', desc: 'Character Street', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk', travelTime: '15 min' },
-                                    { time: '12:00', title: 'Manten Sushi', desc: '丸之內店', category: 'food', loc: 'Manten Sushi Marunouchi', transportType: 'walk', travelTime: '10 min' },
-                                    { time: '14:00', title: '前往 Marunouchi', desc: '行 15 min', category: 'transport', loc: 'Marunouchi', transportType: 'walk', travelTime: '15 min' },
-                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '20 min' },
-                                    { time: '14:45', title: '前往機場', desc: 'CX501 回程', category: 'transport', loc: 'Narita Airport', transportType: 'bus', travelTime: '60 min' }
+                                    { time: '10:30', title: '東京一番街', desc: 'Character Street', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk', travelTime: '15 min', location: 'Tokyo Station' },
+                                    { time: '12:00', title: 'Manten Sushi', desc: '丸之內店', category: 'food', loc: 'Manten Sushi Marunouchi', transportType: 'walk', travelTime: '10 min', location: 'Manten Sushi Marunouchi' },
+                                    { time: '14:00', title: '前往 Marunouchi', desc: '行 15 min', category: 'transport', loc: 'Marunouchi', transportType: 'walk', travelTime: '15 min', location: 'Marunouchi' },
+                                    { time: '14:30', title: 'T-CAT 寄行李', desc: '3樓買飛', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '20 min', location: 'T-CAT' },
+                                    { time: '14:45', title: '前往機場', desc: 'CX501 回程', category: 'transport', loc: 'Narita Airport', transportType: 'bus', travelTime: '60 min', location: 'Narita Airport' }
                                 ]}
                             ]
                         },
@@ -630,7 +607,6 @@
                             docLink: 'https://docs.google.com/document/d/11eFLaGqOmRfXx90pVCWGF0iNIQRwECa3X3VmFjqQgdk/edit?usp=drivesdk',
                             weatherCity: 'Nagoya,JP',
 
-                            // Info Tab 數據
                             flights: {
                                 out: { code: 'CX524', date: '10/31', dep: '01:30', arr: '06:40' },
                                 in: { code: 'CX505', date: '11/08', dep: '18:00', arr: '22:25' }
@@ -661,67 +637,66 @@
                             shopping: ['沼津 乾物', '伊豆 山葵漬物', '松本 味噌/蘋果', '草津 溫泉粉', '御殿場 Outlet 戰利品', '東京 手信'],
                             expenses: [],
                             
-                            // 完整行程 Day 1 - Day 9
                             days: [
                                 { weekday: 'Sat', dateStr: '10/31', events: [
-                                    { time: '06:40', title: '抵達 NRT', desc: '取車出發去沼津', category: 'flight', loc: 'Narita Airport', transportType: 'flight' },
-                                    { time: '08:00', title: '出發沼津', desc: '自駕 3 hr', category: 'transport', loc: 'Numazu', transportType: 'car', travelTime: '3 hr (180km)' },
-                                    { time: '11:30', title: '沼津港 (丸天)', desc: 'MC: 650 583 339*01 (魚市場立體停車場)', category: 'food', loc: 'Numazu Port', transportType: 'car', travelTime: '15 min', mapcode: '650 583 339*01' },
-                                    { time: '13:30', title: '三島大吊橋', desc: 'MC: 50 238 668*85 (日本最長吊橋)', category: 'sightseeing', loc: 'Mishima Skywalk', transportType: 'car', travelTime: '30 min', mapcode: '50 238 668*85' },
-                                    { time: '16:00', title: 'Sawayaka 攞飛', desc: '沼津學園通店 (MC: 50 104 702*76) 必做!', category: 'other', loc: 'Sawayaka Numazu', transportType: 'car', travelTime: '20 min', mapcode: '50 104 702*76', tips: '記得早啲攞飛' },
-                                    { time: '17:00', title: 'Check-in 酒店', desc: 'Daiwa Roynet (泊 Plaza Verde: 50 073 112*71)', category: 'hotel', loc: 'Daiwa Roynet Numazu', transportType: 'car', travelTime: '10 min', mapcode: '50 073 112*71' },
-                                    { time: '19:00', title: 'Dinner: Sawayaka', desc: '必食拳頭漢堡', category: 'food', loc: 'Sawayaka Numazu', transportType: 'walk', travelTime: '15 min' },
-                                    { time: '21:00', title: '返酒店休息', desc: 'Plaza Verde 停車場', category: 'hotel', loc: 'Daiwa Roynet Numazu', transportType: 'walk' }
+                                    { time: '06:40', title: '抵達 NRT', desc: '取車出發去沼津', category: 'flight', loc: 'Narita Airport', transportType: 'flight', location: 'Narita Airport' },
+                                    { time: '08:00', title: '出發沼津', desc: '自駕 3 hr', category: 'transport', loc: 'Numazu', transportType: 'car', travelTime: '3 hr (180km)', location: 'Numazu' },
+                                    { time: '11:30', title: '沼津港 (丸天)', desc: 'MC: 650 583 339*01 (魚市場立體停車場)', category: 'food', loc: 'Numazu Port', transportType: 'car', travelTime: '15 min', mapcode: '650 583 339*01', location: 'Numazu Port' },
+                                    { time: '13:30', title: '三島大吊橋', desc: 'MC: 50 238 668*85 (日本最長吊橋)', category: 'sightseeing', loc: 'Mishima Skywalk', transportType: 'car', travelTime: '30 min', mapcode: '50 238 668*85', location: 'Mishima Skywalk' },
+                                    { time: '16:00', title: 'Sawayaka 攞飛', desc: '沼津學園通店 (MC: 50 104 702*76) 必做!', category: 'other', loc: 'Sawayaka Numazu', transportType: 'car', travelTime: '20 min', mapcode: '50 104 702*76', tips: '記得早啲攞飛', location: 'Sawayaka Numazu' },
+                                    { time: '17:00', title: 'Check-in (Daiwa Roynet)', category: 'hotel', desc: '泊 Plaza Verde: 50 073 112*71', loc: 'Daiwa Roynet Numazu', transportType: 'car', travelTime: '10 min', mapcode: '50 073 112*71', location: 'Daiwa Roynet Numazu' },
+                                    { time: '19:00', title: 'Dinner: Sawayaka', desc: '必食拳頭漢堡', category: 'food', loc: 'Sawayaka Numazu', transportType: 'walk', travelTime: '15 min', location: 'Sawayaka Numazu' },
+                                    { time: '21:00', title: '回程酒店 (Daiwa Roynet)', category: 'hotel', desc: '休息', transportType: 'walk', location: 'Daiwa Roynet Numazu' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '11/01', events: [
-                                    { time: '10:30', title: '大室山', desc: 'MC: 48 846 512*63 (搭吊車)', category: 'sightseeing', loc: 'Omuro Mountain', transportType: 'car', travelTime: '60 min (40km)', mapcode: '48 846 512*63' },
-                                    { time: '12:30', title: 'Lunch: 蕎麥麵', desc: '伊豆高原附近', category: 'food', loc: 'Izu Kogen', transportType: 'car', travelTime: '10 min' },
-                                    { time: '14:30', title: '修善寺溫泉', desc: 'MC: 16 186 084*42 (竹林小徑)', category: 'sightseeing', loc: 'Shuzenji', transportType: 'car', travelTime: '45 min', mapcode: '16 186 084*42' },
-                                    { time: '19:00', title: '鰻魚飯 櫻家', desc: '三島市內 (055-975-4520)', category: 'food', loc: 'Sakuraya', transportType: 'car', travelTime: '30 min', phone: '055-975-4520' },
-                                    { time: '20:30', title: '返酒店休息', desc: 'Daiwa Roynet Hotel', category: 'hotel', loc: 'Daiwa Roynet Numazu', transportType: 'car', travelTime: '20 min' }
+                                    { time: '10:30', title: '大室山', desc: 'MC: 48 846 512*63 (搭吊車)', category: 'sightseeing', loc: 'Omuro Mountain', transportType: 'car', travelTime: '60 min (40km)', mapcode: '48 846 512*63', location: 'Omuro Mountain' },
+                                    { time: '12:30', title: 'Lunch: 蕎麥麵', desc: '伊豆高原附近', category: 'food', loc: 'Izu Kogen', transportType: 'car', travelTime: '10 min', location: 'Izu Kogen' },
+                                    { time: '14:30', title: '修善寺溫泉', desc: 'MC: 16 186 084*42 (竹林小徑)', category: 'sightseeing', loc: 'Shuzenji', transportType: 'car', travelTime: '45 min', mapcode: '16 186 084*42', location: 'Shuzenji' },
+                                    { time: '19:00', title: '鰻魚飯 櫻家', desc: '三島市內 (055-975-4520)', category: 'food', loc: 'Sakuraya', transportType: 'car', travelTime: '30 min', phone: '055-975-4520', location: 'Sakuraya' },
+                                    { time: '20:30', title: '回程酒店 (Daiwa Roynet)', category: 'hotel', desc: '休息', transportType: 'car', travelTime: '20 min', location: 'Daiwa Roynet Numazu' }
                                 ]},
                                 { weekday: 'Mon', dateStr: '11/02', events: [
-                                    { time: '11:00', title: '諏訪湖', desc: '立石公園 (MC: 75 236 391*70)', category: 'sightseeing', loc: 'Tateishi Park', transportType: 'car', travelTime: '2.5 hr (160km)', mapcode: '75 236 391*70' },
-                                    { time: '13:00', title: 'Lunch: 山賊燒', desc: '松本市內', category: 'food', loc: 'Matsumoto', transportType: 'car', travelTime: '40 min' },
-                                    { time: '14:30', title: '松本城', desc: 'MC: 75 851 375*66', category: 'sightseeing', loc: 'Matsumoto Castle', transportType: 'car', travelTime: '10 min', mapcode: '75 851 375*66' },
-                                    { time: '18:30', title: 'Dinner: 馬肉刺身', desc: '市內居酒屋', category: 'food', loc: 'Matsumoto Station', transportType: 'walk' },
-                                    { time: '21:00', title: 'Check-in 松本', desc: 'Onyado Nono (MC: 75 791 881*76)', category: 'hotel', loc: 'Onyado Nono Matsumoto', transportType: 'walk', mapcode: '75 791 881*76' }
+                                    { time: '11:00', title: '諏訪湖', desc: '立石公園 (MC: 75 236 391*70)', category: 'sightseeing', loc: 'Tateishi Park', transportType: 'car', travelTime: '2.5 hr (160km)', mapcode: '75 236 391*70', location: 'Tateishi Park' },
+                                    { time: '13:00', title: 'Lunch: 山賊燒', desc: '松本市內', category: 'food', loc: 'Matsumoto', transportType: 'car', travelTime: '40 min', location: 'Matsumoto' },
+                                    { time: '14:30', title: '松本城', desc: 'MC: 75 851 375*66', category: 'sightseeing', loc: 'Matsumoto Castle', transportType: 'car', travelTime: '10 min', mapcode: '75 851 375*66', location: 'Matsumoto Castle' },
+                                    { time: '18:30', title: 'Dinner: 馬肉刺身', desc: '市內居酒屋', category: 'food', loc: 'Matsumoto Station', transportType: 'walk', location: 'Matsumoto Station' },
+                                    { time: '21:00', title: 'Check-in (Onyado Nono)', category: 'hotel', desc: 'MC: 75 791 881*76', loc: 'Onyado Nono Matsumoto', transportType: 'walk', mapcode: '75 791 881*76', location: 'Onyado Nono Matsumoto' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '11/03', events: [
-                                    { time: '09:30', title: '善光寺', desc: '第1停車場', category: 'sightseeing', loc: 'Zenkoji', transportType: 'car', travelTime: '1 hr (65km)' },
-                                    { time: '12:00', title: 'Enza Cafe', desc: '地獄谷入口 (MC: 341 818 200*82)', category: 'food', loc: 'Enza Cafe', transportType: 'car', travelTime: '45 min', mapcode: '341 818 200*82' },
-                                    { time: '13:00', title: '地獄谷野猿公苑', desc: '行30分鐘睇馬騮', category: 'sightseeing', loc: 'Snow Monkey Park', transportType: 'walk', travelTime: '30 min' },
-                                    { time: '16:30', title: 'Check-in 季之庭', desc: 'MC: 341 448 004*52 (1周年紀念)', category: 'highlight', loc: 'Tokinoniwa', transportType: 'car', travelTime: '1 hr (40km)', mapcode: '341 448 004*52', tips: '1周年紀念!!!' }
+                                    { time: '09:30', title: '善光寺', desc: '第1停車場', category: 'sightseeing', loc: 'Zenkoji', transportType: 'car', travelTime: '1 hr (65km)', location: 'Zenkoji' },
+                                    { time: '12:00', title: 'Enza Cafe', desc: '地獄谷入口 (MC: 341 818 200*82)', category: 'food', loc: 'Enza Cafe', transportType: 'car', travelTime: '45 min', mapcode: '341 818 200*82', location: 'Enza Cafe' },
+                                    { time: '13:00', title: '地獄谷野猿公苑', desc: '行30分鐘睇馬騮', category: 'sightseeing', loc: 'Snow Monkey Park', transportType: 'walk', travelTime: '30 min', location: 'Snow Monkey Park' },
+                                    { time: '16:30', title: 'Check-in (季之庭)', category: 'highlight', desc: 'MC: 341 448 004*52 (1周年紀念)', loc: 'Tokinoniwa', transportType: 'car', travelTime: '1 hr (40km)', mapcode: '341 448 004*52', tips: '1周年紀念!!!', location: 'Tokinoniwa' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '11/04', events: [
-                                    { time: '13:00', title: '河口湖', desc: '大石公園 (MC: 161 303 446*52)', category: 'sightseeing', loc: 'Oishi Park', transportType: 'car', travelTime: '2.5 hr (140km)', mapcode: '161 303 446*52' },
-                                    { time: '14:30', title: '紅葉迴廊', desc: 'MC: 161 361 561*66', category: 'sightseeing', loc: 'Momiji Corridor', transportType: 'car', travelTime: '15 min', mapcode: '161 361 561*66' },
-                                    { time: '16:30', title: 'Check-in', desc: 'HOTEL CLAD (MC: 50 806 191*75)', category: 'hotel', loc: 'HOTEL CLAD', transportType: 'car', travelTime: '45 min (30km)', mapcode: '50 806 191*75' }
+                                    { time: '13:00', title: '河口湖', desc: '大石公園 (MC: 161 303 446*52)', category: 'sightseeing', loc: 'Oishi Park', transportType: 'car', travelTime: '2.5 hr (140km)', mapcode: '161 303 446*52', location: 'Oishi Park' },
+                                    { time: '14:30', title: '紅葉迴廊', desc: 'MC: 161 361 561*66', category: 'sightseeing', loc: 'Momiji Corridor', transportType: 'car', travelTime: '15 min', mapcode: '161 361 561*66', location: 'Momiji Corridor' },
+                                    { time: '16:30', title: 'Check-in (HOTEL CLAD)', category: 'hotel', desc: 'MC: 50 806 191*75', loc: 'HOTEL CLAD', transportType: 'car', travelTime: '45 min (30km)', mapcode: '50 806 191*75', location: 'HOTEL CLAD' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '11/05', events: [
-                                    { time: '06:30', title: '山中湖逆富士', desc: '長池親水公園 (MC: 434 324 577*85)', category: 'sightseeing', loc: 'Nagaike Water Park', transportType: 'car', travelTime: '30 min', mapcode: '434 324 577*85' },
-                                    { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping', category: 'shopping', loc: 'Gotemba Outlet', transportType: 'car', travelTime: '40 min' },
-                                    { time: '14:00', title: '箱根神社', desc: '平和之鳥居 (MC: 57 123 048*31)', category: 'sightseeing', loc: 'Hakone Shrine', transportType: 'car', travelTime: '40 min', mapcode: '57 123 048*31' },
-                                    { time: '18:00', title: '東京還車', desc: '淺草/上野 (入滿油)', category: 'transport', loc: 'Asakusa', transportType: 'car', travelTime: '2 hr (90km)' },
-                                    { time: '19:30', title: 'Dinner: 鳥貴族', desc: '淺草店 Mega Beer', category: 'food', loc: 'Torikizoku Asakusa', transportType: 'walk' },
-                                    { time: '21:30', title: '返酒店休息', desc: '淺草東武酒店', category: 'hotel', loc: 'Asakusa Tobu Hotel', transportType: 'walk' }
+                                    { time: '06:30', title: '山中湖逆富士', desc: '長池親水公園 (MC: 434 324 577*85)', category: 'sightseeing', loc: 'Nagaike Water Park', transportType: 'car', travelTime: '30 min', mapcode: '434 324 577*85', location: 'Nagaike Water Park' },
+                                    { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping', category: 'shopping', loc: 'Gotemba Outlet', transportType: 'car', travelTime: '40 min', location: 'Gotemba Outlet' },
+                                    { time: '14:00', title: '箱根神社', desc: '平和之鳥居 (MC: 57 123 048*31)', category: 'sightseeing', loc: 'Hakone Shrine', transportType: 'car', travelTime: '40 min', mapcode: '57 123 048*31', location: 'Hakone Shrine' },
+                                    { time: '18:00', title: '東京還車', desc: '淺草/上野 (入滿油)', category: 'transport', loc: 'Asakusa', transportType: 'car', travelTime: '2 hr (90km)', location: 'Asakusa' },
+                                    { time: '19:30', title: 'Dinner: 鳥貴族', desc: '淺草店 Mega Beer', category: 'food', loc: 'Torikizoku Asakusa', transportType: 'walk', location: 'Torikizoku Asakusa' },
+                                    { time: '21:30', title: '回程酒店 (淺草東武)', category: 'hotel', desc: '休息', transportType: 'walk', location: 'Asakusa Tobu Hotel' }
                                 ]},
                                 { weekday: 'Fri', dateStr: '11/06', events: [
-                                    { time: '10:00', title: '銀座 / 澀谷 Sky', desc: 'Shopping', category: 'shopping', loc: 'Ginza', transportType: 'train', travelTime: '20 min' },
-                                    { time: '16:30', title: '東京鐵塔', desc: '停車場打卡位', category: 'sightseeing', loc: 'Tokyo Tower', transportType: 'train', travelTime: '30 min' },
-                                    { time: '19:00', title: 'Mantensushi', desc: '10+1 紀念 Omakase', category: 'highlight', loc: 'Mantensushi Nihonbashi', transportType: 'train' },
-                                    { time: '21:30', title: '返酒店休息', desc: '淺草東武酒店', category: 'hotel', loc: 'Asakusa Tobu Hotel', transportType: 'train' }
+                                    { time: '10:00', title: '銀座 / 澀谷 Sky', desc: 'Shopping', category: 'shopping', loc: 'Ginza', transportType: 'train', travelTime: '20 min', location: 'Ginza' },
+                                    { time: '16:30', title: '東京鐵塔', desc: '停車場打卡位', category: 'sightseeing', loc: 'Tokyo Tower', transportType: 'train', travelTime: '30 min', location: 'Tokyo Tower' },
+                                    { time: '19:00', title: 'Mantensushi', desc: '10+1 紀念 Omakase', category: 'highlight', loc: 'Mantensushi Nihonbashi', transportType: 'train', location: 'Mantensushi Nihonbashi' },
+                                    { time: '21:30', title: '回程酒店 (淺草東武)', category: 'hotel', desc: '休息', transportType: 'train', location: 'Asakusa Tobu Hotel' }
                                 ]},
                                 { weekday: 'Sat', dateStr: '11/07', events: [
-                                    { time: '10:30', title: '吉祥寺', desc: 'Satou 炸牛丸 / 井之頭公園', category: 'sightseeing', loc: 'Kichijoji', transportType: 'train', travelTime: '45 min' },
-                                    { time: '14:00', title: '下北澤', desc: '古著店', category: 'shopping', loc: 'Shimokitazawa', transportType: 'train', travelTime: '20 min' },
-                                    { time: '19:00', title: 'Dinner', desc: '隨心食', category: 'food', loc: 'Shinjuku', transportType: 'train' },
-                                    { time: '21:30', title: '返酒店休息', desc: '淺草東武酒店', category: 'hotel', loc: 'Asakusa Tobu Hotel', transportType: 'train' }
+                                    { time: '10:30', title: '吉祥寺', desc: 'Satou 炸牛丸 / 井之頭公園', category: 'sightseeing', loc: 'Kichijoji', transportType: 'train', travelTime: '45 min', location: 'Kichijoji' },
+                                    { time: '14:00', title: '下北澤', desc: '古著店', category: 'shopping', loc: 'Shimokitazawa', transportType: 'train', travelTime: '20 min', location: 'Shimokitazawa' },
+                                    { time: '19:00', title: 'Dinner', desc: '隨心食', category: 'food', loc: 'Shinjuku', transportType: 'train', location: 'Shinjuku' },
+                                    { time: '21:30', title: '回程酒店 (淺草東武)', category: 'hotel', desc: '休息', transportType: 'train', location: 'Asakusa Tobu Hotel' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '11/08', events: [
-                                    { time: '10:00', title: '最後衝刺', desc: '淺草/上野', category: 'shopping', loc: 'Ueno', transportType: 'walk' },
-                                    { time: '14:00', title: 'Skyliner', desc: '上野 -> 成田', category: 'transport', loc: 'Keisei Ueno', transportType: 'train', travelTime: '45 min' },
-                                    { time: '18:00', title: '回程 (CX505)', desc: '18:00 起飛', category: 'flight', loc: 'Narita Airport' }
+                                    { time: '10:00', title: '最後衝刺', desc: '淺草/上野', category: 'shopping', loc: 'Ueno', transportType: 'walk', location: 'Ueno' },
+                                    { time: '14:00', title: 'Skyliner', desc: '上野 -> 成田', category: 'transport', loc: 'Keisei Ueno', transportType: 'train', travelTime: '45 min', location: 'Keisei Ueno' },
+                                    { time: '18:00', title: '回程 (CX505)', desc: '18:00 起飛', category: 'flight', loc: 'Narita Airport', location: 'Narita Airport' }
                                 ]}
                             ]
                         }
@@ -842,8 +817,8 @@
                 openDoc() {
                     window.open(this.activeTrip.docLink, '_blank');
                 },
-                addShoppingItem() { if(this.newShopItem) this.activeTrip.shopping.push(this.newShopItem); this.newShopItem = ''; },
-                removeShoppingItem(idx) { this.activeTrip.shopping.splice(idx, 1); },
+                addShoppingItem() { if(this.newShopping.name) this.shoppingList.push({ name: this.newShopping.name }); this.newShopping.name = ''; },
+                removeShoppingItem(idx) { this.shoppingList.splice(idx, 1); },
                 deleteExpense(idx) { this.activeTrip.expenses.splice(idx, 1); },
                 
                 openAddModal() { this.showModal = true; },
