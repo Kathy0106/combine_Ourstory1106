@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>❤️OurStory❤️</title>
+    <title>OurStory❤️</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -44,6 +44,9 @@
 
         .card-press:active { transform: scale(0.98); transition: transform 0.1s; }
         
+        .highlight-red { color: #C62828; font-weight: 900; }
+        .highlight-blue { color: #1565C0; font-weight: 900; }
+
         /* 飄落動畫 */
         @keyframes fall {
             0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 1; }
@@ -97,7 +100,6 @@
         </div>
 
         <div v-if="currentView === 'home'" class="flex-1 flex flex-col px-6 pt-10 pb-6 z-10 overflow-y-auto">
-            
             <div class="mb-8 flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl font-bold" style="color: #5D4037;">早晨！☀️</h1>
@@ -239,7 +241,6 @@
                                             </div>
                                             <h3 class="text-lg font-bold mb-1.5 leading-tight text-[#5D4037]">{{ item.title }}</h3>
                                             <div class="text-xs text-[#8D6E63] mb-2 flex items-start gap-1.5 leading-relaxed whitespace-pre-line" v-if="item.desc" v-html="formatText(item.desc)"></div>
-
                                             <div class="flex flex-wrap gap-1.5 mt-2">
                                                 <span v-if="idx < currentDayEvents.length" class="text-[9px] bg-[#ECEFF1] text-[#78909C] px-2 py-1 rounded-lg font-bold flex items-center gap-1 border border-dashed border-[#CFD8DC]">
                                                     <i :class="getTransportIcon(item.transportType)"></i> {{ item.travelTime || '移動' }}
@@ -251,13 +252,11 @@
                                         </div>
 
                                         <div v-if="item.mapcode || item.phone" class="w-24 flex-shrink-0 flex flex-col gap-2 justify-start mt-1">
-                                            
                                             <div v-if="item.mapcode" class="bg-white border-2 rounded-lg p-1.5 text-center shadow-sm" @click.stop :style="{ borderColor: currentTheme.main }">
                                                 <div class="text-[9px] font-bold mb-0.5 uppercase tracking-tighter" :style="{ color: currentTheme.main }">MapCode</div>
                                                 <div class="text-xs font-black text-slate-800 break-all leading-tight mb-1">{{ item.mapcode }}</div>
                                                 <div class="text-white text-[9px] rounded px-1 py-0.5 font-bold cursor-pointer active:scale-95" :style="{ backgroundColor: currentTheme.main }">COPY</div>
                                             </div>
-
                                             <div v-if="item.phone" class="bg-white border-2 rounded-lg p-1.5 text-center shadow-sm" @click.stop :style="{ borderColor: currentTheme.main }">
                                                 <div class="text-[9px] font-bold mb-0.5 uppercase" :style="{ color: currentTheme.main }">TEL</div>
                                                 <div class="text-xs font-black text-slate-800 break-all leading-tight">{{ item.phone }}</div>
@@ -275,27 +274,61 @@
                     </div>
 
                     <div v-if="activeTab === 'info'" class="space-y-5 px-5 pt-4">
-                         <div class="cream-card overflow-hidden border-2 dashed border-[#BBDEFB] cursor-pointer hover:opacity-90" @click="openDoc">
-                            <div class="p-4 flex items-center justify-center gap-2 bg-[#4285F4] text-white font-bold rounded-xl shadow-md">
-                                <i class="fa-brands fa-google-drive text-lg"></i>
-                                <span class="text-sm">查看完整 Google Doc 行程</span>
+                        
+                        <div class="cream-card overflow-hidden cursor-pointer border-2 dashed border-[#FFCDD2]" @click="toggleAlarms">
+                            <div class="p-4 flex justify-between items-center" :style="{ color: currentTheme.main === '#F48FB1' ? '#EC407A' : '#EF6C00', backgroundColor: currentTheme.main === '#F48FB1' ? '#FCE4EC' : '#FFF3E0' }">
+                                <span class="text-sm font-bold"><i class="fa-regular fa-bell mr-2"></i>關鍵行動鬧鐘 (Click Me)</span>
+                                <i :class="['fa-solid text-xs transition-transform duration-300', alarmsOpen ? 'fa-chevron-up' : 'fa-chevron-down']"></i>
+                            </div>
+                            <transition name="accordion">
+                                <div v-if="alarmsOpen" class="p-4 space-y-3 bg-white">
+                                    <div v-for="(alarm, idx) in activeTrip.alarms" :key="idx" class="flex gap-3 border-b border-dashed border-[#F5F5F5] pb-2 last:border-0 last:pb-0 items-center">
+                                        <span class="font-bold text-[10px] text-white px-2 py-0.5 rounded-md min-w-[50px] text-center" :style="{ backgroundColor: currentTheme.main }">{{ alarm.date }}</span> 
+                                        <span class="text-[#5D4037] font-bold text-xs">{{ alarm.task }}</span>
+                                    </div>
+                                </div>
+                            </transition>
+                        </div>
+
+                        <div class="cream-card overflow-hidden">
+                            <div class="p-4 text-white font-bold flex justify-between text-sm" :style="{ backgroundColor: currentTheme.main }">
+                                <span><i class="fa-solid fa-plane mr-2"></i>航班資訊 (CX)</span>
+                            </div>
+                            <div class="p-5 text-sm bg-white space-y-6">
+                                <div v-if="activeTrip.flights">
+                                    <div>
+                                        <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-blue-400 mr-1"></span>去程 (HKT)</div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.out.dep }}</div>
+                                            <div class="flex-1 px-4 flex flex-col items-center">
+                                                <div class="h-0.5 w-full bg-[#E0E0E0] relative rounded-full border-t border-dashed border-[#BDBDBD]"><i class="fa-solid fa-plane text-[#BDBDBD] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs"></i></div>
+                                            </div>
+                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.out.arr }}</div>
+                                        </div>
+                                        <div class="flex justify-between text-xs font-bold bg-[#F5F5F5] p-3 rounded-xl text-[#757575] border border-dashed border-[#E0E0E0]">
+                                            <span>HKG → JP ({{ activeTrip.flights.out.code }})</span>
+                                            <span>{{ activeTrip.flights.out.date }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="border-t-2 border-dashed border-[#E0E0E0]"></div>
+                                    <div>
+                                        <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-pink-400 mr-1"></span>回程 (JST)</div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.dep }}</div>
+                                            <div class="flex-1 px-4 flex flex-col items-center">
+                                                <div class="h-0.5 w-full bg-[#E0E0E0] relative rounded-full border-t border-dashed border-[#BDBDBD]"><i class="fa-solid fa-plane text-[#BDBDBD] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs" style="transform: translate(-50%, -50%) rotate(180deg);"></i></div>
+                                            </div>
+                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.arr }}</div>
+                                        </div>
+                                        <div class="flex justify-between text-xs font-bold bg-[#F5F5F5] p-3 rounded-xl text-[#757575] border border-dashed border-[#E0E0E0]">
+                                            <span>JP → HKG ({{ activeTrip.flights.in.code }})</span>
+                                            <span>{{ activeTrip.flights.in.date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="space-y-3">
-                            <h3 class="font-bold text-[#A1887F] ml-1 text-sm">住宿列表</h3>
-                            <div v-for="hotel in activeTrip.hotels" :key="hotel.name" class="cream-card p-4 flex items-center gap-4 cursor-pointer" @click="openMap(hotel.name)">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-lg shadow-sm" :style="{ backgroundColor: currentTheme.main }">
-                                    <i class="fa-solid fa-bed"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-sm text-[#5D4037]">{{ hotel.name }}</h4>
-                                    <p class="text-xs text-[#A1887F] mt-0.5">{{ hotel.dates }}</p>
-                                </div>
-                                <i class="fa-solid fa-chevron-right text-[#D7CCC8] text-xs"></i>
-                            </div>
-                        </div>
-                        
+
                         <div class="cream-card overflow-hidden" v-if="activeTrip.rental">
                             <div class="p-4 font-bold flex justify-between text-sm" style="background-color: #E3F2FD; color: #1976D2;">
                                 <span><i class="fa-solid fa-car mr-2"></i>租車資訊</span>
@@ -317,13 +350,37 @@
                                         <p class="text-sm font-bold text-[#B71C1C] mt-1">{{ activeTrip.rental.returnLocName }}</p>
                                     </div>
                                 </div>
-                                <div v-if="activeTrip.rental.note" class="text-xs text-red-500 bg-red-50 p-2 rounded border border-dashed border-red-200">
+                                <div v-if="activeTrip.rental.note" class="text-xs text-[#E65100] bg-[#FFF3E0] p-2 rounded border border-dashed border-[#FFE0B2]">
                                     <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ activeTrip.rental.note }}
                                 </div>
+                                <button @click="openMap(activeTrip.rental.pickupLoc)" class="w-full text-white py-3 rounded-xl font-bold shadow-md active:scale-95 transition-transform text-sm mt-1 flex items-center justify-center" style="background-color: #42A5F5;">
+                                    <i class="fa-solid fa-location-arrow mr-2"></i> 導航去取車
+                                </button>
                             </div>
                         </div>
 
-                         <div class="cream-card p-5">
+                        <div class="space-y-3">
+                            <h3 class="font-bold text-[#A1887F] ml-1 text-sm">住宿列表</h3>
+                            <div v-for="hotel in activeTrip.hotels" :key="hotel.name" class="cream-card p-4 flex items-center gap-4 cursor-pointer" @click="openMap(hotel.name)">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-lg shadow-sm" :style="{ backgroundColor: currentTheme.main }">
+                                    <i class="fa-solid fa-bed"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-sm text-[#5D4037]">{{ hotel.name }}</h4>
+                                    <p class="text-xs text-[#A1887F] mt-0.5">{{ hotel.dates }}</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-[#D7CCC8] text-xs"></i>
+                            </div>
+                        </div>
+
+                        <div class="cream-card overflow-hidden border-2 dashed border-[#BBDEFB] cursor-pointer hover:opacity-90" @click="openDoc">
+                            <div class="p-4 flex items-center justify-center gap-2 bg-[#4285F4] text-white font-bold rounded-xl shadow-md">
+                                <i class="fa-brands fa-google-drive text-lg"></i>
+                                <span class="text-sm">查看完整 Google Doc 行程</span>
+                            </div>
+                        </div>
+
+                        <div class="cream-card p-5">
                             <h3 class="font-bold mb-3 text-sm" :style="{ color: currentTheme.main }"><i class="fa-solid fa-coins mr-2"></i>匯率換算 (JPY)</h3>
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="flex-1 bg-[#F5F5F5] rounded-xl p-3 flex items-center border border-dashed border-[#E0E0E0]">
@@ -341,9 +398,9 @@
                     </div>
 
                     <div v-if="activeTab === 'shopping'" class="px-5 pt-4">
-                         <div class="cream-card p-5 mb-4">
+                        <div class="cream-card p-5 mb-4">
                             <h3 class="font-bold mb-3 text-sm text-[#5D4037]">待購清單</h3>
-                             <div class="space-y-2">
+                            <div class="space-y-2">
                                 <div v-for="(item, idx) in activeTrip.shopping" :key="idx" class="flex items-center gap-3 p-3 bg-[#FAFAFA] border border-dashed border-[#EEEEEE] rounded-xl">
                                     <input type="checkbox" class="w-5 h-5 rounded border-[#BDBDBD] accent-[#F48FB1]">
                                     <span class="text-sm font-bold text-[#5D4037]">{{ item }}</span>
@@ -354,10 +411,11 @@
                                     <button @click="addShoppingItem" class="w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-md active:scale-95 text-lg" :style="{ backgroundColor: currentTheme.main }"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
-                         </div>
+                        </div>
                     </div>
+                    
                     <div v-if="activeTab === 'expenses'" class="px-5 pt-4">
-                         <div class="cream-card p-6 mb-4 text-center border-none" :style="{ backgroundColor: currentTheme.main }">
+                        <div class="cream-card p-6 mb-4 text-center border-none" :style="{ backgroundColor: currentTheme.main }">
                             <p class="text-xs text-white/80 mb-1">總花費 (日元)</p>
                             <div class="text-4xl font-bold text-white mb-1">¥{{ totalExpenses.toLocaleString() }}</div>
                              <p class="text-[10px] text-white/60">≈ HK$ {{ (totalExpenses * exchangeRate).toFixed(0) }}</p>
@@ -382,8 +440,8 @@
                 <div class="space-y-4">
                     <input v-model="newItem.title" type="text" placeholder="標題 / 項目名稱" class="w-full p-3 bg-[#F5F5F5] rounded-xl border-none outline-none text-sm text-[#5D4037]">
                     <div class="flex gap-2">
-                        <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#5D4037]">
-                        <select v-model="newItem.category" class="w-2/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#5D4037]">
+                        <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#004D40]">
+                        <select v-model="newItem.category" class="w-2/3 p-3 bg-[#F5F5F5] rounded-xl outline-none text-sm text-[#004D40]">
                             <option value="sightseeing">景點</option>
                             <option value="food">美食</option>
                             <option value="shopping">購物</option>
@@ -477,7 +535,7 @@
                                 ]},
                                 { weekday: 'Wed', dateStr: '4/22', events: [
                                     { time: '10:00', title: '白絲瀑布', desc: 'MC: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls', transportType: 'car', travelTime: '45 min', mapcode: '292 701 645*63', location: 'Shiraito Falls' },
-                                    { time: '11:00', title: 'Rogotei 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei', transportType: 'car', travelTime: '30 min', location: 'Rogotei', mapcode: '292 673 483*66' },
+                                    { time: '11:00', title: 'ろぐ亭 (Rogotei) 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei', transportType: 'car', travelTime: '30 min', location: 'Rogotei', mapcode: '292 673 483*66' },
                                     { time: '12:30', title: '舊輕井澤銀座通', desc: '掃街', category: 'sightseeing', loc: 'Kyu-Karuizawa Ginza', transportType: 'car', travelTime: '15 min', location: 'Kyu-Karuizawa Ginza' },
                                     { time: '17:00', title: '東京還車', desc: 'T-CAT', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '2.5 hr', location: 'T-CAT' },
                                     { time: '18:00', title: 'Check-in (八重翠)', category: 'hotel', loc: 'Yaekit', transportType: 'walk', location: 'Yaekit' }
@@ -549,7 +607,7 @@
                                 { weekday: 'Thu', dateStr: '11/05', events: [
                                     { time: '06:30', title: '山中湖逆富士', category: 'sightseeing', loc: 'Nagaike Water Park', transportType: 'car', mapcode: '434 324 577*85', location: 'Nagaike Water Park' },
                                     { time: '10:00', title: '御殿場 Outlet', desc: 'Shopping', category: 'shopping', loc: 'Gotemba Outlet', transportType: 'car', travelTime: '40 min', location: 'Gotemba Outlet' },
-                                    { time: '13:00', title: 'Lunch: Outlet Food Court / Shake Shack', category: 'food', loc: 'Gotemba Outlet', transportType: 'walk', location: 'Gotemba Outlet' },
+                                    { time: '13:00', title: 'Lunch: Outlet Food Court', category: 'food', loc: 'Gotemba Outlet', transportType: 'walk', location: 'Gotemba Outlet' },
                                     { time: '14:00', title: '箱根神社', category: 'sightseeing', loc: 'Hakone Shrine', transportType: 'car', mapcode: '57 123 048*31', location: 'Hakone Shrine' },
                                     { time: '18:00', title: '還車 (淺草)', category: 'transport', loc: 'Asakusa', transportType: 'car', location: 'Asakusa' },
                                     { time: '19:30', title: 'Dinner: 鳥貴族', category: 'food', loc: 'Torikizoku Asakusa', transportType: 'walk', location: 'Torikizoku Asakusa' }
