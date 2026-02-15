@@ -47,7 +47,7 @@
         .highlight-red { color: #C62828; font-weight: 900; }
         .highlight-blue { color: #1565C0; font-weight: 900; }
 
-        /* 特效層 Z-Index 修正 */
+        /* 特效層 Z-Index */
         .falling-container {
             position: fixed;
             top: 0;
@@ -137,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div @click="selectTrip('central')" class="relative w-full aspect-[16/9] rounded-[30px] shadow-sm overflow-hidden card-press cursor-pointer group bg-white border-2 dashed border-[#E0D8C0]">
                     <div class="absolute inset-0 trip-header-bg opacity-90" :style="{ backgroundImage: `url(${trips.central.headerImg})` }"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-[#5D4037]/60 via-transparent to-transparent"></div>
@@ -249,6 +249,7 @@
                                             </div>
                                             <h3 class="text-lg font-bold mb-1.5 leading-tight text-[#5D4037]">{{ item.title }}</h3>
                                             <div class="text-xs text-[#8D6E63] mb-2 flex items-start gap-1.5 leading-relaxed whitespace-pre-line" v-if="item.desc" v-html="formatText(item.desc)"></div>
+
                                             <div class="flex flex-wrap gap-1.5 mt-2">
                                                 <span v-if="idx < currentDayEvents.length" class="text-[9px] bg-[#ECEFF1] text-[#78909C] px-2 py-1 rounded-lg font-bold flex items-center gap-1 border border-dashed border-[#CFD8DC]">
                                                     <i :class="getTransportIcon(item.transportType)"></i> {{ item.travelTime || '移動' }}
@@ -356,13 +357,13 @@
                                 </div>
                                 <div class="flex gap-3">
                                     <div class="flex-1 bg-[#F1F8E9] p-3 rounded-xl border border-dashed border-[#DCEDC8] text-center">
-                                        <p class="text-[#558B2F] text-[10px] mb-1 font-bold">取車</p>
+                                        <p class="text-[#558B2F] text-[10px] mb-1 font-bold">取車 (PICK-UP)</p>
                                         <p class="text-base font-black text-[#33691E] whitespace-pre-line leading-tight mb-1">{{ activeTrip.rental.pickupDate }}</p>
                                         <p class="text-lg font-black text-[#33691E]">{{ activeTrip.rental.pickupTime }}</p>
                                         <p class="text-sm font-bold text-[#1B5E20] mt-1">{{ activeTrip.rental.pickupLocName }}</p>
                                     </div>
                                     <div class="flex-1 bg-[#FFEBEE] p-3 rounded-xl border border-dashed border-[#FFCDD2] text-center">
-                                        <p class="text-[#C62828] text-[10px] mb-1 font-bold">還車</p>
+                                        <p class="text-[#C62828] text-[10px] mb-1 font-bold">還車 (RETURN)</p>
                                         <p class="text-base font-black text-[#B71C1C] whitespace-pre-line leading-tight mb-1">{{ activeTrip.rental.returnDate }}</p>
                                         <p class="text-lg font-black text-[#B71C1C]">{{ activeTrip.rental.returnTime }}</p>
                                         <p class="text-sm font-bold text-[#B71C1C] mt-1">{{ activeTrip.rental.returnLocName }}</p>
@@ -497,7 +498,7 @@
                     showModal: false, showSettings: false, alarmsOpen: true, newShopItem: '',
                     exchangeRate: 0.053, calcJpy: '', calcHkd: '',
                     weather: { city_name: '', temp: '--', feels_like: '--', icon: 'fa-spinner fa-spin' },
-                    apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4',
+                    apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4', // User's custom key
                     settings: { themeColor: 'pink', effect: 'flower', fontSize: 14 },
                     themes: { pink: { main: '#F48FB1', bg: '#FFF0F5' }, orange: { main: '#FFB74D', bg: '#FFF8E1' } },
 
@@ -583,16 +584,12 @@
                             weatherCity: 'Nagoya,JP',
                             flights: { out: { code: 'CX524', date: '10/31', dep: '01:30', arr: '06:40' }, in: { code: 'CX505', date: '11/08', dep: '18:00', arr: '22:25' } },
                             rental: {
-                                company: 'Toyota Rent a Car', pickupDate: '10/31', pickupTime: '08:00', pickupLocName: '成田機場 (一開門即取)',
-                                returnDate: '11/05', returnTime: '18:00', returnLocName: '淺草/上野', pickupLoc: 'Toyota Rent a Car Narita Airport',
-                                insurance: 'NOC 安心保險', note: '必須指定雪胎 (Snow Tires)'
+                                company: 'Toyota Rent a Car', pickupDate: '10/31', pickupTime: '08:00', pickupLocName: '成田機場',
+                                returnDate: '11/05', returnTime: '18:00', returnLocName: '淺草/上野', pickupLoc: 'Toyota Rent a Car Narita', no: '預約中', insurance: 'NOC', note: '必須雪胎'
                             },
                             hotels: [
-                                { name: 'Daiwa Roynet Numazu', dates: '10/31 - 11/2' },
-                                { name: 'Onyado Nono Matsumoto', dates: '11/2 - 11/3' },
-                                { name: '湯宿 季之庭 (草津)', dates: '11/3 - 11/4' },
-                                { name: 'HOTEL CLAD (御殿場)', dates: '11/4 - 11/5' },
-                                { name: '淺草東武酒店', dates: '11/5 - 11/8' }
+                                { name: 'Daiwa Roynet Numazu', dates: '10/31 - 11/2' }, { name: 'Onyado Nono Matsumoto', dates: '11/2 - 11/3' },
+                                { name: '湯宿 季之庭 (草津)', dates: '11/3 - 11/4' }, { name: 'HOTEL CLAD (御殿場)', dates: '11/4 - 11/5' }, { name: '淺草東武酒店', dates: '11/5 - 11/8' }
                             ],
                             alarms: [
                                 { date: '4/25', task: '搶訂 季之庭 & HOTEL CLAD' }, { date: '7/01', task: '預約租車' },
@@ -670,7 +667,50 @@
             },
             methods: {
                 selectTrip(id) { this.selectedTripId = id; this.currentView = 'detail'; this.activeTab = 'itinerary'; },
-                fetchWeather() { /* ... weather logic ... */ },
+                fetchWeather() {
+                    let locName = 'Tokyo';
+                    const trip = this.activeTrip;
+                    const idx = this.selectedDayIndex;
+
+                    if (trip.id === 'karuizawa') {
+                        if (idx >= 2 && idx <= 5) locName = 'Karuizawa,JP';
+                        else locName = 'Tokyo,JP';
+                    } else if (trip.id === 'central') {
+                        if (idx === 0) locName = 'Numazu,JP';
+                        else if (idx === 1) locName = 'Izu,JP'; // Note: Izu might need specific city like Ito
+                        else if (idx === 2) locName = 'Matsumoto,JP';
+                        else if (idx === 3) locName = 'Kusatsu,JP';
+                        else if (idx === 4) locName = 'Gotemba,JP';
+                        else locName = 'Tokyo,JP';
+                    }
+
+                    const cityMap = {
+                        'Tokyo,JP': '東京',
+                        'Karuizawa,JP': '輕井澤',
+                        'Numazu,JP': '沼津',
+                        'Izu,JP': '伊豆',
+                        'Matsumoto,JP': '松本',
+                        'Kusatsu,JP': '草津',
+                        'Gotemba,JP': '御殿場'
+                    };
+
+                    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${locName}&units=metric&lang=zh_tw&appid=${this.apiKey}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.weather.city_name = cityMap[locName] || data.name;
+                        this.weather.temp = Math.round(data.main.temp);
+                        // Icon logic
+                        const code = data.weather[0].icon;
+                        if (code.includes('01')) this.weather.icon = 'fa-sun';
+                        else if (code.includes('02') || code.includes('03')) this.weather.icon = 'fa-cloud-sun';
+                        else if (code.includes('04')) this.weather.icon = 'fa-cloud';
+                        else if (code.includes('09') || code.includes('10')) this.weather.icon = 'fa-cloud-rain';
+                        else if (code.includes('13')) this.weather.icon = 'fa-snowflake';
+                        else if (code.includes('11')) this.weather.icon = 'fa-bolt';
+                        else this.weather.icon = 'fa-smog';
+                    })
+                    .catch(() => { this.weather.temp = '--'; });
+                },
                 getCountdown(dateString) { const target = new Date(dateString); const now = new Date(); return Math.ceil((target - now) / (1000 * 60 * 60 * 24)); },
                 itemCategoryName(cat) { const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班', ticket: '門票', highlight: '紀念日' }; return map[cat] || '其他'; },
                 getTransportIcon(type) { const map = { walk: 'fa-person-walking', train: 'fa-train-subway', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
