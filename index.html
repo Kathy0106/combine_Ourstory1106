@@ -285,18 +285,19 @@
                         
                         <div class="cream-card overflow-hidden border-2 dashed border-[#CE93D8]" v-if="selectedTripId === 'karuizawa'">
                             <div class="p-4 font-bold flex justify-between text-sm" style="background-color: #F3E5F5; color: #6A1B9A;">
-                                <span><i class="fa-solid fa-suitcase-rolling mr-2"></i>Klook 機場行李運送教學</span>
+                                <span><i class="fa-solid fa-car-side mr-2"></i>Klook 機場包車攻略 (Alphard)</span>
                             </div>
                             <div class="p-4 text-sm bg-white space-y-3">
-                                <p class="text-[#5D4037] font-bold">因為太多篋，Day 8 強烈建議用 Klook (LuggAgent) 送去機場！</p>
+                                <p class="text-[#5D4037] font-bold">有 4 個大篋，Book 包車去機場最抵最舒服！(約 HK$824)</p>
                                 <div class="bg-[#FAFAFA] p-3 rounded-lg border border-dashed border-[#E0E0E0]">
                                     <ol class="list-decimal pl-4 space-y-1 text-gray-600 text-xs">
-                                        <li><b>預訂：</b> 出發前喺 Klook 搜尋「東京 行李運送 (LuggAgent)」，揀「酒店 至 機場」。</li>
-                                        <li><b>Day 8 (09:00前)：</b> 將大篋交俾八重翠 Front Desk，話 "Luggage Agent will pick up"。影張相留底。</li>
-                                        <li><b>Day 8 (16:00後)：</b> 喺成田 T2 (CX客運大樓) 指定櫃檯攞返啲篋。</li>
+                                        <li><b>預訂：</b> 去 Klook 搜尋「東京機場接送」，揀「市區酒店 ➔ 成田機場」，車型揀「舒適型 7人座 (Alphard)」。</li>
+                                        <li><b>時間：</b> 建議 Book <b>16:30</b> 或 <b>17:00</b> 喺「八重翠酒店」上車。</li>
+                                        <li><b>Day 8 朝早：</b> Check-out 擺低行李喺酒店，兩手揈揈去食 Manten Sushi 同 Shopping。</li>
+                                        <li><b>Day 8 傍晚：</b> 16:00 左右搭車/的士返酒店，舒舒服服上 Alphard 直達機場！</li>
                                     </ol>
                                 </div>
-                                <p class="text-xs text-[#E65100]">💡 <b>好處：</b>食完 Manten Sushi 可以兩手揈揈 Shopping，然後直接喺東京站搭 N'EX 去機場，<b>唔使返酒店，唔使去 T-CAT！</b></p>
+                                <p class="text-xs text-[#E65100]">💡 <b>溫馨提示：</b>雖然 Klook 運送行李平少少 ($632)，但包車 ($824) 差唔多錢，仲可以慳返你哋自己搭 N'EX 嘅車費同搬行李嘅體力！</p>
                             </div>
                         </div>
 
@@ -388,6 +389,9 @@
                                 <div v-if="activeTrip.rental.note" class="text-xs text-[#E65100] bg-[#FFF3E0] p-2 rounded border border-dashed border-[#FFE0B2]">
                                     <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ activeTrip.rental.note }}
                                 </div>
+                                <a v-if="selectedTripId === 'karuizawa'" href="https://rent.toyota.co.jp/zh-tw/" target="_blank" class="block w-full bg-[#1976D2] text-white text-center py-3 rounded-xl font-bold shadow-md active:scale-95">
+                                    <i class="fa-solid fa-map-location-dot mr-2"></i>前往 Toyota 官網
+                                </a>
                             </div>
                         </div>
 
@@ -520,6 +524,7 @@
                             id: 'karuizawa', name: '東京櫻花之旅 2026', date: '2026-04-18', range: 'Apr 18 - 25, 2026',
                             theme: 'pink', effect: 'flower', headerImg: './header_karuizawa.jpg',
                             docLink: 'https://docs.google.com/document/d/1-4mgjTycE9bGWhuitIkigPSM4_0fBPlZX2RoVRCTlXw/edit?usp=drivesdk',
+                            weatherCity: 'Tokyo,JP',
                             flights: { out: { code: 'CX524', date: '4/18', dep: '01:30', arr: '06:40' }, in: { code: 'CX501', date: '4/25', dep: '21:30', arr: '02:00' } },
                             rental: {
                                 company: 'Toyota Rent a Car', pickupDate: '4/20', pickupTime: '09:30', pickupLocName: 'T-CAT (水天宮)',
@@ -528,10 +533,10 @@
                             hotels: [
                                 { name: 'VIA INN PRIME 日本橋人形町', dates: '4/18 - 4/20' },
                                 { name: 'Toyoko Inn 佐久平站淺間口', dates: '4/20 - 4/22' },
-                                { name: '八重翠東京酒店 (Yaenomidori)', dates: '4/22 - 4/25' }
+                                { name: '八重翠東京酒店', dates: '4/22 - 4/25' }
                             ],
                             alarms: [
-                                { date: '出發前', task: '預訂 Klook 機場行李運送' }, 
+                                { date: '出發前', task: 'Klook Book 機場包車 (Alphard)' }, 
                                 { date: '1/20', task: 'Book 輕井澤燒肉 (ろぐ亭)' }
                             ],
                             shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
@@ -584,12 +589,13 @@
                                     { time: '20:30', title: '回程酒店', category: 'hotel', desc: '休息', transportType: 'train', location: 'Yaekit' }
                                 ]},
                                 { weekday: 'Sat', dateStr: '4/25', events: [
-                                    { time: '09:00', title: 'Klook 行李託運 🧳', desc: '將篋交俾酒店 Front Desk (兩手揈揈去玩！)', category: 'other', loc: 'Yaekit', transportType: 'walk', location: 'Yaekit' },
-                                    { time: '10:00', title: '東京站一番街', desc: '買手信', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk', location: 'Tokyo Station' },
+                                    { time: '09:00', title: '寄放行李 🧳', desc: 'Check-out 將篋留喺酒店大堂', category: 'other', loc: 'Yaekit', transportType: 'walk', location: 'Yaekit' },
+                                    { time: '10:00', title: '東京站一番街', desc: '買手信', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk', travelTime: '15 min', location: 'Tokyo Station' },
                                     { time: '11:00', title: 'まんてん鮨 (Manten Sushi)', desc: '丸之內店\n✨ <span class="highlight-red">已預約: 11:00 (結婚紀念日)</span>', category: 'highlight', loc: 'Manten Sushi Marunouchi', transportType: 'walk', travelTime: '10 min', location: 'Manten Sushi Marunouchi' },
-                                    { time: '13:00', title: '丸之內 / 銀座 Shopping', desc: '無行李束縛，瘋狂行街', category: 'shopping', loc: 'Ginza', transportType: 'walk', location: 'Ginza' },
-                                    { time: '16:30', title: '出發去機場', desc: '東京站搭 N\'EX 或 機場巴士\n(無需返酒店/T-CAT)', category: 'transport', loc: 'Tokyo Station', transportType: 'train', travelTime: '60 min', location: 'Tokyo Station' },
-                                    { time: '18:00', title: '機場拎行李 & Check-in', desc: '成田 T2 搵 Klook 櫃檯攞行李\n航班: CX501 (21:30 起飛)', category: 'flight', loc: 'Narita Airport', transportType: 'walk', location: 'Narita Airport' }
+                                    { time: '13:00', title: '銀座 / 丸之內 Shopping', desc: '無行李負擔，瘋狂行街！', category: 'shopping', loc: 'Ginza', transportType: 'walk', location: 'Ginza' },
+                                    { time: '16:00', title: '返回酒店', desc: '返酒店準備上車', category: 'transport', loc: 'Yaekit', transportType: 'walk', location: 'Yaekit' },
+                                    { time: '16:30', title: 'Klook 專車前往機場 🚗💨', desc: '酒店門口上車，直達成田 T2 (約 1-1.5hr)', category: 'transport', loc: 'Narita Airport', transportType: 'car', travelTime: '1.5 hr', location: 'Narita Airport' },
+                                    { time: '18:00', title: '到達機場 (CX501)', desc: '21:30 起飛', category: 'flight', loc: 'Narita Airport', transportType: 'walk', location: 'Narita Airport' }
                                 ]}
                             ]
                         },
@@ -692,7 +698,6 @@
                     const trip = this.activeTrip;
                     const idx = this.selectedDayIndex;
 
-                    // 100% 精準天氣定位切換
                     if (trip.id === 'karuizawa') {
                         switch(idx) {
                             case 0: query = 'Tokyo,JP'; displayName = '東京'; break;
