@@ -137,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div @click="selectTrip('central')" class="relative w-full aspect-[16/9] rounded-[30px] shadow-sm overflow-hidden card-press cursor-pointer group bg-white border-2 dashed border-[#E0D8C0]">
                     <div class="absolute inset-0 trip-header-bg opacity-90" :style="{ backgroundImage: `url(${trips.central.headerImg})` }"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-[#5D4037]/60 via-transparent to-transparent"></div>
@@ -323,42 +323,40 @@
                                 <span><i class="fa-solid fa-plane mr-2"></i>航班資訊 (CX)</span>
                             </div>
                             <div class="p-5 text-sm bg-white space-y-6">
-                                <div v-if="activeTrip.flights">
-                                    <div>
-                                        <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-blue-400 mr-1"></span>去程 (HKT)</div>
-                                        <div class="flex justify-between items-center mb-2">
-                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.out.dep }}</div>
-                                            <div class="flex-1 px-4 flex flex-col items-center">
-                                                <div class="h-0.5 w-full bg-[#E0E0E0] relative rounded-full border-t border-dashed border-[#BDBDBD]"><i class="fa-solid fa-plane text-[#BDBDBD] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs"></i></div>
-                                            </div>
-                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.out.arr }}</div>
+                                <div>
+                                    <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-blue-400 mr-1"></span>去程 (HKT)</div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.out.dep }}</div>
+                                        <div class="flex-1 px-4 flex flex-col items-center">
+                                            <div class="h-0.5 w-full bg-[#E0E0E0] relative rounded-full border-t border-dashed border-[#BDBDBD]"><i class="fa-solid fa-plane text-[#BDBDBD] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs"></i></div>
                                         </div>
-                                        <div class="flex justify-between text-xs font-bold bg-[#F5F5F5] p-3 rounded-xl text-[#757575] border border-dashed border-[#E0E0E0]">
-                                            <span>HKG → JP ({{ activeTrip.flights.out.code }})</span>
-                                            <span>{{ activeTrip.flights.out.date }}</span>
-                                        </div>
-                                        <a :href="`https://www.google.com/search?q=${activeTrip.flights.out.code}+flight+status`" target="_blank" class="block w-full text-center py-2 mt-2 rounded-lg border border-dashed border-[#A1887F] text-[#5D4037] text-xs font-bold hover:bg-[#F5F5F5] transition-colors bg-white">
-                                            <i class="fa-solid fa-magnifying-glass mr-1"></i> 🔍 查看實時起降 (HKG)
-                                        </a>
+                                        <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.out.arr }}</div>
                                     </div>
-                                    <div class="border-t-2 border-dashed border-[#E0E0E0]"></div>
-                                    <div>
-                                        <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-pink-400 mr-1"></span>回程 (JST)</div>
-                                        <div class="flex justify-between items-center mb-2">
-                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.dep }}</div>
-                                            <div class="flex-1 px-4 flex flex-col items-center">
-                                                <div class="h-0.5 w-full bg-[#E0E0E0] relative rounded-full border-t border-dashed border-[#BDBDBD]"><i class="fa-solid fa-plane text-[#BDBDBD] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs" style="transform: translate(-50%, -50%) rotate(180deg);"></i></div>
-                                            </div>
-                                            <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.arr }}</div>
-                                        </div>
-                                        <div class="flex justify-between text-xs font-bold bg-[#F5F5F5] p-3 rounded-xl text-[#757575] border border-dashed border-[#E0E0E0]">
-                                            <span>JP → HKG ({{ activeTrip.flights.in.code }})</span>
-                                            <span>{{ activeTrip.flights.in.date }}</span>
-                                        </div>
-                                        <a :href="`https://www.google.com/search?q=${activeTrip.flights.in.code}+flight+status`" target="_blank" class="block w-full text-center py-2 mt-2 rounded-lg border border-dashed border-[#A1887F] text-[#5D4037] text-xs font-bold hover:bg-[#F5F5F5] transition-colors bg-white">
-                                            <i class="fa-solid fa-magnifying-glass mr-1"></i> 🔍 查看實時起降 (NRT)
-                                        </a>
+                                    <div class="flex justify-between text-xs font-bold bg-[#F5F5F5] p-3 rounded-xl text-[#757575] border border-dashed border-[#E0E0E0]">
+                                        <span>HKG → JP ({{ activeTrip.flights.out.code }})</span>
+                                        <span>{{ activeTrip.flights.out.date }}</span>
                                     </div>
+                                    <a :href="`https://www.google.com/search?q=${activeTrip.flights.out.code}+flight+status`" target="_blank" class="block w-full text-center py-2 mt-2 rounded-lg border border-dashed border-[#A1887F] text-[#5D4037] text-xs font-bold hover:bg-[#F5F5F5] transition-colors bg-white">
+                                        <i class="fa-solid fa-magnifying-glass mr-1"></i> 🔍 查看實時起降 (HKG)
+                                    </a>
+                                </div>
+                                <div class="border-t-2 border-dashed border-[#E0E0E0]"></div>
+                                <div>
+                                    <div class="text-[10px] font-bold text-[#A1887F] mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-pink-400 mr-1"></span>回程 (JST)</div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.dep }}</div>
+                                        <div class="flex-1 px-4 flex flex-col items-center">
+                                            <div class="h-0.5 w-full bg-[#E0E0E0] relative rounded-full border-t border-dashed border-[#BDBDBD]"><i class="fa-solid fa-plane text-[#BDBDBD] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs" style="transform: translate(-50%, -50%) rotate(180deg);"></i></div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-[#5D4037]">{{ activeTrip.flights.in.arr }}</div>
+                                    </div>
+                                    <div class="flex justify-between text-xs font-bold bg-[#F5F5F5] p-3 rounded-xl text-[#757575] border border-dashed border-[#E0E0E0]">
+                                        <span>JP → HKG ({{ activeTrip.flights.in.code }})</span>
+                                        <span>{{ activeTrip.flights.in.date }}</span>
+                                    </div>
+                                    <a :href="`https://www.google.com/search?q=${activeTrip.flights.in.code}+flight+status`" target="_blank" class="block w-full text-center py-2 mt-2 rounded-lg border border-dashed border-[#A1887F] text-[#5D4037] text-xs font-bold hover:bg-[#F5F5F5] transition-colors bg-white">
+                                        <i class="fa-solid fa-magnifying-glass mr-1"></i> 🔍 查看實時起降 (NRT)
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -515,7 +513,7 @@
                     showModal: false, showSettings: false, alarmsOpen: true, newShopItem: '',
                     exchangeRate: 0.053, calcJpy: '', calcHkd: '',
                     weather: { city_name: '', temp: '--', feels_like: '--', icon: 'fa-spinner fa-spin' },
-                    apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4', 
+                    apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4', // User Private Key
                     settings: { themeColor: 'pink', effect: 'flower', fontSize: 14 },
                     themes: { pink: { main: '#F48FB1', bg: '#FFF0F5' }, orange: { main: '#FFB74D', bg: '#FFF8E1' } },
 
@@ -524,7 +522,6 @@
                             id: 'karuizawa', name: '東京櫻花之旅 2026', date: '2026-04-18', range: 'Apr 18 - 25, 2026',
                             theme: 'pink', effect: 'flower', headerImg: './header_karuizawa.jpg',
                             docLink: 'https://docs.google.com/document/d/1-4mgjTycE9bGWhuitIkigPSM4_0fBPlZX2RoVRCTlXw/edit?usp=drivesdk',
-                            weatherCity: 'Tokyo,JP',
                             flights: { out: { code: 'CX524', date: '4/18', dep: '01:30', arr: '06:40' }, in: { code: 'CX501', date: '4/25', dep: '21:30', arr: '02:00' } },
                             rental: {
                                 company: 'Toyota Rent a Car', pickupDate: '4/20', pickupTime: '09:30', pickupLocName: 'T-CAT (水天宮)',
@@ -533,22 +530,26 @@
                             hotels: [
                                 { name: 'VIA INN PRIME 日本橋人形町', dates: '4/18 - 4/20' },
                                 { name: 'Toyoko Inn 佐久平站淺間口', dates: '4/20 - 4/22' },
-                                { name: '八重翠東京酒店', dates: '4/22 - 4/25' }
+                                { name: '八重翠東京酒店 (Yaenomidori)', dates: '4/22 - 4/25' }
                             ],
                             alarms: [
-                                { date: '出發前', task: 'Klook Book 機場包車 (Alphard)' }, 
+                                { date: '出發前', task: '預訂 Klook 機場行李運送/包車' }, 
                                 { date: '1/20', task: 'Book 輕井澤燒肉 (ろぐ亭)' }
                             ],
                             shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
                             expenses: [],
                             days: [
+                                // V120 Updated Day 1 (4/18)
                                 { weekday: 'Sat', dateStr: '4/18', events: [
                                     { time: '06:40', title: '抵達成田 (NRT)', desc: '橙色櫃台買飛去 T-CAT', category: 'flight', transportType: 'flight', location: 'Narita Airport' },
                                     { time: '07:45', title: '利木津巴士 (Limousine Bus)', desc: '前往 T-CAT (水天宮前)\n⚠️ 多行李必搭！', category: 'transport', transportType: 'bus', travelTime: '75 min (60km)', location: 'T-CAT' },
-                                    { time: '09:00', title: 'Check-in 酒店', desc: 'T-CAT 轉的士 (短途)', category: 'hotel', transportType: 'car', location: 'VIA INN PRIME Nihonbashi' },
-                                    { time: '11:00', title: '利久牛舌 (牛たん炭焼 利久)', desc: '上野 Parco_ya 6F', category: 'food', loc: 'Rikyu Ueno', transportType: 'train', travelTime: '30 min', location: 'Rikyu Ueno' },
-                                    { time: '15:30', title: '龜戶天神社 (Kameido Tenjin)', desc: '紫藤花 (錦糸町行過去)', category: 'sightseeing', loc: 'Kameido Tenjin', transportType: 'train', travelTime: '20 min', location: 'Kameido Tenjin' },
-                                    { time: '17:00', title: '米久本店 (Yonekyu)', desc: '百年牛鍋', category: 'food', loc: 'Yonekyu Honten', transportType: 'walk', travelTime: '10 min', location: 'Yonekyu Honten' }
+                                    { time: '09:00', title: '酒店擺低行李', desc: 'VIA INN PRIME 日本橋人形町\n(T-CAT轉的士/行過去)', category: 'hotel', transportType: 'car', location: 'VIA INN PRIME Nihonbashi' },
+                                    { time: '09:45', title: '上野恩賜公園 / 阿美橫町', desc: '早晨散步去上野公園睇下風景，或者去阿美橫町買士多啤梨！🍓', category: 'sightseeing', loc: 'Ueno Park', transportType: 'train', travelTime: '15 min', location: 'Ueno Park' },
+                                    { time: '11:50', title: '利久牛舌 (牛たん炭焼 利久)', desc: '上野 Parco_ya 6F\n穩陣食 Lunch 👅', category: 'food', loc: 'Rikyu Ueno', transportType: 'walk', travelTime: '10 min', location: 'Rikyu Ueno' },
+                                    { time: '13:50', title: '龜戶天神社 (紫藤花) 🍇', desc: '趁日光影相，補回冇點燈嘅缺憾！', category: 'sightseeing', loc: 'Kameido Tenjin', transportType: 'train', travelTime: '20 min', location: 'Kameido Tenjin' },
+                                    { time: '16:00', title: '新宿御苑 (八重櫻) 🌸', desc: '黃昏光線影婚紗相預演最靚！\n(18:00 閂門)', category: 'sightseeing', loc: 'Shinjuku Gyoen', transportType: 'train', travelTime: '35 min', location: 'Shinjuku Gyoen' },
+                                    { time: '18:30', title: '淺草雷門 📸', desc: '食飯前仲有時間，影張無人嘅雷門夜景！', category: 'sightseeing', loc: 'Kaminarimon', transportType: 'train', travelTime: '40 min', location: 'Kaminarimon' },
+                                    { time: '19:30', title: '平城苑 浅草総本店 🥩', desc: '✨ <span class="highlight-red">已預約: 19:30</span>\n準時入座，唔使排隊，慢慢嘆頂級和牛大餐！', category: 'highlight', loc: 'Heijoen Asakusa', transportType: 'walk', travelTime: '5 min', location: 'Heijoen Asakusa' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '4/19', events: [
                                     { time: '07:30', title: '出發 Patam', desc: '早起鳥兒有袋買！', category: 'transport', loc: 'Patam Asakusa', transportType: 'train', travelTime: '15 min', location: 'Patam Asakusa' },
@@ -698,6 +699,7 @@
                     const trip = this.activeTrip;
                     const idx = this.selectedDayIndex;
 
+                    // 100% 精準天氣定位切換
                     if (trip.id === 'karuizawa') {
                         switch(idx) {
                             case 0: query = 'Tokyo,JP'; displayName = '東京'; break;
@@ -742,18 +744,41 @@
                     })
                     .catch(() => { this.weather.temp = '--'; });
                 },
-                getCountdown(dateString) { const target = new Date(dateString); const now = new Date(); return Math.ceil((target - now) / (1000 * 60 * 60 * 24)); },
-                itemCategoryName(cat) { const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班', ticket: '門票', highlight: '紀念日', other: '行程' }; return map[cat] || '其他'; },
-                getTransportIcon(type) { const map = { walk: 'fa-person-walking', train: 'fa-train-subway', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
-                getTabClass(tab) { return this.activeTab === tab ? `text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center transform scale-110 transition-all` : `bg-white/90 w-8 h-8 rounded-full shadow flex items-center justify-center hover:bg-white transition-all`; },
-                getTabStyle(tab) { return this.activeTab === tab ? { backgroundColor: this.currentTheme.main } : { color: this.currentTheme.main }; },
-                openMap(loc) { let query = loc; if (!query.includes('Japan')) query += ', Japan'; window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank'); },
+                getCountdown(dateString) {
+                    const target = new Date(dateString);
+                    const now = new Date();
+                    const diff = target - now;
+                    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+                },
+                itemCategoryName(cat) {
+                    const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班', ticket: '門票', highlight: '紀念日', other: '行程' };
+                    return map[cat] || '其他';
+                },
+                getTransportIcon(type) {
+                    const map = { walk: 'fa-person-walking', train: 'fa-train-subway', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane' };
+                    return `fa-solid ${map[type] || 'fa-arrow-right'}`;
+                },
+                getTabClass(tab) {
+                    return this.activeTab === tab 
+                        ? `text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center transform scale-110 transition-all` 
+                        : `bg-white/90 w-8 h-8 rounded-full shadow flex items-center justify-center hover:bg-white transition-all`;
+                },
+                getTabStyle(tab) {
+                    return this.activeTab === tab ? { backgroundColor: this.currentTheme.main } : { color: this.currentTheme.main };
+                },
+                openMap(loc) { if(loc) { let query = loc; if (!query.includes('Japan')) query += ', Japan'; window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank'); } },
                 openDoc() { window.open(this.activeTrip.docLink, '_blank'); },
                 addShoppingItem() { if(this.newShopItem) this.activeTrip.shopping.push(this.newShopItem); this.newShopItem = ''; },
                 removeShoppingItem(idx) { this.activeTrip.shopping.splice(idx, 1); },
                 openAddModal() { this.showModal = true; },
-                confirmAdd() { if(this.newItem.title) { this.activeTrip.days[this.selectedDayIndex].events.push({...this.newItem}); } this.showModal = false; },
-                formatText(text) { return text; },
+                confirmAdd() { 
+                    if(this.newItem.title) { 
+                        this.activeTrip.days[this.selectedDayIndex].events.push({...this.newItem}); 
+                        this.newItem = { title: '', time: '12:00', category: 'sightseeing' };
+                    } 
+                    this.showModal = false; 
+                },
+                formatText(text) { return text ? text.replace(/\n/g, '<br>') : ''; },
                 toggleAlarms() { this.alarmsOpen = !this.alarmsOpen; }
             }
         }).mount('#app');
