@@ -292,12 +292,11 @@
                                 <div class="bg-[#FAFAFA] p-3 rounded-lg border border-dashed border-[#E0E0E0]">
                                     <ol class="list-decimal pl-4 space-y-1 text-gray-600 text-xs">
                                         <li><b>預訂：</b> 去 Klook 搜尋「東京機場接送」，揀「市區酒店 ➔ 成田機場」，車型揀「舒適型 7人座 (Alphard)」。</li>
-                                        <li><b>時間：</b> 建議 Book <b>16:30</b> 或 <b>17:00</b> 喺「八重翠酒店」上車。</li>
+                                        <li><b>時間：</b> 建議 Book <b>17:00</b> 喺「八重翠酒店」上車 (確保唔會趕)。</li>
                                         <li><b>Day 8 朝早：</b> Check-out 擺低行李喺酒店，兩手揈揈去食 Manten Sushi 同 Shopping。</li>
-                                        <li><b>Day 8 傍晚：</b> 16:00 左右搭車/的士返酒店，舒舒服服上 Alphard 直達機場！</li>
+                                        <li><b>Day 8 傍晚：</b> 16:30 左右搭車/的士返酒店，舒舒服服上 Alphard 直達機場！</li>
                                     </ol>
                                 </div>
-                                <p class="text-xs text-[#E65100]">💡 <b>溫馨提示：</b>雖然 Klook 運送行李平少少 ($632)，但包車 ($824) 差唔多錢，仲可以慳返你哋自己搭 N'EX 嘅車費同搬行李嘅體力！</p>
                             </div>
                         </div>
 
@@ -368,7 +367,7 @@
                             <div class="p-5 space-y-4 text-sm bg-white">
                                 <div class="flex justify-between items-center border-b border-dashed border-[#E0E0E0] pb-2">
                                     <span class="text-[#90A4AE] text-xs">預約號碼</span>
-                                    <span class="text-xl font-black text-[#1565C0] tracking-widest">{{ activeTrip.rental.no || '預約中' }}</span>
+                                    <span class="text-xl font-black text-[#1565C0] tracking-widest">{{ activeTrip.rental.no || '待確認' }}</span>
                                 </div>
                                 <div class="flex gap-3">
                                     <div class="flex-1 bg-[#F1F8E9] p-3 rounded-xl border border-dashed border-[#DCEDC8] text-center">
@@ -513,7 +512,7 @@
                     showModal: false, showSettings: false, alarmsOpen: true, newShopItem: '',
                     exchangeRate: 0.053, calcJpy: '', calcHkd: '',
                     weather: { city_name: '', temp: '--', feels_like: '--', icon: 'fa-spinner fa-spin' },
-                    apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4', // User Private Key
+                    apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4', 
                     settings: { themeColor: 'pink', effect: 'flower', fontSize: 14 },
                     themes: { pink: { main: '#F48FB1', bg: '#FFF0F5' }, orange: { main: '#FFB74D', bg: '#FFF8E1' } },
 
@@ -525,7 +524,7 @@
                             flights: { out: { code: 'CX524', date: '4/18', dep: '01:30', arr: '06:40' }, in: { code: 'CX501', date: '4/25', dep: '21:30', arr: '02:00' } },
                             rental: {
                                 company: 'Toyota Rent a Car', pickupDate: '4/20', pickupTime: '09:30', pickupLocName: 'T-CAT (水天宮)',
-                                returnDate: '4/22', returnTime: '17:00', returnLocName: 'T-CAT (水天宮)', pickupLoc: 'Toyota Rent a Car T-CAT', insurance: 'NOC 安心保險', no: '98147748300', note: 'SERENA e-POWER'
+                                returnDate: '4/22', returnTime: '17:00', returnLocName: 'T-CAT (水天宮)', pickupLoc: 'Toyota Rent a Car T-CAT', insurance: 'NOC 安心保險', no: '待確認', note: '車型: Toyota 休旅 (如 Sienta/Voxy) \n⚠️ 請核對預約單！'
                             },
                             hotels: [
                                 { name: 'VIA INN PRIME 日本橋人形町', dates: '4/18 - 4/20' },
@@ -533,23 +532,22 @@
                                 { name: '八重翠東京酒店 (Yaenomidori)', dates: '4/22 - 4/25' }
                             ],
                             alarms: [
-                                { date: '出發前', task: '預訂 Klook 機場行李運送/包車' }, 
-                                { date: '1/20', task: 'Book 輕井澤燒肉 (ろぐ亭)' }
+                                { date: '出發前', task: '確認 Toyota 租車車型！' }, 
+                                { date: '出發前', task: 'Klook 預訂包車 (Alphard)' }
                             ],
                             shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
                             expenses: [],
                             days: [
-                                // V120 Updated Day 1 (4/18)
                                 { weekday: 'Sat', dateStr: '4/18', events: [
                                     { time: '06:40', title: '抵達成田 (NRT)', desc: '橙色櫃台買飛去 T-CAT', category: 'flight', transportType: 'flight', location: 'Narita Airport' },
                                     { time: '07:45', title: '利木津巴士 (Limousine Bus)', desc: '前往 T-CAT (水天宮前)\n⚠️ 多行李必搭！', category: 'transport', transportType: 'bus', travelTime: '75 min (60km)', location: 'T-CAT' },
-                                    { time: '09:00', title: '酒店擺低行李', desc: 'VIA INN PRIME 日本橋人形町\n(T-CAT轉的士/行過去)', category: 'hotel', transportType: 'car', location: 'VIA INN PRIME Nihonbashi' },
-                                    { time: '09:45', title: '上野恩賜公園 / 阿美橫町', desc: '早晨散步去上野公園睇下風景，或者去阿美橫町買士多啤梨！🍓', category: 'sightseeing', loc: 'Ueno Park', transportType: 'train', travelTime: '15 min', location: 'Ueno Park' },
+                                    { time: '09:00', title: '酒店擺低行李', desc: 'VIA INN PRIME 日本橋人形町', category: 'hotel', transportType: 'car', location: 'VIA INN PRIME Nihonbashi' },
+                                    { time: '09:45', title: '上野恩賜公園 / 阿美橫町', desc: '早晨散步睇櫻花，或者去阿美橫町買士多啤梨！🍓', category: 'sightseeing', loc: 'Ueno Park', transportType: 'train', travelTime: '15 min', location: 'Ueno Park' },
                                     { time: '11:50', title: '利久牛舌 (牛たん炭焼 利久)', desc: '上野 Parco_ya 6F\n穩陣食 Lunch 👅', category: 'food', loc: 'Rikyu Ueno', transportType: 'walk', travelTime: '10 min', location: 'Rikyu Ueno' },
                                     { time: '13:50', title: '龜戶天神社 (紫藤花) 🍇', desc: '趁日光影相，補回冇點燈嘅缺憾！', category: 'sightseeing', loc: 'Kameido Tenjin', transportType: 'train', travelTime: '20 min', location: 'Kameido Tenjin' },
-                                    { time: '16:00', title: '新宿御苑 (八重櫻) 🌸', desc: '黃昏光線影婚紗相預演最靚！\n(18:00 閂門)', category: 'sightseeing', loc: 'Shinjuku Gyoen', transportType: 'train', travelTime: '35 min', location: 'Shinjuku Gyoen' },
-                                    { time: '18:30', title: '淺草雷門 📸', desc: '食飯前仲有時間，影張無人嘅雷門夜景！', category: 'sightseeing', loc: 'Kaminarimon', transportType: 'train', travelTime: '40 min', location: 'Kaminarimon' },
-                                    { time: '19:30', title: '平城苑 浅草総本店 🥩', desc: '✨ <span class="highlight-red">已預約: 19:30</span>\n準時入座，唔使排隊，慢慢嘆頂級和牛大餐！', category: 'highlight', loc: 'Heijoen Asakusa', transportType: 'walk', travelTime: '5 min', location: 'Heijoen Asakusa' }
+                                    { time: '16:00', title: '新宿御苑 (八重櫻) 🌸', desc: '黃昏光線影婚紗相預演！(18:00 閂門)', category: 'sightseeing', loc: 'Shinjuku Gyoen', transportType: 'train', travelTime: '35 min', location: 'Shinjuku Gyoen' },
+                                    { time: '18:30', title: '淺草雷門 📸', desc: '食飯前影張無人嘅雷門夜景！', category: 'sightseeing', loc: 'Kaminarimon', transportType: 'train', travelTime: '40 min', location: 'Kaminarimon' },
+                                    { time: '19:30', title: '平城苑 浅草総本店 🥩', desc: '✨ <span class="highlight-red">已預約: 19:30</span>\n準時入座，慢慢嘆頂級和牛！', category: 'highlight', loc: 'Heijoen Asakusa', transportType: 'walk', travelTime: '5 min', location: 'Heijoen Asakusa' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '4/19', events: [
                                     { time: '07:30', title: '出發 Patam', desc: '早起鳥兒有袋買！', category: 'transport', loc: 'Patam Asakusa', transportType: 'train', travelTime: '15 min', location: 'Patam Asakusa' },
@@ -560,22 +558,23 @@
                                 ]},
                                 { weekday: 'Mon', dateStr: '4/20', events: [
                                     { time: '09:00', title: 'Check-out', desc: '行去 T-CAT', category: 'other', loc: 'T-CAT', transportType: 'walk', travelTime: '10 min', location: 'T-CAT' },
-                                    { time: '09:30', title: '取車', desc: 'Toyota T-CAT', category: 'transport', loc: 'Toyota Rent a Car T-CAT', transportType: 'walk', location: 'Toyota Rent a Car T-CAT' },
+                                    { time: '09:30', title: '取車', desc: 'Toyota T-CAT\n⚠️ 核對車型', category: 'transport', loc: 'Toyota Rent a Car T-CAT', transportType: 'walk', location: 'Toyota Rent a Car T-CAT' },
                                     { time: '10:30', title: '三芳 PA', desc: '休息站', category: 'transport', loc: 'Miyoshi PA', transportType: 'car', travelTime: '60 min', mapcode: '33 444 555*66', location: 'Miyoshi PA' },
-                                    { time: '13:00', title: '輕井澤午餐', desc: 'Option A: 川上庵\nOption B: 村民食堂', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '90 min', mapcode: '292 701 462*82', location: 'Karuizawa Hoshino Area' },
+                                    { time: '13:00', title: 'ろぐ亭 (Rogotei) 燒肉', desc: '⚠️ <span class="highlight-red">逢星期二、三休息，只能今日食！</span>\n午餐時間: 11:00 - 14:00', category: 'food', loc: 'Rogotei', transportType: 'car', travelTime: '90 min', location: 'Rogotei', mapcode: '292 673 483*66' },
                                     { time: '14:30', title: 'Outlet Shopping', desc: 'MC: 292 677 245*55 (泊 P7)', category: 'shopping', loc: 'Prince Shopping Plaza', transportType: 'car', travelTime: '20 min', mapcode: '292 677 245*55', location: 'Prince Shopping Plaza' },
                                     { time: '18:00', title: 'Check-in (Toyoko Inn)', category: 'hotel', loc: 'Toyoko Inn Sakudaira', transportType: 'car', travelTime: '40 min', mapcode: '85 748 837*33', phone: '0267-66-1045', location: 'Toyoko Inn Sakudaira' }
                                 ]},
                                 { weekday: 'Tue', dateStr: '4/21', events: [
                                     { time: '08:00', title: 'Pre-wedding', desc: '全日拍攝 (自駕移動)', category: 'highlight', loc: 'Karuizawa', transportType: 'car', travelTime: '全日', location: 'Karuizawa' },
-                                    { time: '19:00', title: '慶功晚餐', desc: '川上庵 或 燒肉', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '15 min', location: 'Karuizawa' },
+                                    { time: '19:00', title: '慶功晚餐', desc: '川上庵 (Soba) 或 其他餐廳\n(注意: ろぐ亭今日休息)', category: 'food', loc: 'Karuizawa', transportType: 'car', travelTime: '15 min', location: 'Karuizawa' },
                                     { time: '21:00', title: '回程酒店', category: 'hotel', desc: '休息', transportType: 'car', location: 'Toyoko Inn Sakudaira' }
                                 ]},
                                 { weekday: 'Wed', dateStr: '4/22', events: [
                                     { time: '10:00', title: '白絲瀑布', desc: 'MC: 292 701 645*63', category: 'sightseeing', loc: 'Shiraito Falls', transportType: 'car', travelTime: '45 min', mapcode: '292 701 645*63', location: 'Shiraito Falls' },
-                                    { time: '11:00', title: 'ろぐ亭 (Rogotei) 燒肉', desc: '午餐', category: 'food', loc: 'Rogotei', transportType: 'car', travelTime: '30 min', location: 'Rogotei', mapcode: '292 673 483*66' },
-                                    { time: '12:30', title: '舊輕井澤銀座通', desc: '掃街', category: 'sightseeing', loc: 'Kyu-Karuizawa Ginza', transportType: 'car', travelTime: '15 min', location: 'Kyu-Karuizawa Ginza' },
-                                    { time: '17:00', title: '東京還車', desc: 'T-CAT', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '2.5 hr', location: 'T-CAT' },
+                                    { time: '11:30', title: '村民食堂 或 川上庵', desc: '午餐 (星野區)\n⚠️ ろぐ亭今日定休，改食呢度！', category: 'food', loc: 'Sonmin Shokudo', transportType: 'car', travelTime: '20 min', location: 'Karuizawa Hoshino Area', mapcode: '292 701 462*82' },
+                                    { time: '13:00', title: '舊輕井澤銀座通', desc: '掃街', category: 'sightseeing', loc: 'Kyu-Karuizawa Ginza', transportType: 'car', travelTime: '15 min', location: 'Kyu-Karuizawa Ginza' },
+                                    { time: '14:30', title: '出發回東京', desc: '準備還車', category: 'transport', loc: 'T-CAT', transportType: 'car', travelTime: '2.5 hr', location: 'T-CAT' },
+                                    { time: '17:00', title: '東京還車 (Toyota T-CAT)', desc: '營業時間至 20:00', category: 'transport', loc: 'T-CAT', transportType: 'car', location: 'T-CAT' },
                                     { time: '18:00', title: 'Check-in (八重翠)', category: 'hotel', loc: 'Yaekit', transportType: 'walk', location: 'Yaekit' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '4/23', events: [
@@ -592,11 +591,11 @@
                                 { weekday: 'Sat', dateStr: '4/25', events: [
                                     { time: '09:00', title: '寄放行李 🧳', desc: 'Check-out 將篋留喺酒店大堂', category: 'other', loc: 'Yaekit', transportType: 'walk', location: 'Yaekit' },
                                     { time: '10:00', title: '東京站一番街', desc: '買手信', category: 'shopping', loc: 'Tokyo Station', transportType: 'walk', travelTime: '15 min', location: 'Tokyo Station' },
-                                    { time: '11:00', title: 'まんてん鮨 (Manten Sushi)', desc: '丸之內店\n✨ <span class="highlight-red">已預約: 11:00 (結婚紀念日)</span>', category: 'highlight', loc: 'Manten Sushi Marunouchi', transportType: 'walk', travelTime: '10 min', location: 'Manten Sushi Marunouchi' },
+                                    { time: '11:00', title: 'まんてん鮨 (Manten Sushi)', desc: '丸之內店\n✨ <span class="highlight-red">已預約: 11:00 (約會紀念日)</span>', category: 'highlight', loc: 'Manten Sushi Marunouchi', transportType: 'walk', travelTime: '10 min', location: 'Manten Sushi Marunouchi' },
                                     { time: '13:00', title: '銀座 / 丸之內 Shopping', desc: '無行李負擔，瘋狂行街！', category: 'shopping', loc: 'Ginza', transportType: 'walk', location: 'Ginza' },
                                     { time: '16:00', title: '返回酒店', desc: '返酒店準備上車', category: 'transport', loc: 'Yaekit', transportType: 'walk', location: 'Yaekit' },
-                                    { time: '16:30', title: 'Klook 專車前往機場 🚗💨', desc: '酒店門口上車，直達成田 T2 (約 1-1.5hr)', category: 'transport', loc: 'Narita Airport', transportType: 'car', travelTime: '1.5 hr', location: 'Narita Airport' },
-                                    { time: '18:00', title: '到達機場 (CX501)', desc: '21:30 起飛', category: 'flight', loc: 'Narita Airport', transportType: 'walk', location: 'Narita Airport' }
+                                    { time: '17:00', title: 'Klook 專車前往機場 🚗💨', desc: '✨ <span class="highlight-red">已預約: Alphard 7人車</span>\n直達成田 T2 (約 1.5hr)', category: 'transport', loc: 'Narita Airport', transportType: 'car', travelTime: '1.5 hr', location: 'Narita Airport' },
+                                    { time: '18:30', title: '到達機場 (CX501)', desc: '21:30 起飛', category: 'flight', loc: 'Narita Airport', transportType: 'walk', location: 'Narita Airport' }
                                 ]}
                             ]
                         },
