@@ -218,18 +218,22 @@
 
                         <div class="onsen-card border-2 dashed border-[#CE93D8]" v-if="currentTrip === 'karuizawa'">
                             <div class="p-4 font-bold flex justify-between text-sm" style="background-color: #F3E5F5; color: #6A1B9A;">
-                                <span><i class="fa-solid fa-car-side mr-2"></i>Klook 機場包車攻略 (Alphard)</span>
+                                <span><i class="fa-solid fa-car-side mr-2"></i>KKday 專車送機憑證 (Alphard)</span>
                             </div>
                             <div class="p-4 text-sm bg-white space-y-3">
-                                <p class="text-[#5D4037] font-bold">有 4 個大篋，Book 包車去機場最抵最舒服！(約 HK$824)</p>
-                                <div class="bg-[#FAFAFA] p-3 rounded-lg border border-dashed border-[#E0E0E0]">
-                                    <ol class="list-decimal pl-4 space-y-1 text-gray-600 text-xs">
-                                        <li><b>預訂：</b> 去 Klook 搜尋「東京機場接送」，揀「市區酒店 ➔ 成田機場」，車型揀「舒適型 7人座 (Alphard)」。</li>
-                                        <li><b>時間：</b> 建議 Book <b>17:00</b> 喺「八重翠酒店」上車 (確保唔會趕)。</li>
-                                        <li><b>Day 8 朝早：</b> Check-out 擺低行李喺酒店，兩手揈揈去食 Manten Sushi 同 Shopping。</li>
-                                        <li><b>Day 8 傍晚：</b> 16:30 左右搭車/的士返酒店，舒舒服服由老公扶你上 Alphard 直達機場！</li>
-                                    </ol>
+                                <div class="flex justify-between items-center border-b border-dashed border-[#E0E0E0] pb-2">
+                                    <span class="text-[#90A4AE] text-xs">訂單編號</span>
+                                    <span class="text-base font-black text-[#6A1B9A] tracking-wider">RZ260403OY6221</span>
                                 </div>
+                                <div class="bg-[#FAFAFA] p-3 rounded-lg border border-dashed border-[#E0E0E0]">
+                                    <ul class="space-y-2 text-gray-600 text-xs">
+                                        <li><b><i class="fa-solid fa-calendar-day w-4 text-center"></i> 日期：</b> 2026-04-25</li>
+                                        <li><b><i class="fa-solid fa-car w-4 text-center"></i> 車型：</b> Toyota Alphard (6人座)</li>
+                                        <li><b><i class="fa-solid fa-route w-4 text-center"></i> 路線：</b> 東京市區 ➔ 成田機場 (NRT)</li>
+                                        <li><b><i class="fa-solid fa-user w-4 text-center"></i> 聯絡人：</b> Tsz Wang Tang</li>
+                                    </ul>
+                                </div>
+                                <p class="text-[#5D4037] text-[10px] text-center mt-2 font-bold opacity-70">⚠️ 請將電子憑證寄送至 Email 信箱，並於現場出示。</p>
                             </div>
                         </div>
 
@@ -437,7 +441,7 @@
                             rental: { company: 'Toyota Rent a Car', pickupDate: '4/20', pickupTime: '09:30', pickupLocName: 'T-CAT (水天宮)', returnDate: '4/22', returnTime: '17:00', returnLocName: 'T-CAT (水天宮)', no: '待確認', note: '車型: Toyota 私家車/休旅車 \n⚠️ 請核對預約單！' },
                             hotels: [ { name: 'VIA INN PRIME 日本橋人形町', dates: '4/18 - 4/20' }, { name: 'Toyoko Inn 佐久平站淺間口', dates: '4/20 - 4/22' }, { name: '八重翠東京酒店 (Yaenomidori)', dates: '4/22 - 4/25' } ],
                             hotelMap: { 0: 0, 1: 0, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2 },
-                            alarms: [ { date: '出發前', task: '確認 Toyota 租車車型！' }, { date: '出發前', task: 'Klook 預訂包車 (Alphard)' } ],
+                            alarms: [ { date: '出發前', task: '確認 Toyota 租車車型！' } ],
                             shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
                             expenses: [],
                             diningList: [
@@ -512,7 +516,8 @@
                                     { time: '11:00', title: 'まんてん鮨 (Manten Sushi)', desc: '丸之內店\n✨ 已預約: 11:00 (約會紀念日)', category: 'highlight', transportType: 'walk', travelTime: '10 min', loc: 'Manten Sushi Marunouchi', phone: '03-6269-9100' },
                                     { time: '13:00', title: '銀座 / 丸之內 Shopping', desc: '無行李負擔，瘋狂行街！', category: 'shopping', transportType: 'walk', loc: 'Ginza' },
                                     { time: '16:00', title: '返回酒店', desc: '返酒店準備上車', category: 'transport', transportType: 'walk', loc: 'Yaenomidori Tokyo' },
-                                    { time: '17:00', title: 'Klook 專車前往機場 🚗💨', desc: '✨ 已預約: Alphard 7人車\n直達成田 T2 (約 1.5hr)', category: 'transport', transportType: 'car', travelTime: '1.5 hr', loc: 'Narita Airport' },
+                                    // 🌟 娘娘嘅最新專車 Update 喺呢度呀！
+                                    { time: '17:00', title: 'KKday 專車前往機場 🚗💨', desc: '✨ 已預約: Toyota Alphard (6人座)\n直達成田 T2 (約 1.5hr)', action: '📝 訂單編號: RZ260403OY6221\n👤 聯絡人: Tsz Wang Tang', category: 'transport', transportType: 'car', travelTime: '1.5 hr', loc: 'Narita Airport' },
                                     { time: '18:30', title: '到達機場 (CX501)', desc: '21:30 起飛', category: 'flight', transportType: 'walk', loc: 'Narita Airport' }
                                 ]}
                             ]
