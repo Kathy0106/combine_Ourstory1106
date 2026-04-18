@@ -208,6 +208,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="onsen-card border-2 dashed select-none" :style="{ borderColor: currentTheme.borderLight }">
+                            <div class="p-4 flex justify-between items-center cursor-pointer transition-colors hover:opacity-80 active:opacity-60" 
+                                 @click.stop.prevent="toggleAlarms"
+                                 :style="{ color: currentTheme.accentMain, backgroundColor: currentTheme.bgMain }">
+                                <span class="text-sm font-bold"><i class="fa-regular fa-bell mr-2"></i>關鍵行動鬧鐘 (Click Me)</span>
+                                <i :class="['fa-solid text-xs transition-transform duration-300', alarmsOpen ? 'fa-chevron-up' : 'fa-chevron-down']"></i>
+                            </div>
+                            <transition name="accordion">
+                                <div v-show="alarmsOpen" class="p-4 space-y-3 bg-white">
+                                    <div v-for="(alarm, idx) in currentTripData.alarms" :key="idx" class="flex gap-3 border-b border-dashed pb-2 last:border-0 last:pb-0 items-center" :style="{ borderColor: currentTheme.borderLight }">
+                                        <span class="font-bold text-[10px] text-white px-2 py-0.5 rounded-md min-w-[50px] text-center" :style="{ backgroundColor: currentTheme.accentMain }">{{ alarm.date }}</span> 
+                                        <span class="font-bold text-xs" :style="{ color: currentTheme.textDark }">{{ alarm.task }}</span>
+                                    </div>
+                                </div>
+                            </transition>
+                        </div>
                     </div>
 
                     <div v-if="activeTab === 'shopping'" class="px-5 pt-4">
@@ -266,6 +283,7 @@
                             flights: { out: { code: 'CX524', date: '4/18', dep: '01:30', arr: '06:40' }, in: { code: 'CX501', date: '4/25', dep: '21:30', arr: '02:00' } },
                             hotels: [ { name: 'VIA INN PRIME 日本橋人形町', dates: '4/18 - 4/20' }, { name: 'Toyoko Inn 佐久平站淺間口', dates: '4/20 - 4/22' }, { name: '八重翠東京酒店 (Yaenomidori)', dates: '4/22 - 4/25' } ],
                             hotelMap: { 0: 0, 1: 0, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2 },
+                            alarms: [ { date: '3/20', task: '預約新宿御苑櫻花入場' }, { date: '出發前', task: '確認 Toyota 租車車型！' } ],
                             shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra'],
                             expenses: [],
                             diningList: [
@@ -286,12 +304,12 @@
                                     { time: '17:30', title: '返回酒店休息 🛏️', desc: '返 VIA INN PRIME 放低戰利品，稍作休息充電！', departTime: '17:10', category: 'hotel', transportType: 'train', loc: 'VIA INN PRIME Nihonbashi' },
                                     { time: '19:30', title: '平城苑 浅草総本店 🥩', desc: '✨ 已預約: 19:30\n準時入座，兩公婆慢慢嘆頂級和牛！', departTime: '19:00', category: 'highlight', transportType: 'train', loc: 'Heijoen Asakusa', phone: '03-3843-2914' }
                                 ]},
+                                // ✨✨✨ Day 2 完美升級版喺呢度！ ✨✨✨
                                 { weekday: 'Sun', dateStr: '4/19', events: [
-                                    { time: '10:00', title: 'Cafe 早餐: Bread, Espresso &', desc: '📍 表參道排隊名店 🍞\n必試：法式吐司 (French Toast)！', departTime: '09:30', category: 'food', transportType: 'train', loc: 'Bread, Espresso & Omotesando' },
-                                    { time: '11:30', title: '明治神宮散策 ⛩️', desc: '悠閒散步，最啱攞部電話出嚟種花 (Pikmin Bloom) 🌸', departTime: '11:15', category: 'sightseeing', transportType: 'walk', loc: 'Meiji Jingu' },
-                                    { time: '12:45', title: '表參道/原宿 逛街 🛍️', desc: '睇下有無 山田涼介 相關嘅週邊或最新週邊店！', departTime: '12:30', category: 'shopping', transportType: 'walk', loc: 'Omotesando' },
-                                    { time: '13:30', title: '山笑ふ (Yama Warau)', desc: '表參道店 Shabu Shabu\n✨ 已預約 (結婚紀念日)\n預約號: CCNCAS', departTime: '13:20', category: 'highlight', transportType: 'walk', loc: 'Yama Warau Omotesando', phone: '03-5413-6625' },
-                                    { time: '15:30', title: 'Harakado', desc: '7F 屋頂花園', departTime: '15:15', category: 'sightseeing', transportType: 'walk', loc: 'Harakado' },
+                                    { time: '09:15', title: 'Cafe 早餐: Butter 🥞', desc: '食超人氣 Butter 梳乎厘班戟做完美早餐！\n食飽充滿力量出發！', departTime: '08:30', category: 'food', transportType: 'train', loc: 'Butter' },
+                                    { time: '10:45', title: '新宿御苑賞晚櫻 🌸', desc: '明治神宮本身係冇櫻花㗎，所以改去新宿御苑！4月中下旬仲有「八重櫻」同晚開櫻花，最啱瘋狂影相兼開 Pikmin Bloom 狂種花執大苗！🌱', departTime: '10:20', action: '⚠️ 櫻花季星期日可能需要上網提早預約入場，記得留意官網！', category: 'sightseeing', transportType: 'train', loc: 'Shinjuku Gyoen' },
+                                    { time: '13:30', title: '山笑ふ (Yama Warau)', desc: '表參道店 Shabu Shabu\n✨ 已預約 (結婚紀念日)\n預約號: CCNCAS', departTime: '12:50', category: 'highlight', transportType: 'train', loc: 'Yama Warau Omotesando', phone: '03-5413-6625' },
+                                    { time: '15:30', title: '表參道 / Harakado 🛍️', desc: '食飽去 7F 屋頂花園打卡！\n附近仲可以留意下有無 山田涼介 相關嘅快閃店或者 Super Junior 嘅週邊！', departTime: '15:15', category: 'shopping', transportType: 'walk', loc: 'Harakado' },
                                     { time: '19:00', title: '牛かつもと村', desc: '澀谷分店 炸牛排', departTime: '18:40', category: 'food', transportType: 'walk', loc: 'Gyukatsu Motomura Shibuya', phone: '03-3406-8181' }
                                 ]},
                                 { weekday: 'Mon', dateStr: '4/20', events: [
