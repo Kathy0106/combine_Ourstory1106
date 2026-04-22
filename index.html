@@ -151,6 +151,10 @@
                                             <h3 class="text-lg font-bold mb-1.5 leading-tight" :style="{ color: currentTheme.textDark }" v-html="formatText(item.title)"></h3>
                                             <div class="text-xs mb-2 flex items-start gap-1.5 leading-relaxed whitespace-pre-line" v-if="item.desc" :style="{ color: currentTheme.textDark, opacity: 0.8 }" v-html="formatText(item.desc)"></div>
 
+                                            <div class="mt-2 bg-[#FFF8E1] p-2 rounded-xl border border-dashed border-[#FFE082]" v-if="item.action || item.info">
+                                                <div class="text-[0.7rem] text-[#F57F17] font-bold flex items-start"><i class="fa-solid fa-bell mr-1.5 mt-0.5 text-base flex-shrink-0"></i><span class="leading-relaxed whitespace-pre-line" v-html="formatText(item.action || item.info)"></span></div>
+                                            </div>
+
                                             <div class="flex flex-wrap gap-1.5 mt-2">
                                                 <span v-if="item.departTime" class="text-[0.65rem] px-2 py-1 rounded-lg font-bold flex items-center gap-1 border border-dashed shadow-sm" style="background-color: #FFF3E0; color: #E65100; border-color: #FFCC80;"><i class="fa-solid fa-person-running"></i> 出發: {{ item.departTime }}</span>
                                                 <span v-if="idx < currentItineraryData.length" class="text-[0.65rem] px-2 py-1 rounded-lg font-bold flex items-center gap-1 border border-dashed shadow-sm" :style="{ backgroundColor: currentTheme.bgMain, color: currentTheme.accentMain, borderColor: currentTheme.borderLight }"><i :class="getTransportIcon(item.transportType)"></i> {{ item.travelTime || '移動' }}</span>
@@ -168,6 +172,7 @@
                                             <div v-if="item.mapcode" class="bg-white border-2 rounded-lg p-1.5 text-center shadow-sm" @click.stop :style="{ borderColor: currentTheme.accentMain }">
                                                 <div class="text-[9px] font-bold mb-0.5 uppercase tracking-tighter" :style="{ color: currentTheme.accentMain }">MapCode</div>
                                                 <div class="text-xs font-black text-slate-800 break-all leading-tight mb-1">{{ item.mapcode }}</div>
+                                                <div class="text-white text-[9px] rounded px-1 py-0.5 font-bold cursor-pointer active:scale-95" :style="{ backgroundColor: currentTheme.accentMain }">COPY</div>
                                             </div>
                                         </div>
                                     </div>
@@ -180,6 +185,7 @@
                     </div>
 
                     <div v-if="activeTab === 'info'" class="space-y-5 px-5 pt-4">
+                        
                         <div class="onsen-card" :style="{ border: '2px dashed ' + currentTheme.borderLight }">
                             <div class="p-4 text-white font-bold flex justify-between text-sm" :style="{ backgroundColor: currentTheme.accentMain }">
                                 <span><i class="fa-solid fa-plane mr-2"></i>航班即時資訊 (CX)</span>
@@ -231,6 +237,7 @@
                                         <li><b><i class="fa-solid fa-calendar-day w-4 text-center"></i> 日期：</b> 2026-04-25</li>
                                         <li><b><i class="fa-solid fa-car w-4 text-center"></i> 車型：</b> Toyota Alphard (6人座)</li>
                                         <li><b><i class="fa-solid fa-route w-4 text-center"></i> 路線：</b> 酒店直達 ➔ 成田機場 (NRT)</li>
+                                        <li><b><i class="fa-solid fa-user w-4 text-center"></i> 聯絡人：</b> Tsz Wang Tang</li>
                                     </ul>
                                 </div>
                             </div>
@@ -306,6 +313,23 @@
                                 <span class="text-sm">查看完整 Google Doc 行程</span>
                             </div>
                         </div>
+
+                        <div class="onsen-card border-2 dashed select-none" :style="{ borderColor: currentTheme.borderLight }">
+                            <div class="p-4 flex justify-between items-center cursor-pointer transition-colors hover:opacity-80 active:opacity-60" 
+                                 @click.stop.prevent="toggleAlarms"
+                                 :style="{ color: currentTheme.accentMain, backgroundColor: currentTheme.bgMain }">
+                                <span class="text-sm font-bold"><i class="fa-regular fa-bell mr-2"></i>關鍵行動鬧鐘 (Click Me)</span>
+                                <i :class="['fa-solid text-xs transition-transform duration-300', alarmsOpen ? 'fa-chevron-up' : 'fa-chevron-down']"></i>
+                            </div>
+                            <transition name="accordion">
+                                <div v-show="alarmsOpen" class="p-4 space-y-3 bg-white">
+                                    <div v-for="(alarm, idx) in currentTripData.alarms" :key="idx" class="flex gap-3 border-b border-dashed pb-2 last:border-0 last:pb-0 items-center" :style="{ borderColor: currentTheme.borderLight }">
+                                        <span class="font-bold text-[10px] text-white px-2 py-0.5 rounded-md min-w-[50px] text-center" :style="{ backgroundColor: currentTheme.accentMain }">{{ alarm.date }}</span> 
+                                        <span class="font-bold text-xs" :style="{ color: currentTheme.textDark }">{{ alarm.task }}</span>
+                                    </div>
+                                </div>
+                            </transition>
+                        </div>
                     </div>
 
                     <div v-if="activeTab === 'shopping'" class="px-5 pt-4">
@@ -324,6 +348,31 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div v-if="activeTab === 'expenses'" class="px-5 pt-4">
+                        <div class="onsen-card p-6 mb-4 text-center border-none text-white" :style="{ backgroundColor: currentTheme.accentMain }">
+                            <p class="text-xs text-white/80 mb-1">二人總花費 (日元)</p>
+                            <div class="text-4xl font-bold mb-1">¥{{ totalExpenses.toLocaleString() }}</div>
+                             <p class="text-[0.65rem] text-white/60">≈ HK$ {{ (totalExpenses * exchangeRate).toFixed(0) }}</p>
+                        </div>
+                        
+                        <div class="onsen-card p-5" :style="{ border: '2px dashed ' + currentTheme.borderLight }">
+                            <h3 class="font-bold mb-3 text-sm" :style="{ color: currentTheme.accentMain }"><i class="fa-solid fa-coins mr-2"></i>匯率換算</h3>
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="flex-1 bg-[#F5F5F5] rounded-xl p-3 flex items-center border border-dashed border-[#E0E0E0]">
+                                    <span class="text-[#A1887F] mr-2 text-xs font-bold">JPY</span>
+                                    <input type="number" v-model="calcJpy" @input="convert('jpy')" class="w-full bg-transparent outline-none font-bold text-lg" :style="{ color: currentTheme.textDark }" placeholder="0">
+                                </div>
+                                <i class="fa-solid fa-arrow-right-arrow-left text-xs" :style="{ color: currentTheme.borderLight }"></i>
+                                <div class="flex-1 bg-[#F5F5F5] rounded-xl p-3 flex items-center border border-dashed border-[#E0E0E0]">
+                                    <span class="text-[#A1887F] mr-2 text-xs font-bold">HKD</span>
+                                    <input type="number" v-model="calcHkd" @input="convert('hkd')" class="w-full bg-transparent outline-none font-bold text-lg" :style="{ color: currentTheme.textDark }" placeholder="0">
+                                </div>
+                            </div>
+                            <div class="text-right text-[10px]" :style="{ color: currentTheme.textLight }">匯率: {{ exchangeRate }}</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -418,9 +467,11 @@
                                     { time: '20:45', title: '🐟 晚餐: お魚總本家', departTime: '20:30', desc: '✨ 返銀座食慶功大餐！', category: 'food', transportType: 'walk', loc: 'Osakana Sohonke Ginza' }
                                 ]},
                                 { weekday: 'Thu', dateStr: '4/23', events: [
-                                    { time: '08:00', title: '出發 Disney', desc: '行去「有樂町/八丁堀」 搭 JR京葉線 -> 「舞濱」\n避開上班時間，早點出發！', departTime: '07:45', category: 'transport', transportType: 'train', travelTime: '45 min', loc: 'Tokyo DisneySea' },
-                                    { time: '08:30', title: 'Disney Sea 🌊', departTime: '08:30', desc: '✨ 門票已買！\n【必搶】 Fantasy Springs Pass！', category: 'ticket', transportType: 'walk', loc: 'Tokyo DisneySea' },
-                                    { time: '20:30', title: '回程酒店 (八重翠)', desc: 'JR京葉線回程', departTime: '20:00', category: 'hotel', transportType: 'train', loc: 'Yaenomidori Tokyo' }
+                                    { time: '06:00', title: '酒店食早餐 🍙', departTime: '06:00', desc: '食尋晚買定嘅早餐！準備 06:45 準時出門！', category: 'food', transportType: 'walk' },
+                                    { time: '06:45', title: '出發 Disney 🚃', departTime: '06:45', desc: '【最遲極限】行去「八丁堀站」搭 JR京葉線，力爭早過第一波人潮！', category: 'transport', transportType: 'train', travelTime: '45 min', loc: 'Tokyo DisneySea' },
+                                    { time: '07:30', title: '抵達 DisneySea 門口 🏰', departTime: '07:30', desc: '安檢兼排隊，霸個靚位等 Rope Drop！', category: 'other', transportType: 'walk', loc: 'Tokyo DisneySea' },
+                                    { time: '08:30', title: '入園第一秒：搶 Pass！📱', departTime: '08:30', desc: '✨ 門票已買！即開 App 搶 Fantasy Springs (冰雪奇緣/小飛俠) Standby Pass！', category: 'ticket', transportType: 'walk', loc: 'Tokyo DisneySea' },
+                                    { time: '20:30', title: '回程酒店休息', departTime: '20:15', category: 'hotel', transportType: 'train', loc: 'Yaenomidori Tokyo' }
                                 ]},
                                 { weekday: 'Fri', dateStr: '4/24', events: [
                                     { time: '09:30', title: '前往豐洲', desc: '【巴士】Tokyo BRT (新橋 -> 豐洲市場前)\n快過海鷗號，平過海鷗號', departTime: '09:15', category: 'transport', transportType: 'bus', travelTime: '15 min', loc: 'Toyosu Market' },
