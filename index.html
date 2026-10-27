@@ -110,7 +110,7 @@
 
     <div id="app" v-cloak class="h-full flex flex-col relative" :style="{ fontSize: settings.fontSize + 'px' }">
 
-        <!-- 🔝 頂端固定灰色選單 (已修復電話疊字問題) -->
+        <!-- 🔝 頂端固定灰色選單 -->
         <div class="nav-tabs px-3 pt-12 pb-3 flex flex-col gap-3 z-50 relative shrink-0">
             
             <!-- 上排：設定按鈕 + 行程切換器 -->
@@ -623,13 +623,13 @@
         createApp({
             data() {
                 return {
-                    currentTrip: 'central', // ✨ 已預設打開 10 月秋遊！
+                    currentTrip: 'central',
                     activeTab: 'home', selectedDayIndex: 0, 
                     showSettings: false, showHotelModal: false, newShopItem: '',
                     weather: { city_name: '東京', temp: '--', icon: 'fa-spinner fa-spin' },
                     apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4', 
                     settings: { fontSize: 14 }, 
-                    exchangeRate: 0.052, // Yen to HKD 匯率
+                    exchangeRate: 0.052,
                     now: new Date(),
                     
                     trips: {
@@ -741,7 +741,7 @@
                             ],
                             hotelMap: { 0: 0, 1: 0, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2 },
                             expenseHotels: [], expenseRental: { name: 'Nippon Rent-A-Car 租車', yen: 0, hkdStr: '已包含' }, expenseDining: [],
-                            alarms: [ { date: '出發前', task: '確認 Nippon 租車車型！' } ],
+                            alarms: [ { date: '出發前', task: '確認 Toyota 租車車型！' } ],
                             shopping: ['保暖襪', '隱形眼鏡', 'Head dress', 'NuBra', 'ReFa (澀谷)', '藥妝/Donki (澀谷)'],
                             parkingList: [],
                             diningList: [
