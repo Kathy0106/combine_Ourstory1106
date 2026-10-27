@@ -16,9 +16,9 @@
         
         /* 🎨 日系繪本風核心設定 */
         body {
-            font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: #FFFCF6; /* 指定的暖白底色 */
-            color: #3E3A39; /* 指定的墨灰字體 */
+            font-family: sans-serif;
+            background-color: #FFFCF6;
+            color: #3E3A39;
             margin: 0; padding: 0;
             width: 100vw; height: 100vh; height: 100dvh;
             overflow: hidden; overscroll-behavior-y: none;
@@ -178,18 +178,71 @@
                 </div>
             </div>
 
-            <!-- 首頁插圖 & 倒數 (所有頁面頂部都顯示，讓感覺更連貫) -->
+            <!-- 首頁插圖 & 倒數 (全新整合版 SVG，車仔落地生根) -->
             <div class="relative pt-2 pb-6 border-b-[3px] border-[#3E3A39] mb-4 mx-5">
                 <div class="w-full h-28 relative overflow-hidden mb-4 bg-white border-[3px] border-[#3E3A39] rounded-2xl shadow-[3px_3px_0px_#3E3A39]">
                     <svg viewBox="0 0 400 150" class="w-full h-full bg-[#FFFCF6]">
+                        <!-- 雲朵 (共有) -->
                         <path class="cloud-anim" d="M 50 40 Q 60 20 80 40 Q 100 30 110 50 L 40 50 Z" fill="white" stroke="#3E3A39" stroke-width="3"/>
                         <path class="cloud-anim" style="animation-delay: -10s" d="M 250 30 Q 260 10 280 30 Q 300 20 310 40 L 240 40 Z" fill="white" stroke="#3E3A39" stroke-width="3"/>
-                        <circle cx="330" cy="50" r="20" fill="#F6D27A" stroke="#3E3A39" stroke-width="3" class="float-anim"/>
-                        <path d="M 100 140 L 200 40 L 300 140 Z" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
-                        <path d="M 160 80 L 200 40 L 240 80 Q 220 90 200 80 Q 180 90 160 80 Z" fill="white" stroke="#3E3A39" stroke-width="3"/>
-                        <rect x="220" y="115" width="40" height="20" rx="5" fill="#F2A497" stroke="#3E3A39" stroke-width="3" class="float-anim"/>
-                        <circle cx="230" cy="135" r="6" fill="#3E3A39"/>
-                        <circle cx="250" cy="135" r="6" fill="#3E3A39"/>
+                        
+                        <!-- 太陽 (共有) -->
+                        <circle cx="330" cy="40" r="18" fill="#F6D27A" stroke="#3E3A39" stroke-width="3" class="float-anim"/>
+
+                        <!-- 🏔️ 富士山 (居中偏右) -->
+                        <path d="M 120 140 L 220 40 L 320 140 Z" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+                        <path d="M 180 80 L 220 40 L 260 80 Q 240 90 220 80 Q 200 90 180 80 Z" fill="white" stroke="#3E3A39" stroke-width="3"/>
+
+                        <!-- 🏯 松本城 (左側) -->
+                        <g transform="translate(40, 60)">
+                            <!-- 城牆底座 -->
+                            <path d="M 10 80 L 70 80 L 60 40 L 20 40 Z" fill="#FFFFFF" stroke="#3E3A39" stroke-width="3"/>
+                            <!-- 黑色天守閣 -->
+                            <rect x="25" y="10" width="30" height="30" fill="#3E3A39"/>
+                            <path d="M 15 15 L 40 -5 L 65 15 Z" fill="#3E3A39"/>
+                            <path d="M 20 40 L 40 25 L 60 40 Z" fill="#3E3A39"/>
+                            <!-- 金色裝飾 -->
+                            <circle cx="40" cy="5" r="2" fill="#F6D27A"/>
+                        </g>
+
+                        <!-- 🗼 東京鐵塔 (右側) -->
+                        <g transform="translate(320, 50)">
+                            <path d="M 15 90 L 35 90 L 25 10 Z" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+                            <path d="M 20 60 L 30 60 M 22 40 L 28 40 M 24 20 L 26 20" stroke="#FFFFFF" stroke-width="3"/>
+                            <!-- 鐵塔頂端 -->
+                            <line x1="25" y1="10" x2="25" y2="0" stroke="#3E3A39" stroke-width="3"/>
+                        </g>
+
+                        <!-- ♨️ 草津溫泉標誌 (左下前景) -->
+                        <g transform="translate(30, 110)">
+                            <path d="M 10 30 Q 25 45 40 30" fill="none" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                            <g class="float-anim">
+                                <path d="M 15 25 Q 20 15 15 5 M 25 25 Q 30 15 25 5 M 35 25 Q 40 15 35 5" fill="none" stroke="#F2A497" stroke-width="2"/>
+                            </g>
+                        </g>
+
+                        <!-- 🚗 自駕車仔 (前景居中) -->
+                        <g transform="translate(180, 115)">
+                            <g class="float-anim">
+                                <rect x="0" y="0" width="40" height="20" rx="5" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+                                <rect x="5" y="3" width="12" height="8" rx="2" fill="#FFFFFF" stroke="#3E3A39" stroke-width="2"/>
+                                <rect x="23" y="3" width="12" height="8" rx="2" fill="#FFFFFF" stroke="#3E3A39" stroke-width="2"/>
+                                <circle cx="10" cy="20" r="6" fill="#3E3A39"/>
+                                <circle cx="30" cy="20" r="6" fill="#3E3A39"/>
+                            </g>
+                        </g>
+
+                        <!-- 🍁 紅葉裝飾 (散落) -->
+                        <g transform="translate(140, 50)">
+                            <g class="float-anim" style="animation-delay: -1s;">
+                                <path d="M 5 0 L 10 10 L 0 5 Z" fill="#E64A19" stroke="#3E3A39" stroke-width="1.5"/>
+                            </g>
+                        </g>
+                        <g transform="translate(280, 100)">
+                            <g class="float-anim" style="animation-delay: -2s;">
+                                <path d="M 5 0 L 10 10 L 0 5 Z" fill="#F2A497" stroke="#3E3A39" stroke-width="1.5"/>
+                            </g>
+                        </g>
                     </svg>
                 </div>
 
@@ -205,47 +258,39 @@
             <!-- ===================== 🗺️ 行程頁籤 ===================== -->
             <div v-show="activeTab === 'itinerary'" class="pt-2">
                 
-                <!-- 行李箱進度條 (滑動效果) -->
-                <div class="px-5 mb-6 relative">
-                    <div class="h-[3px] bg-[#3E3A39] w-[80%] mx-auto mt-6 relative rounded-full">
-                        <div class="absolute -top-1.5 left-0 w-full flex justify-between px-2">
-                            <div v-for="(day, idx) in currentDays" :key="'dot-'+idx" class="w-4 h-4 rounded-full bg-white border-[3px] border-[#3E3A39] z-0"></div>
-                        </div>
-                        <div class="absolute -top-5 z-20 suitcase-progress flex flex-col items-center" 
-                             :style="{ left: `calc(${(selectedDayIndex / (currentDays.length - 1)) * 100}% - 14px)` }">
-                            <div class="w-8 h-7 bg-[#F2A497] border-[3px] border-[#3E3A39] rounded-lg shadow-[2px_2px_0px_#3E3A39] flex items-center justify-center">
-                                <div class="w-2 h-1.5 bg-[#3E3A39] rounded-full mx-0.5"></div>
-                                <div class="w-2 h-1.5 bg-[#3E3A39] rounded-full mx-0.5"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between mt-4 text-center px-2">
+                <!-- 方案二：日曆卡片滑動 (完美解決擠迫問題) -->
+                <div class="px-4 mb-6">
+                    <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 pt-1 px-1">
                         <div v-for="(day, idx) in currentDays" :key="'date-'+idx" 
                              @click="selectedDayIndex = idx"
-                             class="cursor-pointer font-bold transition-all"
-                             :class="selectedDayIndex === idx ? 'text-[#F2A497] scale-110' : 'text-[#3E3A39] opacity-60'">
-                            <div class="text-[10px] mb-0.5">{{ day.dateStr }}</div>
-                            <div class="text-[11px]">{{ day.weekday }}</div>
+                             class="flex flex-col items-center justify-center w-14 h-16 rounded-2xl border-[3px] border-[#3E3A39] shrink-0 cursor-pointer transition-all shadow-[2px_2px_0px_#3E3A39]"
+                             :class="selectedDayIndex === idx ? 'bg-[#F2A497] text-white -translate-y-1 shadow-[2px_4px_0px_#3E3A39]' : 'bg-white text-[#3E3A39] opacity-70 hover:opacity-100'">
+                            <div class="text-[10px] font-bold mb-0.5">{{ day.weekday }}</div>
+                            <div class="text-[13px] font-black">{{ day.dateStr }}</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 每日住宿與天氣提示 -->
+                <!-- 每日住宿與天氣提示 (包含 🗻 富士山能見度！) -->
                 <div class="px-5 mb-4 flex gap-3" v-if="currentItineraryData.length > 0">
                     <div class="story-card bg-white p-3 flex-1 flex gap-3 items-center cursor-pointer" @click="showHotelModal = true">
                         <div class="w-10 h-10 bg-[#A8D3E6] border-[3px] border-[#3E3A39] rounded-xl flex items-center justify-center shrink-0">
                             <i class="fa-solid fa-bed text-[#3E3A39]"></i>
                         </div>
-                        <div>
+                        <div class="min-w-0">
                             <div class="text-[10px] font-bold opacity-60">Day {{ selectedDayIndex + 1 }} 住宿</div>
-                            <div class="font-black text-[13px] mt-0.5 leading-tight">{{ getHotelForDay(selectedDayIndex).name }}</div>
+                            <div class="font-black text-[13px] mt-0.5 leading-tight truncate">{{ getHotelForDay(selectedDayIndex).name }}</div>
                         </div>
                     </div>
-                    <div class="story-card bg-white p-3 w-20 flex flex-col items-center justify-center shrink-0">
-                        <div class="text-[10px] font-bold opacity-60 mb-1">{{ weather.city_name }}</div>
+                    
+                    <!-- 天氣卡片 + 富士山能見度 -->
+                    <div class="story-card bg-white p-3 min-w-[90px] flex flex-col items-center justify-center shrink-0">
+                        <div class="text-[10px] font-bold opacity-60 mb-0.5">{{ weather.city_name }}</div>
                         <div class="flex items-center gap-1 font-black">
                             <i :class="['fa-solid', weather.icon]" class="text-[#E64A19]"></i> {{ weather.temp }}°
+                        </div>
+                        <div v-if="fujiVisibility" class="mt-1 text-[9px] font-black px-1.5 py-0.5 rounded-md border-2 border-[#3E3A39] bg-[#E3F2FD] text-[#1976D2] shadow-[1px_1px_0px_#3E3A39] whitespace-nowrap">
+                            {{ fujiVisibility }}
                         </div>
                     </div>
                 </div>
@@ -602,7 +647,7 @@
 
     </div>
 
-    <!-- =============== VUE 腳本區：完全保留原本嘅 DATA =============== -->
+    <!-- =============== VUE 腳本區 =============== -->
     <script>
         const { createApp } = Vue;
 
@@ -742,7 +787,7 @@
                                 ]},
                                 { weekday: 'Sat', dateStr: '10/31', events: [
                                     { time: '07:30', title: 'R&B 酒店 Check-out 🧳', departTime: '08:45', travelTime: '15 min', desc: '喺酒店辦理退房，帶齊所有大行李出發前往 Nippon 租車點！', category: 'hotel', transportType: 'walk', loc: 'R&B Hotel Ueno Hirokoji' },
-                                    { time: '09:00', title: 'Nippon Rent-A-Car 租車 🚗', departTime: '09:45', travelTime: '45 min', desc: '✨ 預約號: C38760\n完成手續、驗車，並將所有大行李直接放上車尾箱！', category: 'transport', transportType: 'car', phone: '05017122597', mapcode: '2 718 196*12', loc: 'Nippon Rent-A-Car Ueno' },
+                                    { time: '09:00', title: 'Nippon Rent-A-Car 租車 🚗', departTime: '09:45', travelTime: '45 min', desc: '✨ 預約號: C38760\n完成手續、驗車，並將所有大行李直接放上車尾箱！', category: 'highlight', transportType: 'car', phone: '05017122597', mapcode: '2 718 196*12', loc: 'Nippon Rent-A-Car Ueno' },
                                     { time: '09:45', title: '正式出發！向長野 / 靜岡進發 🚗💨', departTime: '09:45', travelTime: '1.5 hr', desc: '行李隨車，一路向南直奔海老名 SA！', category: 'transport', transportType: 'car' },
                                     { time: '11:00', title: '海老名 SA (下行) 🚗🍩', departTime: '11:45', travelTime: '45 min', desc: '中途停靠全日本最出名嘅高速公路休息站【海老名 SA】！必食超人氣名物 "紅肉蜜瓜包"，買杯咖啡回氣！', category: 'sightseeing', transportType: 'car', phone: '046-231-4368', mapcode: '2 083 454*88', loc: 'EXPASA海老名 下り' },
                                     { time: '12:30', title: '沼津港 丸天 Lunch 🐟', departTime: '14:00', travelTime: '1.5 hr', desc: '由海老名再踩個半鐘直達沼津港！食巨型海鮮塔！\n🚗 行車距離: 由上野起計約 140km\n🅿️ 泊車: 沼津港免費停車場', category: 'food', loc: '魚河岸 丸天 魚河岸店', transportType: 'car', phone: '055-963-0202', mapcode: '650 583 339*01', info: '💡 REMINDER: 假日多人，落車即刻去排隊攞飛先！' },
@@ -818,14 +863,14 @@
                                     { time: '14:00', title: '抵達會場 & 官方指定席入場 🎟️', departTime: '17:30', desc: '抵達土浦全國煙花競技大會現場！<br>🌟 憑團體票入座【官方團體指定席】，視野超正！<br>🍢 大會現場有豐富嘅日本祭典美食攤位 (屋台)，可提早買定小食飲品！', category: 'sightseeing', transportType: 'walk', loc: '土浦全国花火競技大会' },
                                     { time: '17:30', title: '土浦全國花火競技大會 正式開幕 🎆✨', departTime: '20:30', desc: '【日本三大煙花競技大會之一】數萬發頂級競技煙花照亮秋季夜空，極致震撼！<br>⚠️ 11月晚間氣溫低且靠近河川，務必穿著足夠保暖防風外套並備好暖包！', category: 'highlight', transportType: 'walk', info: '💡 REMINDER: 自助導覽 5 小時，享受極致夜空盛宴！' },
                                     { time: '20:30', title: '集合上專車返回東京 🚌', departTime: '21:00', travelTime: '2 hr', desc: '於指定集合點集合上車，專車原路返回東京市區。預留散場及回程交通時間。', category: 'transport', transportType: 'bus' },
-                                    { time: '23:00', title: '抵達東京站周邊下車 📍', departTime: '23:30', travelTime: '15 min', desc: '於【下車地點1：東京站周邊】順利下車解散 (預計 23:00 - 23:30)。', category: 'transport', transportType: 'walk', loc: '東京駅' },
+                                    { time: '23:00', title: '抵達東京站周邊下車 📍', departTime: '23:30', travelTime: '15 min', desc: '於【下車地点1：東京站周邊】順利下車解散 (預計 23:00 - 23:30)。', category: 'transport', transportType: 'walk', loc: '東京駅' },
                                     { time: '23:45', title: '搭 JR 返回秋葉原酒店 🚆💤', departTime: '23:45', desc: '喺東京站轉搭 JR 山手線或京濱東北線，只需 4 分鐘直達秋葉原！完美結束極具紀念意義嘅花火之夜！', category: 'hotel', loc: 'Hotel Resol Stay Akihabara', transportType: 'train', phone: '03-3252-9269' }
                                 ]},
                                 { weekday: 'Sun', dateStr: '11/08', events: [
                                     { time: '08:30', title: '酒店 Check-out & 寄行李 🧳', departTime: '09:00', travelTime: '20 min', desc: '將全部行李寄放喺酒店大堂，兩手空空出發！', category: 'hotel', transportType: 'walk', loc: 'Hotel Resol Stay Akihabara' },
                                     { time: '10:30', title: '秋葉原 / 上野 最後補給 🛍️', departTime: '11:30', travelTime: '10 min', desc: '喺秋葉原買動漫周邊或者上野買手信，買齊佢！', category: 'shopping', transportType: 'walk' },
                                     { time: '11:30', title: 'Lunch: 壽司郎 (Sushiro) 秋葉原店 🍣', departTime: '12:30', travelTime: '1 hr', desc: '平靚正回轉壽司，食飽返香港！', category: 'food', transportType: 'walk', loc: 'スシロー 秋葉原駅前店', info: '💡 REMINDER: 星期日極多人！必須提早最少 3 個鐘用 Sushiro App 抽定飛！' },
-                                    { time: '13:30', title: '返酒店攞行李 ➔ 搭 Skyliner 🚆', departTime: '13:30', travelTime: '45 min', desc: '返酒店攞完行李，搭 1 個站去 "京成上野站"！\n搭乘【Keisei Skyliner】，45 分鐘極速直飛成田機場！', category: 'transport', transportType: 'train', loc: '京成上野駅' },
+                                    { time: '13:30', title: '返酒店攞行李 ➔ 搭 Skyliner 🚆', departTime: '13:30', travelTime: '45 min', desc: '返酒店攞完行李，搭 1 個站去 "京成上野站"！\n搭乘【Keisei Skyliner】，45 分鐘極速直飞成田機場！', category: 'transport', transportType: 'train', loc: '京成上野駅' },
                                     { time: '14:45', title: '抵達成田機場 ✈️', departTime: '16:00', travelTime: '15 min', desc: '極速抵達，準備入去掃免稅品！', category: 'transport', loc: '成田空港', transportType: 'walk' },
                                     { time: '16:30', title: '機場 Check-in (CX505) ✈️', departTime: '16:30', desc: '18:30 起飛返港，完美結束旅程！', category: 'flight', loc: '成田空港', transportType: 'walk' }
                                 ]}
@@ -850,6 +895,17 @@
                 totalTripYen() {
                     const rentalYen = this.currentTripData.expenseRental ? this.currentTripData.expenseRental.yen : 0;
                     return this.totalHotelYen + rentalYen + this.totalDiningYen;
+                },
+
+                // 🗻 富士山能見度百分比邏輯！原汁原味重現！
+                fujiVisibility() {
+                    if (this.currentTrip !== 'central') return null;
+                    const fujiDays = [1, 2, 5, 6]; // 對應原版嘅 Index (Day 2, Day 3, Day 6, Day 7)
+                    if (!fujiDays.includes(this.selectedDayIndex)) return null;
+                    if (this.weather.icon === 'fa-sun') return '🗻 富士山: 絕景 (90%)';
+                    if (this.weather.icon === 'fa-cloud-sun') return '🗻 富士山: 隱現 (50%)';
+                    if (this.weather.icon.includes('rain') || this.weather.icon.includes('cloud')) return '🗻 富士山: 殘念 (10%)';
+                    return '🗻 富士預測中...';
                 }
             },
             watch: {
